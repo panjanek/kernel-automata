@@ -9,16 +9,15 @@ namespace KernelAutomata.Gpu
 {
     public class ConvolutionProgram
     {
-        public int fftProgram;
+        private int fftProgram;
 
-        public int multiplyProgram;
+        private int multiplyProgram;
         public ConvolutionProgram() 
         {
             fftProgram = ShaderUtil.CompileAndLinkComputeShader("fft_cooley.comp");
             multiplyProgram = ShaderUtil.CompileAndLinkComputeShader("multiply.comp");
         }
         public int DispatchFFT(
-            int fftProgram,
             int inputTex,
             int pingTex,
             int size,
@@ -103,9 +102,9 @@ namespace KernelAutomata.Gpu
             int t = a; a = b; b = t;
         }
 
-        public void MultiplySpectra(int program, int aTex, int kTex, int outTex, int size)
+        public void MultiplySpectra(int aTex, int kTex, int outTex, int size)
         {
-            GL.UseProgram(program);
+            GL.UseProgram(multiplyProgram);
 
             GL.BindImageTexture(0, aTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
             GL.BindImageTexture(1, kTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
@@ -116,8 +115,6 @@ namespace KernelAutomata.Gpu
         }
 
         public int ConvolveFFT(
-            int fftProgram,
-            int mulProgram,
             int fieldTex,
             int kernelFftTex,
             int fftTmpTex,
@@ -127,14 +124,14 @@ namespace KernelAutomata.Gpu
         {
             // FFT(field)
             int fieldFft = DispatchFFT(
-                fftProgram, fieldTex, pingTex, size, inverse: false);
+                fieldTex, pingTex, size, inverse: false);
 
             // Multiply in frequency domain
-            MultiplySpectra(mulProgram, fieldFft, kernelFftTex, fftTmpTex, size);
+            MultiplySpectra(fieldFft, kernelFftTex, fftTmpTex, size);
 
             // IFFT
             int convTex = DispatchFFT(
-                fftProgram, fftTmpTex, pingTex, size, inverse: true);
+                fftTmpTex, pingTex, size, inverse: true);
 
             return convTex; // spatial-domain convolution result
         }

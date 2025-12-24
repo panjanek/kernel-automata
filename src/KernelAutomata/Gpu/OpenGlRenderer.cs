@@ -146,7 +146,6 @@ namespace KernelAutomata.Gpu
             //fft of kernel 1
             TextureUtil.CopyTexture2D(kernel1Tex, tmpTex, simulation.fieldSize, simulation.fieldSize);
             int resTex = convolution.DispatchFFT(
-                convolution.fftProgram,
                 tmpTex,
                 pingTex,
                 simulation.fieldSize,
@@ -161,7 +160,6 @@ namespace KernelAutomata.Gpu
             GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernelFlattened2);
             TextureUtil.CopyTexture2D(kernel2Tex, tmp2Tex, simulation.fieldSize, simulation.fieldSize);
             resTex = convolution.DispatchFFT(
-                convolution.fftProgram,
                 tmp2Tex,
                 ping2Tex,
                 simulation.fieldSize,
@@ -229,8 +227,6 @@ namespace KernelAutomata.Gpu
 
             TextureUtil.CopyTexture2D(fieldTex, tmpTex, simulation.fieldSize, simulation.fieldSize);
             var resTex = convolution.ConvolveFFT(
-                convolution.fftProgram,
-                convolution.multiplyProgram,
                 tmpTex,
                 kernel1FftTex,
                 fftTmpTex,
@@ -242,8 +238,6 @@ namespace KernelAutomata.Gpu
 
             TextureUtil.CopyTexture2D(fieldTex, tmp2Tex, simulation.fieldSize, simulation.fieldSize);
             resTex = convolution.ConvolveFFT(
-                convolution.fftProgram,
-                convolution.multiplyProgram,
                 tmp2Tex,
                 kernel2FftTex,
                 fftTmp2Tex,
@@ -268,8 +262,8 @@ namespace KernelAutomata.Gpu
             //growth.DispatchGrowth(growth.program, fieldTex, conv1Tex, conv2Tex, fieldNextTex, simulation.fieldSize, 0.352f, 0.0599f, 0.1f);   //  0.34f, 0.06f, 0.1f);
             growth.DispatchGrowth(growth.program, fieldTex, conv1Tex, conv2Tex, fieldNextTex, simulation.fieldSize, 0.1f, 0.015f, 0.1f);
 
-            //(fieldTex, fieldNextTex) = (fieldNextTex, fieldTex);
-            TextureUtil.CopyTexture2D(fieldNextTex, fieldTex, simulation.fieldSize, simulation.fieldSize);
+            (fieldTex, fieldNextTex) = (fieldNextTex, fieldTex);
+            //TextureUtil.CopyTexture2D(fieldNextTex, fieldTex, simulation.fieldSize, simulation.fieldSize);
 
 
 
