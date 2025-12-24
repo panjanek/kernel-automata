@@ -1,0 +1,52 @@
+﻿#version 450
+
+layout (local_size_x = 16, local_size_y = 16) in;
+
+layout (rgba32f, binding = 0) readonly  uniform image2D src;
+layout (rgba32f, binding = 1) writeonly uniform image2D dst;
+
+uniform int  uStage;
+uniform int  uStride;
+uniform int  uSize;
+uniform int  uInverse;     // +1 FFT, -1 IFFT
+uniform bool uHorizontal;
+
+const float PI = 3.141592653589793;
+
+vec2 cmul(vec2 a, vec2 b)
+{
+    return vec2(
+        a.x * b.x - a.y * b.y,
+        a.x * b.y + a.y * b.x
+    );
+}
+
+void main()
+{
+    ivec2 gid = ivec2(gl_GlobalInvocationID.xy);
+    if (gid.x >= uSize || gid.y >= uSize) return;
+
+    int i = uHorizontal ? gid.x : gid.y;
+    int j = uHorizontal ? gid.y : gid.x;
+
+    int group = i / uStride;
+    int pair  = group * uStride * 2 + (i % uStride);
+    int match = pair + uStride;
+
+    ivec2 p0 = uHorizontal ? ivec2(pair, j) : ivec2(j, pair);
+    ivec2 p1 = uHorizontal ? ivec2(match, j) : ivec2(j, match);
+
+    vec2 a = imageLoad(src, p0).rg;
+    vec2 b = imageLoad(src, p1).rg;
+
+    float angle = uInverse * -2.0 * PI * float(i % uStride) / float(uStride * 2);
+    vec2  w = vec2(cos(angle), sin(angle));
+
+    vec2 t = cmul(b, w);
+
+    vec2 out0 = a + t;
+    vec2 out1 = a - t;
+
+    imageStore(dst, p0, vec4(out0, 0, 0));
+    imageStore(dst, p1, vec4(out1, 0, 0));
+}

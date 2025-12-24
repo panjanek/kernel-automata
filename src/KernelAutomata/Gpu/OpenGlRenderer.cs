@@ -32,13 +32,25 @@ namespace KernelAutomata.Gpu
 
         private DebugProgram debugProgram;
 
+        private ConvolutionProgram convProgram;
+
         private int frameCounter;
 
         private int dummyVao;
 
         private int kernelTex;
 
+        private int kernelFftTex;
+
+        private int fieldTex;
+
+        private int pingTex;
+
+        private int pongTex;
+
         private int ketnelFbo;
+
+        private int kernelFftFbo;
         public OpenGlRenderer(Panel placeholder, Simulation simulation)
         {
             this.placeholder = placeholder;
@@ -73,15 +85,29 @@ namespace KernelAutomata.Gpu
             GL.BindVertexArray(dummyVao);
 
             debugProgram = new DebugProgram();
+            convProgram = new ConvolutionProgram();
 
-            int kernelSize = 64;
             if (kernelTex > 0)
                 GL.DeleteTexture(kernelTex);
-            kernelTex = TextureUtil.CreateStateTexture(kernelSize, kernelSize);
-            float[,] kernel = KernelUtil.CreateRingKernel(kernelSize, 32, 0.5f, 0.5f);
+            //kernelTex = TextureUtil.CreateStateTexture(simulation.kernelSize, simulation.kernelSize);
+            kernelTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            float[,] kernel = KernelUtil.CreateRingKernel(simulation.fieldSize, 32, 0.5f, 0.5f);
             float[] initialState = KernelUtil.Flatten4Channels(kernel, 0);
             GL.BindTexture(TextureTarget.Texture2D, kernelTex);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, kernelSize, kernelSize, PixelFormat.Rgba, PixelType.Float, initialState);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, initialState);
+
+
+            /*
+            kernelFftTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            convProgram.DispatchFFT(
+                convProgram.fftProgram,
+                kernelTex,
+                kernelFftTex,
+                simulation.fieldSize,
+                inverse: false
+            );
+            */
+
             ketnelFbo = TextureUtil.CreateFboForTexture(kernelTex);
             GL.ClearColor(0f, 0f, 0f, 0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);

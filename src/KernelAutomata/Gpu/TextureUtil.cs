@@ -9,6 +9,22 @@ namespace KernelAutomata.Gpu
 {
     public static class TextureUtil
     {
+        public static int CreateComplexTexture(int size)
+        {
+            int tex = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, tex);
+
+            GL.TexStorage2D(TextureTarget2d.Texture2D, 1,
+                SizedInternalFormat.Rgba32f, size, size);
+
+            GL.TexParameter(TextureTarget.Texture2D,
+                TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D,
+                TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            return tex;
+        }
         public static int CreateStateTexture(int width, int height)
         {
             int tex = GL.GenTexture();
