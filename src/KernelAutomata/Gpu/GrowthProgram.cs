@@ -9,14 +9,13 @@ namespace KernelAutomata.Gpu
 {
     public class GrowthProgram
     {
-        public int program;
+        private int program;
         public GrowthProgram()
         {
             program = ShaderUtil.CompileAndLinkComputeShader("growth.comp");
         }
 
         public void DispatchGrowth(
-            int program,
             int fieldInTex,
             int conv1Tex,
             int conv2Tex,

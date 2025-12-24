@@ -54,13 +54,13 @@ namespace KernelAutomata.Gpu
 
         private int fieldNextTex;
 
-        private int pingTex;
-
-        private int ping2Tex;
-
-        private int tmpTex;
+        private int tmp1Tex;
 
         private int tmp2Tex;
+
+        private int source1Tex;
+
+        private int source2Tex;
 
         private int fftTmpTex;
 
@@ -103,19 +103,21 @@ namespace KernelAutomata.Gpu
             convolution = new ConvolutionProgram();
             growth = new GrowthProgram();
 
+            //kernel buffers
             kernel1Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             kernel1FftTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             kernel2Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             kernel2FftTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+
+            //field buffers
             fieldTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             fieldNextTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
 
-
-            pingTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            ping2Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-
-            tmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            //temporary buffers
+            tmp1Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             tmp2Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            source1Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            source2Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             fftTmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             fftTmp2Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
 
@@ -123,10 +125,10 @@ namespace KernelAutomata.Gpu
             float[] kernel1 = KernelUtil.Flatten4Channels(KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 10f, 4f), 0);
             GL.BindTexture(TextureTarget.Texture2D, kernel1Tex);
             GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernel1);
-            TextureUtil.CopyTexture2D(kernel1Tex, tmpTex, simulation.fieldSize, simulation.fieldSize);
+            TextureUtil.CopyTexture2D(kernel1Tex, source1Tex, simulation.fieldSize, simulation.fieldSize);
             int resTex = convolution.DispatchFFT(
-                tmpTex,
-                pingTex,
+                source1Tex,
+                tmp1Tex,
                 simulation.fieldSize,
                 inverse: false
             );
@@ -136,10 +138,10 @@ namespace KernelAutomata.Gpu
             float[] kernel2 = KernelUtil.Flatten4Channels(KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7), 0);
             GL.BindTexture(TextureTarget.Texture2D, kernel2Tex);
             GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernel2);
-            TextureUtil.CopyTexture2D(kernel2Tex, tmp2Tex, simulation.fieldSize, simulation.fieldSize);
+            TextureUtil.CopyTexture2D(kernel2Tex, source2Tex, simulation.fieldSize, simulation.fieldSize);
             resTex = convolution.DispatchFFT(
+                source2Tex,
                 tmp2Tex,
-                ping2Tex,
                 simulation.fieldSize,
                 inverse: false
             );
@@ -154,24 +156,19 @@ namespace KernelAutomata.Gpu
             */
 
 
-            //denormalize original ring, only for debugging;
+            //denormalize original ring, only for debugging
             var kernelMax1 = kernel1.Max();
             for (int i = 0; i < kernel1.Length; i++) kernel1[i] /= kernelMax1;
             GL.BindTexture(TextureTarget.Texture2D, kernel1Tex);
             GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernel1);
-
-
             var kernelMax2 = kernel2.Max();
             for (int i = 0; i < kernel2.Length; i++) kernel2[i] /= kernelMax2;
             GL.BindTexture(TextureTarget.Texture2D, kernel2Tex);
             GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernel2);
 
-
             var fieldData = FieldUtil.InitRandom(simulation.fieldSize);
             GL.BindTexture(TextureTarget.Texture2D, fieldTex);
             GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, fieldData);
-
-            GL.ClearTexImage(pingTex, 0, PixelFormat.Rgba, PixelType.Float, IntPtr.Zero);
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
@@ -193,21 +190,20 @@ namespace KernelAutomata.Gpu
         public void Draw()
         {
 
-            TextureUtil.CopyTexture2D(fieldTex, tmpTex, simulation.fieldSize, simulation.fieldSize);
+            TextureUtil.CopyTexture2D(fieldTex, source1Tex, simulation.fieldSize, simulation.fieldSize);
             var res1Tex = convolution.ConvolveFFT(
-                tmpTex,
+                source1Tex,
                 kernel1FftTex,
                 fftTmpTex,
-                pingTex,
+                tmp1Tex,
                 simulation.fieldSize);
 
-
-            TextureUtil.CopyTexture2D(fieldTex, tmp2Tex, simulation.fieldSize, simulation.fieldSize);
+            TextureUtil.CopyTexture2D(fieldTex, source2Tex, simulation.fieldSize, simulation.fieldSize);
             var res2Tex = convolution.ConvolveFFT(
-                tmp2Tex,
+                source2Tex,
                 kernel2FftTex,
                 fftTmp2Tex,
-                ping2Tex,
+                tmp2Tex,
                 simulation.fieldSize);
 
 
@@ -223,10 +219,8 @@ namespace KernelAutomata.Gpu
             */
 
 
-            growth.DispatchGrowth(growth.program, fieldTex, res1Tex, res2Tex, fieldNextTex, simulation.fieldSize, 0.1f, 0.015f, 0.1f);
+            growth.DispatchGrowth(fieldTex, res1Tex, res2Tex, fieldNextTex, simulation.fieldSize, 0.1f, 0.015f, 0.1f);
             (fieldTex, fieldNextTex) = (fieldNextTex, fieldTex);
-
-
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
