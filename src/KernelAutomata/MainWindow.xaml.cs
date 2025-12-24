@@ -38,7 +38,7 @@ namespace KernelAutomata
         {
             renderer = new OpenGlRenderer(placeholder, simulation);
             KeyDown += MainWindow_KeyDown;
-            System.Timers.Timer systemTimer = new System.Timers.Timer() { Interval = 10 };
+            System.Timers.Timer systemTimer = new System.Timers.Timer() { Interval = 100 };
             systemTimer.Elapsed += SystemTimer_Elapsed;
             systemTimer.Start();
             DispatcherTimer infoTimer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1.0) };

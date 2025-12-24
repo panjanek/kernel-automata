@@ -19,49 +19,80 @@ namespace KernelAutomata.Gpu
         }
 
         public void DispatchFFT(
-                    int program,
-                    int srcTex,
-                    int dstTex,
-                    int size,
-                    bool inverse)
+            int fftProgram,
+            int inputTex,
+            int pingTex,
+            int pongTex,
+            int size,
+            bool inverse)
         {
-            GL.UseProgram(program);
+            GL.UseProgram(fftProgram);
 
-            GL.Uniform1(GL.GetUniformLocation(program, "uSize"), size);
-            GL.Uniform1(GL.GetUniformLocation(program, "uInverse"), inverse ? -1 : 1);
+            GL.Uniform1(GL.GetUniformLocation(fftProgram, "uSize"), size);
+            GL.Uniform1(GL.GetUniformLocation(fftProgram, "uInverse"), inverse ? -1 : 1);
 
-            for (int stride = 1; stride < size; stride *= 2)
-            {
-                // Horizontal pass
-                GL.Uniform1(GL.GetUniformLocation(program, "uStride"), stride);
-                GL.Uniform1(GL.GetUniformLocation(program, "uStage"), stride);
-                GL.Uniform1(GL.GetUniformLocation(program, "uHorizontal"), 1);
+            int srcTex;
+            int dstTex;
 
-                GL.BindImageTexture(0, srcTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
-                GL.BindImageTexture(1, dstTex, 0, false, 0, TextureAccess.WriteOnly, SizedInternalFormat.Rgba32f);
+            // =========================
+            // 1. HORIZONTAL PASSES
+            // =========================
 
-                GL.DispatchCompute(size / 16, size / 16, 1);
-                GL.MemoryBarrier(MemoryBarrierFlags.ShaderImageAccessBarrierBit);
-
-                // Swap
-                (srcTex, dstTex) = (dstTex, srcTex);
-            }
+            // First stage: inputTex -> pingTex (inputTex NEVER written)
+            srcTex = inputTex;
+            dstTex = pingTex;
 
             for (int stride = 1; stride < size; stride *= 2)
             {
-                // Vertical pass
-                GL.Uniform1(GL.GetUniformLocation(program, "uStride"), stride);
-                GL.Uniform1(GL.GetUniformLocation(program, "uStage"), stride);
-                GL.Uniform1(GL.GetUniformLocation(program, "uHorizontal"), 0);
+                GL.Uniform1(GL.GetUniformLocation(fftProgram, "uStride"), stride);
+                GL.Uniform1(GL.GetUniformLocation(fftProgram, "uStage"), stride);
+                GL.Uniform1(GL.GetUniformLocation(fftProgram, "uHorizontal"), 1);
 
-                GL.BindImageTexture(0, srcTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
-                GL.BindImageTexture(1, dstTex, 0, false, 0, TextureAccess.WriteOnly, SizedInternalFormat.Rgba32f);
+                GL.BindImageTexture(0, srcTex, 0, false, 0,
+                    TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
 
-                GL.DispatchCompute(size / 16, size / 16, 1);
+                GL.BindImageTexture(1, dstTex, 0, false, 0,
+                    TextureAccess.WriteOnly, SizedInternalFormat.Rgba32f);
+
+                GL.DispatchCompute((size + 15) / 16, 1, size);
+
+                //GL.DispatchCompute((size + 15) / 16, (size + 15) / 16, 1);
+
                 GL.MemoryBarrier(MemoryBarrierFlags.ShaderImageAccessBarrierBit);
 
-                (srcTex, dstTex) = (dstTex, srcTex);
+                // After first pass, alternate ONLY between ping/pong
+                srcTex = dstTex;
+                dstTex = (dstTex == pingTex) ? pongTex : pingTex;
             }
+
+            // =========================
+            // 2. VERTICAL PASSES
+            // =========================
+
+            for (int stride = 1; stride < size; stride *= 2)
+            {
+                GL.Uniform1(GL.GetUniformLocation(fftProgram, "uStride"), stride);
+                GL.Uniform1(GL.GetUniformLocation(fftProgram, "uStage"), stride);
+                GL.Uniform1(GL.GetUniformLocation(fftProgram, "uHorizontal"), 0);
+
+                GL.BindImageTexture(0, srcTex, 0, false, 0,
+                    TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
+
+                GL.BindImageTexture(1, dstTex, 0, false, 0,
+                    TextureAccess.WriteOnly, SizedInternalFormat.Rgba32f);
+
+                GL.DispatchCompute((size + 15) / 16, 1, size); 
+                //GL.DispatchCompute((size + 15) / 16, (size + 15) / 16, 1);
+
+                GL.MemoryBarrier(MemoryBarrierFlags.ShaderImageAccessBarrierBit);
+
+                srcTex = dstTex;
+                dstTex = (dstTex == pingTex) ? pongTex : pingTex;
+            }
+
+            // After completion:
+            // - srcTex contains the FFT result
+            // - inputTex is untouched
         }
 
         public void MultiplySpectra(int program, int aTex, int kTex, int outTex, int size)
@@ -86,7 +117,7 @@ namespace KernelAutomata.Gpu
                 int size)
         {
             // FFT(field)
-            DispatchFFT(fftProgram, fieldTex, pingTex, size, inverse: false);
+            DispatchFFT(fftProgram, fieldTex, pingTex, pongTex, size, inverse: false);
 
             int fieldFft = pingTex;
 
@@ -96,10 +127,9 @@ namespace KernelAutomata.Gpu
             int resultFft = pongTex;
 
             // IFFT
-            DispatchFFT(fftProgram, resultFft, pingTex, size, inverse: true);
+            DispatchFFT(fftProgram, resultFft, pingTex, pongTex, size, inverse: true);
 
             // pingTex now contains convolution result (needs 1/(N*N) normalization)
         }
-
     }
 }

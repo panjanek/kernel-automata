@@ -20,6 +20,14 @@ namespace KernelAutomata.Models
                 fieldData[4 * i + 1] = 0f;                      // imag
                 fieldData[4 * i + 2] = 0f;
                 fieldData[4 * i + 3] = 0f;
+
+                var x = i % size;
+                var y = i / size;
+                var r = Math.Sqrt((x - size / 2) * (x - size / 2) + (y - size / 2) * (y - size/2));
+                if (r < 150)
+                    fieldData[4 * i + 0] = 1.0f;
+
+                fieldData[4 * i + 0] = 1.0f;
             }
 
             return fieldData;

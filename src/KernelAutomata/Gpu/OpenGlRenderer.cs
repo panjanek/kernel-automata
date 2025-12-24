@@ -48,13 +48,14 @@ namespace KernelAutomata.Gpu
 
         private int fieldTex;
 
+        private int fieldNextTex;
+
         private int pingTex;
 
         private int pongTex;
 
         private int fbo;
 
-        private int kernelFftFbo;
         public OpenGlRenderer(Panel placeholder, Simulation simulation)
         {
             this.placeholder = placeholder;
@@ -96,6 +97,7 @@ namespace KernelAutomata.Gpu
             kernelFftTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
 
             fieldTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            fieldNextTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             pingTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             pongTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
 
@@ -112,6 +114,7 @@ namespace KernelAutomata.Gpu
                 convolution.fftProgram,
                 kernelTex,
                 kernelFftTex,
+                pongTex,
                 simulation.fieldSize,
                 inverse: false
             );
@@ -159,9 +162,9 @@ namespace KernelAutomata.Gpu
                 pingTex,
                 pongTex,
                 simulation.fieldSize);
+            
 
-
-            /*
+            
             float[] data = new float[simulation.fieldSize * simulation.fieldSize * 4];
             GL.BindTexture(TextureTarget.Texture2D, pingTex);
             GL.GetTexImage(
@@ -172,18 +175,13 @@ namespace KernelAutomata.Gpu
                 data);
             GL.BindTexture(TextureTarget.Texture2D, 0);
             for (int i = 0; i < data.Length; i++) data[i] = data[i] / (simulation.fieldSize * simulation.fieldSize);
+            var min = data.Min();
+            var max = data.Max();
 
 
-            GL.CopyImageSubData(
-                pingTex, ImageTarget.Texture2D, 0, 0, 0, 0,
-                fieldTex, ImageTarget.Texture2D, 0, 0, 0, 0,
-                simulation.fieldSize, simulation.fieldSize, 1);
-            */
+            growth.DispatchGrowth(growth.program, fieldTex, pingTex, fieldNextTex, simulation.fieldSize, 0.5f, 0.06f, 0.1f);
 
-            //growth.DispatchGrowth(growth.program, pingTex, )
-
-
-
+            (fieldNextTex, fieldTex) = (fieldTex, fieldNextTex);
 
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
@@ -193,7 +191,7 @@ namespace KernelAutomata.Gpu
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
 
-            debug.Run(fieldTex, new Vector2(0, 0), new Vector2(1.0f, 1.0f));
+            debug.Run(fieldNextTex, new Vector2(0, 0), new Vector2(1.0f, 1.0f));
 
             glControl.SwapBuffers();
             frameCounter++;
