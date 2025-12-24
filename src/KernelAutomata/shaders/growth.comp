@@ -4,8 +4,7 @@ layout (local_size_x = 16, local_size_y = 16) in;
 
 layout (rgba32f, binding = 0) readonly  uniform image2D fieldIn;
 layout (rgba32f, binding = 1) readonly  uniform image2D conv1In;
-layout (rgba32f, binding = 2) readonly  uniform image2D conv2In;
-layout (rgba32f, binding = 3) writeonly uniform image2D fieldOut;
+layout (rgba32f, binding = 2) writeonly uniform image2D fieldOut;
 
 uniform float uMu;
 uniform float uSigma;
@@ -26,13 +25,12 @@ void main()
 
     float a = imageLoad(fieldIn, p).r;
     float u1 = imageLoad(conv1In, p).r;
-    float u2 = imageLoad(conv2In, p).r;
+    //float u2 = imageLoad(conv2In, p).r;
 
     // Normalize inverse FFT
     u1 /= float(uSize * uSize);
-    u2 /= float(uSize * uSize);
 
-    float u = u1 - 0.37 * u2;
+    float u = u1;
     float g = gaussianGrowth(u);
 
 
