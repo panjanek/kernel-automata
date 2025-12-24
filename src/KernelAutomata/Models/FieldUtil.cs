@@ -24,10 +24,10 @@ namespace KernelAutomata.Models
                 var x = i % size;
                 var y = i / size;
                 var r = Math.Sqrt((x - size / 2) * (x - size / 2) + (y - size / 2) * (y - size/2));
-                if (r < 50)
+                if (r < 25)
                     fieldData[4 * i + 0] = 1.0f;
 
-                //fieldData[4 * i + 0] = 1.0f;
+                if (r > 250) fieldData[4 * i + 0] = 0.0f;
             }
 
             return fieldData;
