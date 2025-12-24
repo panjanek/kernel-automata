@@ -111,7 +111,8 @@ namespace KernelAutomata.Gpu
 
 
             //float[,] kernel = KernelUtil.CreateRingKernel(simulation.fieldSize, 32, 0.5f, 0.5f);
-            float[,] kernel = KernelUtil.CreateRingKernel(simulation.fieldSize, 32, 0.5f, 0.4f);
+            //float[,] kernel = KernelUtil.CreateRingKernel2(simulation.fieldSize, 32, 0.5f, 0.5f);
+            float[,] kernel = KernelUtil.CreateRingKernel3(simulation.fieldSize, 32, 0.75f, 0.11f);
             float[] kernelFlattened = KernelUtil.Flatten4Channels(kernel, 0);
             GL.BindTexture(TextureTarget.Texture2D, kernelTex);
             GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernelFlattened);
@@ -136,6 +137,12 @@ namespace KernelAutomata.Gpu
             */
 
             TextureUtil.CopyTexture2D(resTex, kernelFftTex, simulation.fieldSize, simulation.fieldSize);
+
+            //denormalize original ring, only for debugging;
+            var kernelMax = kernelFlattened.Max();
+            for (int i = 0; i < kernelFlattened.Length; i++) kernelFlattened[i] /= kernelMax;
+            GL.BindTexture(TextureTarget.Texture2D, kernelTex);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernelFlattened);
 
 
 
@@ -192,9 +199,12 @@ namespace KernelAutomata.Gpu
             for (int i = 0; i < data.Length; i++) data[i] = data[i] / (simulation.fieldSize * simulation.fieldSize);
             var min = data.Min();
             var max = data.Max();
+            MathUtil.MeanStd(data, out var mean, out var std); //0.0236145761   0.102233931
             */
 
-            growth.DispatchGrowth(growth.program, fieldTex, resTex, fieldNextTex, simulation.fieldSize, 0.37f, 0.064f, 0.1f);
+
+            growth.DispatchGrowth(growth.program, fieldTex, resTex, fieldNextTex, simulation.fieldSize, 0.35f, 0.6f * 0.102233931f, 0.1f);   //  0.34f, 0.06f, 0.1f);
+            //growth.DispatchGrowth(growth.program, fieldTex, resTex, fieldNextTex, simulation.fieldSize, 0.34f, 0.06f, 0.1f);
 
             TextureUtil.CopyTexture2D(fieldNextTex, fieldTex, simulation.fieldSize, simulation.fieldSize);
 
@@ -207,8 +217,10 @@ namespace KernelAutomata.Gpu
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
             //debug.Run(kernelFftTex, new Vector2(0, 0), new Vector2(1.0f, 1.0f));
+            //debug.Run(fieldNextTex, new Vector2(0, 0), new Vector2(1.0f, 1.0f));
             debug.Run(fieldNextTex, new Vector2(0, 0), new Vector2(1.0f, 1.0f));
-            //debug.Run(kernelTex, new Vector2(0, 0), new Vector2(1.0f, 1.0f));
+
+            debug.Run(kernelTex, new Vector2(0, 0), new Vector2(0.3f, 0.3f));
 
             glControl.SwapBuffers();
             frameCounter++;

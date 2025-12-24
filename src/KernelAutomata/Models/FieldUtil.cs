@@ -27,7 +27,10 @@ namespace KernelAutomata.Models
                 if (r < 25)
                     fieldData[4 * i + 0] = 1.0f;
 
-                if (r > 250) fieldData[4 * i + 0] = 0.0f;
+                if (r > 150) fieldData[4 * i + 0] = 0.0f;
+
+                //testing in conv works
+                //fieldData[4 * i + 0] = (x==size/2 && y==size/2) ? 1.0f : 0.0f;
             }
 
             return fieldData;
