@@ -21,7 +21,6 @@ namespace KernelAutomata.Gpu
             int fftProgram,
             int inputTex,
             int pingTex,
-            int pongTex,
             int size,
             bool inverse)
         {
@@ -121,20 +120,21 @@ namespace KernelAutomata.Gpu
             int mulProgram,
             int fieldTex,
             int kernelFftTex,
+            int fftTmpTex,
             int pingTex,
             int pongTex,
             int size)
         {
             // FFT(field)
             int fieldFft = DispatchFFT(
-                fftProgram, fieldTex, pingTex, pongTex, size, inverse: false);
+                fftProgram, fieldTex, pingTex, size, inverse: false);
 
             // Multiply in frequency domain
-            MultiplySpectra(mulProgram, fieldFft, kernelFftTex, pongTex, size);
+            MultiplySpectra(mulProgram, fieldFft, kernelFftTex, fftTmpTex, size);
 
             // IFFT
             int convTex = DispatchFFT(
-                fftProgram, pongTex, pingTex, pongTex, size, inverse: true);
+                fftProgram, fftTmpTex, pingTex, size, inverse: true);
 
             return convTex; // spatial-domain convolution result
         }
