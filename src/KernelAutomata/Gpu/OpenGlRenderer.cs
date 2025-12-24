@@ -112,7 +112,7 @@ namespace KernelAutomata.Gpu
 
             //float[,] kernel = KernelUtil.CreateRingKernel(simulation.fieldSize, 32, 0.5f, 0.5f);
             //float[,] kernel = KernelUtil.CreateRingKernel2(simulation.fieldSize, 32, 0.5f, 0.5f);
-            float[,] kernel = KernelUtil.CreateRingKernel3(simulation.fieldSize, 32, 0.75f, 0.11f);
+            float[,] kernel = KernelUtil.CreateRingKernel(simulation.fieldSize, 32, 0.5f, 0.5f);
             float[] kernelFlattened = KernelUtil.Flatten4Channels(kernel, 0);
             GL.BindTexture(TextureTarget.Texture2D, kernelTex);
             GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernelFlattened);
@@ -203,7 +203,7 @@ namespace KernelAutomata.Gpu
             */
 
 
-            growth.DispatchGrowth(growth.program, fieldTex, resTex, fieldNextTex, simulation.fieldSize, 0.35f, 0.6f * 0.102233931f, 0.1f);   //  0.34f, 0.06f, 0.1f);
+            growth.DispatchGrowth(growth.program, fieldTex, resTex, fieldNextTex, simulation.fieldSize, 0.352f, 0.0599f, 0.1f);   //  0.34f, 0.06f, 0.1f);
             //growth.DispatchGrowth(growth.program, fieldTex, resTex, fieldNextTex, simulation.fieldSize, 0.34f, 0.06f, 0.1f);
 
             TextureUtil.CopyTexture2D(fieldNextTex, fieldTex, simulation.fieldSize, simulation.fieldSize);

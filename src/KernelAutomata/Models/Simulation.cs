@@ -8,6 +8,6 @@ namespace KernelAutomata.Models
 {
     public class Simulation
     {
-        public int fieldSize = 512;
+        public int fieldSize = 512*2;
     }
 }

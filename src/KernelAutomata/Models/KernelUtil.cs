@@ -192,12 +192,14 @@ namespace KernelAutomata.Models
 
                     ringWidth = 0.05f;
 
-                    v += Bump(rn, 0.4f, 0.1f);
+                    v += Bump(rn, 0.5f, 0.1f);
 
                     
 
-                    v += Bump(rn, 0.8f, 0.1f);
+                    v += 0.7f*Bump(rn, 0.8f, 0.075f);
 
+
+                    v = v / 2;
 
                     //v -= 1*Bump(rn, 0.7f, 0.5f);
 
