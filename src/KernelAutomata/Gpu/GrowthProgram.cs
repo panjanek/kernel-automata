@@ -13,13 +13,13 @@ namespace KernelAutomata.Gpu
         public GrowthProgram()
         {
             program = ShaderUtil.CompileAndLinkComputeShader("growth.comp");
-
         }
 
         public void DispatchGrowth(
             int program,
             int fieldInTex,
-            int convTex,
+            int conv1Tex,
+            int conv2Tex,
             int fieldOutTex,
             int size,
             float mu,
@@ -33,14 +33,13 @@ namespace KernelAutomata.Gpu
             GL.Uniform1(GL.GetUniformLocation(program, "uDt"), dt);
             GL.Uniform1(GL.GetUniformLocation(program, "uSize"), size);
 
-            GL.BindImageTexture(0, fieldInTex, 0, false, 0,
-                TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
+            GL.BindImageTexture(0, fieldInTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
 
-            GL.BindImageTexture(1, convTex, 0, false, 0,
-                TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
+            GL.BindImageTexture(1, conv1Tex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
 
-            GL.BindImageTexture(2, fieldOutTex, 0, false, 0,
-                TextureAccess.WriteOnly, SizedInternalFormat.Rgba32f);
+            GL.BindImageTexture(2, conv2Tex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
+
+            GL.BindImageTexture(3, fieldOutTex, 0, false, 0, TextureAccess.WriteOnly, SizedInternalFormat.Rgba32f);
 
             GL.DispatchCompute(
                 (size + 15) / 16,

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,6 +24,56 @@ namespace KernelAutomata.Models
             }
 
             return result;
+        }
+
+        public static float[,] CreateGausianRing(int N, float R, float ringCenter, float ringWidth)
+        {
+            float[,] kernel = new float[N, N];
+            float sum = 0f;
+
+            for (int y = 0; y < N; y++)
+            {
+                int dy = (y <= N / 2) ? y : y - N;
+
+                for (int x = 0; x < N; x++)
+                {
+                    int dx = (x <= N / 2) ? x : x - N;
+
+                    float r = MathF.Sqrt(dx * dx + dy * dy);
+
+                    if (r > R)
+                    {
+                        kernel[x, y] = 0f;
+                        continue;
+                    }
+
+                    // Normalize radius to [0,1]
+                    //float rn = r / R;
+
+                    // Distance from ring center
+                    //float t = (r - ringCenter) / ringWidth;
+
+                    float v = Gauss(r, ringCenter, ringWidth);
+
+                    kernel[x, y] = v;
+                    sum += v;
+                }
+            }
+
+            // Normalize so sum(kernel) = 1
+            if (sum > 0f)
+            {
+                for (int y = 0; y < N; y++)
+                    for (int x = 0; x < N; x++)
+                        kernel[x, y] /= sum;
+            }
+
+            return kernel;
+        }
+
+        public static float Gauss(float r, float r1, float sigma)
+        {
+            return (float)Math.Exp( -(r-r1)*(r-r1) / (2*sigma*sigma) );
         }
 
         public static float[,] CreateRingKernel(int N, float R,float ringCenter,float ringWidth)
