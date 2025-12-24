@@ -119,19 +119,16 @@ namespace KernelAutomata.Gpu
             int kernelFftTex,
             int fftTmpTex,
             int pingTex,
-            int pongTex,
             int size)
         {
             // FFT(field)
-            int fieldFft = DispatchFFT(
-                fieldTex, pingTex, size, inverse: false);
+            int fieldFft = DispatchFFT(fieldTex, pingTex, size, inverse: false);
 
             // Multiply in frequency domain
             MultiplySpectra(fieldFft, kernelFftTex, fftTmpTex, size);
 
             // IFFT
-            int convTex = DispatchFFT(
-                fftTmpTex, pingTex, size, inverse: true);
+            int convTex = DispatchFFT(fftTmpTex, pingTex, size, inverse: true);
 
             return convTex; // spatial-domain convolution result
         }

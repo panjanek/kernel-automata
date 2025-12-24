@@ -56,11 +56,7 @@ namespace KernelAutomata.Gpu
 
         private int pingTex;
 
-        private int pongTex;
-
         private int ping2Tex;
-
-        private int pong2Tex;
 
         private int tmpTex;
 
@@ -69,12 +65,6 @@ namespace KernelAutomata.Gpu
         private int fftTmpTex;
 
         private int fftTmp2Tex;
-
-        private int conv1Tex;
-
-        private int conv2Tex;
-
-        private int fbo;
 
         public OpenGlRenderer(Panel placeholder, Simulation simulation)
         {
@@ -122,28 +112,17 @@ namespace KernelAutomata.Gpu
 
 
             pingTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            pongTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             ping2Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            pong2Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
 
             tmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             tmp2Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             fftTmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            conv1Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            conv2Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             fftTmp2Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
 
-
-            //float[,] kernel = KernelUtil.CreateRingKernel(simulation.fieldSize, 32, 0.5f, 0.5f);
-            //float[,] kernel = KernelUtil.CreateRingKernel2(simulation.fieldSize, 32, 0.5f, 0.5f);
-            //float[,] kernel1 = KernelUtil.CreateRingKernel(simulation.fieldSize, 32, 0.5f, 0.5f);
-
-
-            float[,] kernel1 = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 10f, 4f);
-            float[] kernelFlattened1 = KernelUtil.Flatten4Channels(kernel1, 0);
+            //kernel 1
+            float[] kernel1 = KernelUtil.Flatten4Channels(KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 10f, 4f), 0);
             GL.BindTexture(TextureTarget.Texture2D, kernel1Tex);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernelFlattened1);
-            //fft of kernel 1
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernel1);
             TextureUtil.CopyTexture2D(kernel1Tex, tmpTex, simulation.fieldSize, simulation.fieldSize);
             int resTex = convolution.DispatchFFT(
                 tmpTex,
@@ -153,11 +132,10 @@ namespace KernelAutomata.Gpu
             );
             TextureUtil.CopyTexture2D(resTex, kernel1FftTex, simulation.fieldSize, simulation.fieldSize);
 
-            //fft of kernel 2
-            float[,] kernel2 = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7); //24
-            float[] kernelFlattened2 = KernelUtil.Flatten4Channels(kernel2, 0);
+            //kernel 2
+            float[] kernel2 = KernelUtil.Flatten4Channels(KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7), 0);
             GL.BindTexture(TextureTarget.Texture2D, kernel2Tex);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernelFlattened2);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernel2);
             TextureUtil.CopyTexture2D(kernel2Tex, tmp2Tex, simulation.fieldSize, simulation.fieldSize);
             resTex = convolution.DispatchFFT(
                 tmp2Tex,
@@ -172,23 +150,21 @@ namespace KernelAutomata.Gpu
             GL.BindTexture(TextureTarget.Texture2D, resTex);
             GL.GetTexImage(TextureTarget.Texture2D, level: 0, PixelFormat.Rgba, PixelType.Float, data);
             GL.BindTexture(TextureTarget.Texture2D, 0);
-
             var max = data.Max();
             */
 
 
-
             //denormalize original ring, only for debugging;
-            var kernelMax1 = kernelFlattened1.Max();
-            for (int i = 0; i < kernelFlattened1.Length; i++) kernelFlattened1[i] /= kernelMax1;
+            var kernelMax1 = kernel1.Max();
+            for (int i = 0; i < kernel1.Length; i++) kernel1[i] /= kernelMax1;
             GL.BindTexture(TextureTarget.Texture2D, kernel1Tex);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernelFlattened1);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernel1);
 
 
-            var kernelMax2 = kernelFlattened2.Max();
-            for (int i = 0; i < kernelFlattened2.Length; i++) kernelFlattened2[i] /= kernelMax2;
+            var kernelMax2 = kernel2.Max();
+            for (int i = 0; i < kernel2.Length; i++) kernel2[i] /= kernelMax2;
             GL.BindTexture(TextureTarget.Texture2D, kernel2Tex);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernelFlattened2);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernel2);
 
 
             var fieldData = FieldUtil.InitRandom(simulation.fieldSize);
@@ -196,14 +172,6 @@ namespace KernelAutomata.Gpu
             GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, fieldData);
 
             GL.ClearTexImage(pingTex, 0, PixelFormat.Rgba, PixelType.Float, IntPtr.Zero);
-            GL.ClearTexImage(pongTex, 0, PixelFormat.Rgba, PixelType.Float, IntPtr.Zero);
-
-
-            /*
-            this.fbo = TextureUtil.CreateFboForTexture(fieldTex);
-            GL.ClearColor(0f, 0f, 0f, 0f);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-            */
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
@@ -226,25 +194,21 @@ namespace KernelAutomata.Gpu
         {
 
             TextureUtil.CopyTexture2D(fieldTex, tmpTex, simulation.fieldSize, simulation.fieldSize);
-            var resTex = convolution.ConvolveFFT(
+            var res1Tex = convolution.ConvolveFFT(
                 tmpTex,
                 kernel1FftTex,
                 fftTmpTex,
                 pingTex,
-                pongTex,
                 simulation.fieldSize);
-            TextureUtil.CopyTexture2D(resTex, conv1Tex, simulation.fieldSize, simulation.fieldSize);
 
 
             TextureUtil.CopyTexture2D(fieldTex, tmp2Tex, simulation.fieldSize, simulation.fieldSize);
-            resTex = convolution.ConvolveFFT(
+            var res2Tex = convolution.ConvolveFFT(
                 tmp2Tex,
                 kernel2FftTex,
                 fftTmp2Tex,
                 ping2Tex,
-                pong2Tex,
                 simulation.fieldSize);
-            TextureUtil.CopyTexture2D(resTex, conv2Tex, simulation.fieldSize, simulation.fieldSize);
 
 
             /*
@@ -259,11 +223,8 @@ namespace KernelAutomata.Gpu
             */
 
 
-            //growth.DispatchGrowth(growth.program, fieldTex, conv1Tex, conv2Tex, fieldNextTex, simulation.fieldSize, 0.352f, 0.0599f, 0.1f);   //  0.34f, 0.06f, 0.1f);
-            growth.DispatchGrowth(growth.program, fieldTex, conv1Tex, conv2Tex, fieldNextTex, simulation.fieldSize, 0.1f, 0.015f, 0.1f);
-
+            growth.DispatchGrowth(growth.program, fieldTex, res1Tex, res2Tex, fieldNextTex, simulation.fieldSize, 0.1f, 0.015f, 0.1f);
             (fieldTex, fieldNextTex) = (fieldNextTex, fieldTex);
-            //TextureUtil.CopyTexture2D(fieldNextTex, fieldTex, simulation.fieldSize, simulation.fieldSize);
 
 
 
