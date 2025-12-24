@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="shaders\growth.comp" />
     <EmbeddedResource Include="shaders\multiply.comp" />
     <EmbeddedResource Include="shaders\fft_pass.comp" />
     <EmbeddedResource Include="shaders\debug.frag" />

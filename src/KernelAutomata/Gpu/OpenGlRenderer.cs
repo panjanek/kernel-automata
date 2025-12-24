@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using OpenTK.GLControl;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
+using static System.Net.Mime.MediaTypeNames;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 using Panel = System.Windows.Controls.Panel;
@@ -30,9 +32,11 @@ namespace KernelAutomata.Gpu
 
         private Simulation simulation;
 
-        private DebugProgram debugProgram;
+        private DebugProgram debug;
 
-        private ConvolutionProgram convProgram;
+        private ConvolutionProgram convolution;
+
+        private GrowthProgram growth;
 
         private int frameCounter;
 
@@ -48,7 +52,7 @@ namespace KernelAutomata.Gpu
 
         private int pongTex;
 
-        private int ketnelFbo;
+        private int fbo;
 
         private int kernelFftFbo;
         public OpenGlRenderer(Panel placeholder, Simulation simulation)
@@ -84,34 +88,48 @@ namespace KernelAutomata.Gpu
             GL.GenVertexArrays(1, out dummyVao);
             GL.BindVertexArray(dummyVao);
 
-            debugProgram = new DebugProgram();
-            convProgram = new ConvolutionProgram();
+            debug = new DebugProgram();
+            convolution = new ConvolutionProgram();
+            growth = new GrowthProgram();
 
-            if (kernelTex > 0)
-                GL.DeleteTexture(kernelTex);
-            //kernelTex = TextureUtil.CreateStateTexture(simulation.kernelSize, simulation.kernelSize);
             kernelTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            float[,] kernel = KernelUtil.CreateRingKernel(simulation.fieldSize, 32, 0.5f, 0.5f);
-            float[] initialState = KernelUtil.Flatten4Channels(kernel, 0);
-            GL.BindTexture(TextureTarget.Texture2D, kernelTex);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, initialState);
-
-
-            /*
             kernelFftTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            convProgram.DispatchFFT(
-                convProgram.fftProgram,
+
+            fieldTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            pingTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            pongTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+
+
+            //kernelTex = TextureUtil.CreateStateTexture(simulation.kernelSize, simulation.kernelSize);
+            
+            float[,] kernel = KernelUtil.CreateRingKernel(simulation.fieldSize, 32, 0.5f, 0.5f);
+            float[] kernelFlattened = KernelUtil.Flatten4Channels(kernel, 0);
+            GL.BindTexture(TextureTarget.Texture2D, kernelTex);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernelFlattened);
+            
+            
+            convolution.DispatchFFT(
+                convolution.fftProgram,
                 kernelTex,
                 kernelFftTex,
                 simulation.fieldSize,
                 inverse: false
             );
-            */
 
-            ketnelFbo = TextureUtil.CreateFboForTexture(kernelTex);
+
+
+            var fieldData = FieldUtil.InitRandom(simulation.fieldSize);
+            GL.BindTexture(TextureTarget.Texture2D, fieldTex);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, fieldData);
+
+            GL.ClearTexImage(pingTex, 0, PixelFormat.Rgba, PixelType.Float, IntPtr.Zero);
+            GL.ClearTexImage(pongTex, 0, PixelFormat.Rgba, PixelType.Float, IntPtr.Zero);
+
+
+
+            this.fbo = TextureUtil.CreateFboForTexture(fieldTex);
             GL.ClearColor(0f, 0f, 0f, 0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
-
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
@@ -132,6 +150,42 @@ namespace KernelAutomata.Gpu
 
         public void Draw()
         {
+            
+            convolution.ConvolveFFT(
+                convolution.fftProgram,
+                convolution.multiplyProgram,
+                fieldTex,
+                kernelFftTex,
+                pingTex,
+                pongTex,
+                simulation.fieldSize);
+
+
+            /*
+            float[] data = new float[simulation.fieldSize * simulation.fieldSize * 4];
+            GL.BindTexture(TextureTarget.Texture2D, pingTex);
+            GL.GetTexImage(
+                TextureTarget.Texture2D,
+                level: 0,
+                PixelFormat.Rgba,
+                PixelType.Float,
+                data);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            for (int i = 0; i < data.Length; i++) data[i] = data[i] / (simulation.fieldSize * simulation.fieldSize);
+
+
+            GL.CopyImageSubData(
+                pingTex, ImageTarget.Texture2D, 0, 0, 0, 0,
+                fieldTex, ImageTarget.Texture2D, 0, 0, 0, 0,
+                simulation.fieldSize, simulation.fieldSize, 1);
+            */
+
+            //growth.DispatchGrowth(growth.program, pingTex, )
+
+
+
+
+
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
         }
@@ -139,7 +193,7 @@ namespace KernelAutomata.Gpu
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
 
-            debugProgram.Run(kernelTex, new Vector2(0, 0), new Vector2(0.3f, 0.3f));
+            debug.Run(fieldTex, new Vector2(0, 0), new Vector2(1.0f, 1.0f));
 
             glControl.SwapBuffers();
             frameCounter++;

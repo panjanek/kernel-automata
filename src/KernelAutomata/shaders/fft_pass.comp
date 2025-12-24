@@ -47,6 +47,7 @@ void main()
     vec2 out0 = a + t;
     vec2 out1 = a - t;
 
+
     imageStore(dst, p0, vec4(out0, 0, 0));
     imageStore(dst, p1, vec4(out1, 0, 0));
 }
