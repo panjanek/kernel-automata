@@ -12,11 +12,11 @@ namespace KernelAutomata.Models
         {
             float[] fieldData = new float[size * size * 4];
 
-            Random rng = new Random();
+            Random rng = new Random(1);
 
             for (int i = 0; i < size * size; i++)
             {
-                fieldData[4 * i + 0] = (float)rng.NextDouble()*0.4f; // real
+                fieldData[4 * i + 0] = (float)rng.NextDouble()*0.5f; // real
                 fieldData[4 * i + 1] = 0f;                      // imag
                 fieldData[4 * i + 2] = 0f;
                 fieldData[4 * i + 3] = 0f;

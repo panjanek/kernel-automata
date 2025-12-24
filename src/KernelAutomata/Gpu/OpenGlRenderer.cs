@@ -268,7 +268,7 @@ namespace KernelAutomata.Gpu
             //growth.DispatchGrowth(growth.program, fieldTex, conv1Tex, conv2Tex, fieldNextTex, simulation.fieldSize, 0.352f, 0.0599f, 0.1f);   //  0.34f, 0.06f, 0.1f);
             growth.DispatchGrowth(growth.program, fieldTex, conv1Tex, conv2Tex, fieldNextTex, simulation.fieldSize, 0.1f, 0.015f, 0.1f);
 
-
+            //(fieldTex, fieldNextTex) = (fieldNextTex, fieldTex);
             TextureUtil.CopyTexture2D(fieldNextTex, fieldTex, simulation.fieldSize, simulation.fieldSize);
 
 
@@ -279,13 +279,11 @@ namespace KernelAutomata.Gpu
 
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
-            //debug.Run(kernelFftTex, new Vector2(0, 0), new Vector2(1.0f, 1.0f));
-            //debug.Run(fieldNextTex, new Vector2(0, 0), new Vector2(1.0f, 1.0f));
             debug.Run(fieldNextTex, new Vector2(0, 0), new Vector2(1.0f, 1.0f));
 
-            debug.Run(kernel1Tex, new Vector2(-1.0f, -1.0f), new Vector2(1.3f, 1.3f));
+            //debug.Run(kernel1Tex, new Vector2(-1.0f, -1.0f), new Vector2(1.3f, 1.3f));
 
-            debug.Run(kernel2Tex, new Vector2(-1.2f, -1.2f), new Vector2(1.3f, 1.3f));
+            //debug.Run(kernel2Tex, new Vector2(-1.2f, -1.2f), new Vector2(1.3f, 1.3f));
 
             glControl.SwapBuffers();
             frameCounter++;
