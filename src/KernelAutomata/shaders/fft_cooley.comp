@@ -1,0 +1,105 @@
+﻿#version 450
+
+layout(local_size_x = 16, local_size_y = 1, local_size_z = 1) in;
+
+layout(rgba32f, binding = 0) readonly  uniform image2D src;
+layout(rgba32f, binding = 1) writeonly uniform image2D dst;
+
+uniform int  uStage;        // -1 = bit-reversal, >=0 = FFT stage
+uniform int  uSize;         // N (power of two)
+uniform int  uInverse;      // +1 FFT, -1 IFFT
+uniform bool uHorizontal;   // true = rows, false = columns
+
+const float PI = 3.141592653589793;
+
+vec2 cmul(vec2 a, vec2 b)
+{
+    return vec2(
+        a.x * b.x - a.y * b.y,
+        a.x * b.y + a.y * b.x
+    );
+}
+
+uint bitReverse(uint x, int bits)
+{
+    uint r = 0;
+    for (int i = 0; i < bits; i++)
+    {
+        r = (r << 1) | (x & 1u);
+        x >>= 1u;
+    }
+    return r;
+}
+
+void main()
+{
+    int i = int(gl_GlobalInvocationID.x);
+    int j = int(gl_GlobalInvocationID.z);
+
+    if (i >= uSize || j >= uSize)
+        return;
+
+    ivec2 srcPos, dstPos;
+
+    // =========================
+    // Bit-reversal pass
+    // =========================
+    if (uStage == -1)
+    {
+        int bits = int(log2(float(uSize)));
+        int ri = int(bitReverse(uint(i), bits));
+
+        if (uHorizontal)
+        {
+            srcPos = ivec2(i, j);
+            dstPos = ivec2(ri, j);
+        }
+        else
+        {
+            srcPos = ivec2(j, i);
+            dstPos = ivec2(j, ri);
+        }
+
+        imageStore(dst, dstPos, imageLoad(src, srcPos));
+        return;
+    }
+
+    // =========================
+    // FFT butterfly stage
+    // =========================
+    int m  = 1 << (uStage + 1);
+    int mh = m >> 1;
+
+    int k = (i / m) * m;
+    int r = i % mh;
+
+    int i0 = k + r;
+    int i1 = i0 + mh;
+
+    ivec2 p0, p1, pout;
+
+    if (uHorizontal)
+    {
+        p0   = ivec2(i0, j);
+        p1   = ivec2(i1, j);
+        pout = ivec2(i,  j);
+    }
+    else
+    {
+        p0   = ivec2(j, i0);
+        p1   = ivec2(j, i1);
+        pout = ivec2(j, i);
+    }
+
+    vec2 a = imageLoad(src, p0).rg;
+    vec2 b = imageLoad(src, p1).rg;
+
+    float angle = float(uInverse) * -2.0 * PI * float(r) / float(m);
+    vec2 w = vec2(cos(angle), sin(angle));
+
+    vec2 t = cmul(b, w);
+
+    vec2 outv = (i < i1) ? (a + t) : (a - t);
+
+    imageStore(dst, pout, vec4(outv, 0.0, 0.0));
+}

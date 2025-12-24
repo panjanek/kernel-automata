@@ -76,5 +76,15 @@ namespace KernelAutomata.Gpu
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             return fbo;
         }
+
+        public static void CopyTexture2D(int srcTex, int dstTex, int width, int height)
+        {
+            GL.CopyImageSubData(
+                srcTex, ImageTarget.Texture2D, 0,  // src
+                0, 0, 0,
+                dstTex, ImageTarget.Texture2D, 0,  // dst
+                0, 0, 0,
+                width, height, 1);
+        }
     }
 }
