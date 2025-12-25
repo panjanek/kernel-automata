@@ -8,7 +8,7 @@ namespace KernelAutomata.Models
 {
     public static class FieldUtil
     {
-        public static float[] InitRandom(int size)
+        public static float[] RandomRingWithDisk(int size, int ringSize, int diskSize)
         {
             float[] fieldData = new float[size * size * 4];
 
@@ -24,10 +24,10 @@ namespace KernelAutomata.Models
                 var x = i % size;
                 var y = i / size;
                 var r = Math.Sqrt((x - size / 2) * (x - size / 2) + (y - size / 2) * (y - size/2));
-                if (r < 25)
+                if (r < diskSize)
                     fieldData[4 * i + 0] = 1.0f;
 
-                if (r > 250) fieldData[4 * i + 0] = 0.0f;
+                if (r > ringSize) fieldData[4 * i + 0] = 0.0f;
 
                 //testing in conv works
                 //fieldData[4 * i + 0] = (x==size/2 && y==size/2) ? 1.0f : 0.0f;

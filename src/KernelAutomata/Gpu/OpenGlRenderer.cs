@@ -38,11 +38,15 @@ namespace KernelAutomata.Gpu
 
         private GrowthProgram growth;
 
+        private DisplayProgram display;
+
         private int frameCounter;
 
         private int dummyVao;
 
         private Channel red;
+
+        private Channel green;
 
         private Kernel kernel;
 
@@ -80,10 +84,12 @@ namespace KernelAutomata.Gpu
             GL.BindVertexArray(dummyVao);
 
             debug = new DebugProgram();
+            display = new DisplayProgram();
             convolution = new ConvolutionProgram();
             growth = new GrowthProgram();
 
             red = new Channel(simulation, convolution, growth);
+            green = new Channel(simulation, convolution, growth);
 
             kernel = new Kernel(simulation, convolution);
             float[] kernel1 = KernelUtil.Flatten4Channels(KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 10f, 4f), 0);
@@ -91,7 +97,8 @@ namespace KernelAutomata.Gpu
             kernel1 = KernelUtil.SumKernels(kernel1, 1.0f, kernel2, -0.36f);
             kernel.UploadData(kernel1);
 
-            red.UploadData(FieldUtil.InitRandom(simulation.fieldSize));
+            red.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, 250, 25));
+            green.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, 200, 100));
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
@@ -115,6 +122,9 @@ namespace KernelAutomata.Gpu
             red.Convolve(kernel.FftTex);
             red.Grow(red.ConvTex);
 
+            green.Convolve(kernel.FftTex);
+            green.Grow(green.ConvTex);
+
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
@@ -122,7 +132,7 @@ namespace KernelAutomata.Gpu
 
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
-            debug.Run(red.FieldTex, new Vector2(0, 0), new Vector2(1.0f, 1.0f));
+            display.Run(red.FieldTex, green.FieldTex);
 
             //debug.Run(kernel1Tex, new Vector2(-1.0f, -1.0f), new Vector2(1.3f, 1.3f));
             //debug.Run(kernel2Tex, new Vector2(-1.2f, -1.2f), new Vector2(1.3f, 1.3f));
