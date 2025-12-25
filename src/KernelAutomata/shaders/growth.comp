@@ -4,12 +4,14 @@ layout (local_size_x = 16, local_size_y = 16) in;
 
 layout (rgba32f, binding = 0) readonly  uniform image2D fieldIn;
 layout (rgba32f, binding = 1) readonly  uniform image2D conv1In;
-layout (rgba32f, binding = 2) writeonly uniform image2D fieldOut;
+layout (rgba32f, binding = 2) readonly  uniform image2D conv2In;
+layout (rgba32f, binding = 3) writeonly uniform image2D fieldOut;
 
 uniform float uMu;
 uniform float uSigma;
 uniform float uDt;
 uniform int   uSize;
+uniform int   uMyChannel;
 
 float gaussianGrowth(float u)
 {
@@ -25,19 +27,22 @@ void main()
 
     float a = imageLoad(fieldIn, p).r;
     float u1 = imageLoad(conv1In, p).r;
-    //float u2 = imageLoad(conv2In, p).r;
+    float u2 = imageLoad(conv2In, p).r;
 
     // Normalize inverse FFT
     u1 /= float(uSize * uSize);
+    u2 /= float(uSize * uSize);
 
-    float u = u1;
-    float g = gaussianGrowth(u);
-
-
-
-    float next = clamp(a + uDt * g, 0.0, 1.0);
-
-    //next = u; (testing convolution)
-
-    imageStore(fieldOut, p, vec4(next, 0.0, 0.0, 0.0));
+    if (uMyChannel == 1)
+    {
+        float g = gaussianGrowth(u1 + u2*0.01);
+        float next = clamp(a + uDt * g, 0.0, 1.0);
+        imageStore(fieldOut, p, vec4(next, 0.0, 0.0, 0.0));
+    }
+    else if (uMyChannel == 2)
+    {
+        float g = gaussianGrowth(u2 + u1*0.02);
+        float next = clamp(a + uDt * g, 0.0, 1.0);
+        imageStore(fieldOut, p, vec4(next, 0.0, 0.0, 0.0));
+    }
 }

@@ -83,22 +83,25 @@ namespace KernelAutomata.Gpu
             GL.GenVertexArrays(1, out dummyVao);
             GL.BindVertexArray(dummyVao);
 
+            //shader programs
             debug = new DebugProgram();
             display = new DisplayProgram();
             convolution = new ConvolutionProgram();
             growth = new GrowthProgram();
 
+            // channels
             red = new Channel(simulation, convolution, growth);
             green = new Channel(simulation, convolution, growth);
 
+            // one shared kernel with 2 rings
             kernel = new Kernel(simulation, convolution);
             float[] kernel1 = KernelUtil.Flatten4Channels(KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 10f, 4f), 0);
             float[] kernel2 = KernelUtil.Flatten4Channels(KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7), 0);
             kernel1 = KernelUtil.SumKernels(kernel1, 1.0f, kernel2, -0.36f);
             kernel.UploadData(kernel1);
 
-            red.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, 250, 25));
-            green.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, 200, 100));
+            red.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.3f, 0.3f), 250, 25));
+            green.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.6f, 0.6f), 350, 100));
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
@@ -120,10 +123,10 @@ namespace KernelAutomata.Gpu
         public void Draw()
         {
             red.Convolve(kernel.FftTex);
-            red.Grow(red.ConvTex);
+            red.Grow(1, red.ConvTex, green.ConvTex);
 
             green.Convolve(kernel.FftTex);
-            green.Grow(green.ConvTex);
+            green.Grow(2, red.ConvTex, green.ConvTex);
 
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
