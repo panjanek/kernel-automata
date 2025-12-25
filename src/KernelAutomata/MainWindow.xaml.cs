@@ -74,6 +74,12 @@ namespace KernelAutomata
 
         private void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            switch (e.Key)
+            {
+                case Key.Space:
+                    renderer.Paused = !renderer.Paused;
+                    break;
+            }
         }
 
         private void InfoTimer_Tick(object? sender, EventArgs e)

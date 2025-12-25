@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,6 +27,8 @@ namespace KernelAutomata.Gpu
     {
         public const double ZoomingSpeed = 0.0005;
         public int FrameCounter => frameCounter;
+
+        public bool Paused { get; set; }
 
         private Panel placeholder;
 
@@ -121,8 +124,9 @@ namespace KernelAutomata.Gpu
 
             dragging = new DraggingHandler(glControl, (pos, left) => true, (prev, curr) =>
             {
+                float aspect = glControl.ClientSize.Width / glControl.ClientSize.Height;
                 var delta = prev - curr;
-                float screenToTexX = (float)simulation.fieldSize / glControl.ClientSize.Width;
+                float screenToTexX = ((float)simulation.fieldSize / aspect) / glControl.ClientSize.Width;
                 float screenToTexY = (float)simulation.fieldSize / glControl.ClientSize.Height;
                 center.X += delta.X / (simulation.fieldSize * zoom / screenToTexX);
                 center.Y -= delta.Y / (simulation.fieldSize * zoom / screenToTexY);
@@ -132,14 +136,17 @@ namespace KernelAutomata.Gpu
 
         }
 
+        private float aspectRatio => (float)(glControl?.ClientSize.Height ?? 1) / (float)(glControl?.ClientSize.Width ?? 1);
+
         private void GlControl_MouseWheel(object? sender, MouseEventArgs e)
         {
             var pos = new Vector2(e.X, e.Y);
             float zoomRatio = (float)(1.0 + ZoomingSpeed * e.Delta);
             float newZoom = zoom * zoomRatio;
             Vector2 mouseUV = new Vector2(pos.X / glControl.ClientSize.Width, 1.0f - pos.Y / glControl.ClientSize.Height);
-            Vector2 mouseTex = (mouseUV - new Vector2(0.5f, 0.5f)) / zoom + center;
-            center = mouseTex - (mouseUV - new Vector2(0.5f)) / newZoom;
+            Vector2 mouseTex = new Vector2((mouseUV.X - 0.5f) / (zoom* aspectRatio) + center.X, (mouseUV.Y - 0.5f) / zoom + center.Y);           
+            center = new Vector2(mouseTex.X - (mouseUV.X - 0.5f) / (newZoom* aspectRatio), mouseTex.Y - (mouseUV.Y - 0.5f) / newZoom);           
+            
             zoom = newZoom;
         }
 
@@ -157,12 +164,14 @@ namespace KernelAutomata.Gpu
 
         public void Draw()
         {
-            red.Convolve(kernel2Rings.FftTex, kernel1RingSmall.FftTex);
-            red.Grow(red.MyConvTex, green.CompeteConvTex, 1.0f, -0.05f,         0.098f, 0.014f);
+            if (!Paused)
+            {
+                red.Convolve(kernel2Rings.FftTex, kernel1RingSmall.FftTex);
+                red.Grow(red.MyConvTex, green.CompeteConvTex, 1.0f, -0.05f, 0.098f, 0.014f);
 
-            green.Convolve(kernel2Rings.FftTex, kernel1RingSmall.FftTex);
-            green.Grow(green.MyConvTex, red.CompeteConvTex, 1.0f, 0.11f,       0.11f, 0.015f);
-
+                green.Convolve(kernel2Rings.FftTex, kernel1RingSmall.FftTex);
+                green.Grow(green.MyConvTex, red.CompeteConvTex, 1.0f, 0.11f, 0.11f, 0.015f);
+            }
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
@@ -170,7 +179,7 @@ namespace KernelAutomata.Gpu
 
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
-            display.Run(red.FieldTex, green.FieldTex, center, zoom);
+            display.Run(red.FieldTex, green.FieldTex, center, zoom, aspectRatio);
 
             //debug.Run(kernel1Tex, new Vector2(-1.0f, -1.0f), new Vector2(1.3f, 1.3f));
             //debug.Run(kernel2Tex, new Vector2(-1.2f, -1.2f), new Vector2(1.3f, 1.3f));
