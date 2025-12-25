@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using KernelAutomata.Models;
 using OpenTK.Graphics.OpenGL;
@@ -19,6 +20,8 @@ namespace KernelAutomata.Gpu
         private int source1Tex;
 
         private int fftTmpTex;
+
+        private int convTex;
 
         private Simulation simulation;
 
@@ -52,18 +55,17 @@ namespace KernelAutomata.Gpu
 
         }
 
-        public void ConvolveAndGrow(int kernelFftTex)
+        public void Convolve(int kernelFftTex)
         {
             TextureUtil.CopyTexture2D(fieldTex, source1Tex, simulation.fieldSize, simulation.fieldSize);
-            var resTex = convolution.ConvolveFFT(
+            convTex = convolution.ConvolveFFT(
                 source1Tex,
                 kernelFftTex,
                 fftTmpTex,
                 tmp1Tex,
                 simulation.fieldSize);
 
-            growth.DispatchGrowth(fieldTex, resTex, fieldNextTex, simulation.fieldSize, 0.1f, 0.015f, 0.1f);
-            (fieldTex, fieldNextTex) = (fieldNextTex, fieldTex);
+
 
 
             /*
@@ -77,6 +79,14 @@ namespace KernelAutomata.Gpu
                 MathUtil.MeanStd(data, out var mean, out var std); //0.0236145761   0.102233931
             */
         }
+
+        public void Grow(int convTexRed)
+        {
+            growth.DispatchGrowth(fieldTex, convTexRed, fieldNextTex, simulation.fieldSize, 0.1f, 0.015f, 0.1f);
+            (fieldTex, fieldNextTex) = (fieldNextTex, fieldTex);
+        }
+
+        public int ConvTex => convTex;
 
         public int FieldTex => fieldNextTex;
     }
