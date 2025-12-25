@@ -89,9 +89,9 @@ namespace KernelAutomata.Gpu
 
         }
 
-        public void Grow(int myConv, int competeConv, float competeWeight, float mu, float sigma)
+        public void Grow(int myConv, int competeConv, float myWeight, float competeWeight, float mu, float sigma)
         {
-            growth.DispatchGrowth(fieldTex, myConv, competeConv, competeWeight, fieldNextTex, simulation.fieldSize, mu, sigma, simulation.dt);
+            growth.DispatchGrowth(fieldTex, myConv, competeConv, myWeight, competeWeight, fieldNextTex, simulation.fieldSize, mu, sigma, simulation.dt);
             (fieldTex, fieldNextTex) = (fieldNextTex, fieldTex);
         }
 

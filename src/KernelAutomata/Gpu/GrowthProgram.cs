@@ -20,6 +20,7 @@ namespace KernelAutomata.Gpu
             int fieldInTex,
             int myConvTex,
             int competeConvTex,
+            float myWeight,
             float competeWeight,
             int fieldOutTex,
             int size,
@@ -33,6 +34,7 @@ namespace KernelAutomata.Gpu
             GL.Uniform1(GL.GetUniformLocation(program, "uSigma"), sigma);
             GL.Uniform1(GL.GetUniformLocation(program, "uDt"), dt);
             GL.Uniform1(GL.GetUniformLocation(program, "uSize"), size);
+            GL.Uniform1(GL.GetUniformLocation(program, "uMyWeight"), myWeight);
             GL.Uniform1(GL.GetUniformLocation(program, "uCompeteWeight"), competeWeight);
 
             GL.BindImageTexture(0, fieldInTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);

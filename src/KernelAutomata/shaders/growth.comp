@@ -11,6 +11,7 @@ uniform float uMu;
 uniform float uSigma;
 uniform float uDt;
 uniform int   uSize;
+uniform float uMyWeight;
 uniform float uCompeteWeight;
 
 float gaussianGrowth(float u)
@@ -33,7 +34,7 @@ void main()
     my /= float(uSize * uSize);
     compete /= float(uSize * uSize);
 
-    float g =  gaussianGrowth(my + compete*uCompeteWeight);
+    float g =  gaussianGrowth(my * uMyWeight + compete * uCompeteWeight);
     float next = clamp(a + uDt * g, 0.0, 1.0);
     imageStore(fieldOut, p, vec4(next, 0.0, 0.0, 0.0));
 }

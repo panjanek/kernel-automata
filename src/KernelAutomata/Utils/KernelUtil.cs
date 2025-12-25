@@ -9,23 +9,6 @@ namespace KernelAutomata.Utils
 {
     public static class KernelUtil
     {
-        public static float[] Flatten4Channels(float[,] array2D, int channel)
-        {
-            int idx = 0;
-            int size = array2D.GetLength(0);
-            float[] result = new float[size * size * 4];
-            for(int x=0;x< size; x++)
-            {
-                for(int y=0; y< size; y++)
-                {
-                    result[idx*4+channel] = array2D[x,y];
-                    idx++;
-                }
-            }
-
-            return result;
-        }
-
         public static float[] SumKernels(float[] kernel1, float weight1, float[] kernel2, float weight2)
         {
             float[] result = new float[kernel1.Length];
@@ -37,7 +20,7 @@ namespace KernelAutomata.Utils
             return result;
         }
 
-        public static float[,] CreateGausianRing(int N, float R, float ringCenter, float ringWidth)
+        public static float[] CreateGausianRing(int N, float R, float ringCenter, float ringWidth)
         {
             float[,] kernel = new float[N, N];
             float sum = 0f;
@@ -79,12 +62,29 @@ namespace KernelAutomata.Utils
                         kernel[x, y] /= sum;
             }
 
-            return kernel;
+            return Flatten4Channels(kernel, 0);
         }
 
         public static float Gauss(float r, float r1, float sigma)
         {
             return (float)Math.Exp( -(r-r1)*(r-r1) / (2*sigma*sigma) );
+        }
+
+        private static float[] Flatten4Channels(float[,] array2D, int channel)
+        {
+            int idx = 0;
+            int size = array2D.GetLength(0);
+            float[] result = new float[size * size * 4];
+            for (int x = 0; x < size; x++)
+            {
+                for (int y = 0; y < size; y++)
+                {
+                    result[idx * 4 + channel] = array2D[x, y];
+                    idx++;
+                }
+            }
+
+            return result;
         }
     }
 }
