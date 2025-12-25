@@ -86,5 +86,20 @@ namespace KernelAutomata.Utils
                 0, 0, 0,
                 width, height, 1);
         }
+
+        public static float[] ReadTextyre(int tex, int width, int height)
+        {
+            float[] data = new float[width * height * 4];
+            GL.BindTexture(TextureTarget.Texture2D, tex);
+            GL.GetTexImage(TextureTarget.Texture2D, level: 0,PixelFormat.Rgba, PixelType.Float, data);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
+            //normalize for inspection
+            for (int i = 0; i < data.Length; i++) data[i] = data[i] / (width * height);
+            var min = data.Min();
+            var max = data.Max();
+            MathUtil.MeanStd(data, out var mean, out var std); //0.0236145761   0.102233931
+            return data;
+        }
     }
 }

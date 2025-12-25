@@ -16,13 +16,21 @@ namespace KernelAutomata.Gpu
 
         private int fieldNextTex;
 
-        private int tmp1Tex;
+        private int myTmpTex;
 
-        private int source1Tex;
+        private int mySourceTex;
 
-        private int fftTmpTex;
+        private int myFftTmpTex;
 
-        private int convTex;
+        private int myConvTex;
+
+        private int competeTmpTex;
+
+        private int competeSourceTex;
+
+        private int competeFftTmpTex;
+
+        private int competeConvTex;
 
         private Simulation simulation;
 
@@ -41,9 +49,12 @@ namespace KernelAutomata.Gpu
             fieldNextTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
 
             //tmp buffers
-            tmp1Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            source1Tex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            fftTmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            myTmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            mySourceTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            myFftTmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            competeTmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            competeSourceTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            competeFftTmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
         }
 
         public void UploadData(float[] fieldData)
@@ -56,38 +67,37 @@ namespace KernelAutomata.Gpu
 
         }
 
-        public void Convolve(int kernelFftTex)
+        public void Convolve(int myKernelFftTex, int competeKernelFftTex)
         {
-            TextureUtil.CopyTexture2D(fieldTex, source1Tex, simulation.fieldSize, simulation.fieldSize);
-            convTex = convolution.ConvolveFFT(
-                source1Tex,
-                kernelFftTex,
-                fftTmpTex,
-                tmp1Tex,
+            TextureUtil.CopyTexture2D(fieldTex, mySourceTex, simulation.fieldSize, simulation.fieldSize);
+            myConvTex = convolution.ConvolveFFT(
+                mySourceTex,
+                myKernelFftTex,
+                myFftTmpTex,
+                myTmpTex,
+                simulation.fieldSize);
+
+            TextureUtil.CopyTexture2D(fieldTex, competeSourceTex, simulation.fieldSize, simulation.fieldSize);
+            competeConvTex = convolution.ConvolveFFT(
+                competeSourceTex,
+                competeKernelFftTex,
+                competeFftTmpTex,
+                competeTmpTex,
                 simulation.fieldSize);
 
 
 
-
-            /*
-                float[] data = new float[simulation.fieldSize * simulation.fieldSize * 4];
-                GL.BindTexture(TextureTarget.Texture2D, resTex);
-                GL.GetTexImage(TextureTarget.Texture2D, level: 0,PixelFormat.Rgba, PixelType.Float, data);
-                GL.BindTexture(TextureTarget.Texture2D, 0);
-                for (int i = 0; i < data.Length; i++) data[i] = data[i] / (simulation.fieldSize * simulation.fieldSize);
-                var min = data.Min();
-                var max = data.Max();
-                MathUtil.MeanStd(data, out var mean, out var std); //0.0236145761   0.102233931
-            */
         }
 
-        public void Grow(int myChannel, int convTexRed, int convGreen)
+        public void Grow(int myChannel, int myConv, int competeConv)
         {
-            growth.DispatchGrowth(fieldTex, myChannel, convTexRed, convGreen, fieldNextTex, simulation.fieldSize, 0.1f, 0.015f, 0.1f);
+            growth.DispatchGrowth(fieldTex, myChannel, myConv, competeConv, fieldNextTex, simulation.fieldSize, 0.1f, 0.015f, 0.1f);
             (fieldTex, fieldNextTex) = (fieldNextTex, fieldTex);
         }
 
-        public int ConvTex => convTex;
+        public int MyConvTex => myConvTex;
+
+        public int CompeteConvTex => competeConvTex;
 
         public int FieldTex => fieldNextTex;
     }
