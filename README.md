@@ -14,6 +14,6 @@ Ispired by:
 * Configurable kernel rings
 * Configurable growth function
 
-## Recults
+## Results
 * Orbs
-* caterpillar ?
+* Caterpillar ?
