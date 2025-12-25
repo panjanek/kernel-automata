@@ -64,10 +64,14 @@ namespace KernelAutomata.Gpu
 
         private Kernel kernel1RingSmall;
 
+        private float aspectRatio => (float)(Math.Max(glControl?.ClientSize.Height ?? 1, 1)) / (float)(Math.Max(glControl?.ClientSize.Width ?? 1, 1));
+
         public OpenGlRenderer(Panel placeholder, Simulation simulation)
         {
             this.placeholder = placeholder;
             this.simulation = simulation;
+            float initialAspect = (float)Math.Max(placeholder.ActualHeight, 1) / (float)Math.Max(placeholder.ActualWidth, 1);
+            //zoom *= initialAspect;
             host = new WindowsFormsHost();
             host.Visibility = Visibility.Visible;
             host.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
@@ -134,9 +138,7 @@ namespace KernelAutomata.Gpu
 
             glControl.MouseWheel += GlControl_MouseWheel;
 
-        }
-
-        private float aspectRatio => (float)(glControl?.ClientSize.Height ?? 1) / (float)(glControl?.ClientSize.Width ?? 1);
+        }    
 
         private void GlControl_MouseWheel(object? sender, MouseEventArgs e)
         {

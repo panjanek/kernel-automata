@@ -10,6 +10,6 @@ namespace KernelAutomata.Models
     {
         public int fieldSize = 512;
 
-        public float dt = 0.001f;
+        public float dt = 0.1f;
     }
 }

@@ -19,10 +19,7 @@ float amplify(float x, int pow)
 
 void main()
 {
-    //vec2 pos = (uv - 0.5) / uZoom + uZoomCenter;
     vec2 pos = vec2((uv.x - 0.5) / (uZoom*uAspect) + uZoomCenter.x, (uv.y - 0.5) / uZoom + uZoomCenter.y);
-
-
 
     float f1 = texture(uStateRed, pos).r;
     float f2 = texture(uStateGreen, pos).r;
@@ -32,4 +29,7 @@ void main()
     float b = amplify((f1+f2)/2, 3);
     
     fragColor = vec4(r, g, b ,1);
+
+    //if (pos.x<0 || pos.x >=1 || pos.y<0 || pos.y>=1)
+    //    fragColor *= 0.5;
 }
