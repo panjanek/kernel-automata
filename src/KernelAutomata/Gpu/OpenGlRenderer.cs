@@ -70,8 +70,6 @@ namespace KernelAutomata.Gpu
         {
             this.placeholder = placeholder;
             this.simulation = simulation;
-            float initialAspect = (float)Math.Max(placeholder.ActualHeight, 1) / (float)Math.Max(placeholder.ActualWidth, 1);
-            //zoom *= initialAspect;
             host = new WindowsFormsHost();
             host.Visibility = Visibility.Visible;
             host.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
@@ -169,10 +167,10 @@ namespace KernelAutomata.Gpu
             if (!Paused)
             {
                 red.Convolve(kernel2Rings.FftTex, kernel1RingSmall.FftTex);
-                red.Grow(red.MyConvTex, green.CompeteConvTex, 1.0f, -0.05f, 0.098f, 0.014f);
+                red.Grow(red.MyConvTex, green.CompeteConvTex, 1.0f, -0.05f, 0.098f, 0.014f, 0);
 
                 green.Convolve(kernel2Rings.FftTex, kernel1RingSmall.FftTex);
-                green.Grow(green.MyConvTex, red.CompeteConvTex, 1.0f, 0.11f, 0.11f, 0.015f);
+                green.Grow(green.MyConvTex, red.CompeteConvTex, 1.0f, 0.11f, 0.11f, 0.015f, 0f);
             }
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);

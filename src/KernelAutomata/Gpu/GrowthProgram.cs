@@ -26,7 +26,8 @@ namespace KernelAutomata.Gpu
             int size,
             float mu,
             float sigma,
-            float dt)
+            float dt,
+            float decay)
         {
             GL.UseProgram(program);
 
@@ -36,6 +37,7 @@ namespace KernelAutomata.Gpu
             GL.Uniform1(GL.GetUniformLocation(program, "uSize"), size);
             GL.Uniform1(GL.GetUniformLocation(program, "uMyWeight"), myWeight);
             GL.Uniform1(GL.GetUniformLocation(program, "uCompeteWeight"), competeWeight);
+            GL.Uniform1(GL.GetUniformLocation(program, "uDecay"), decay);
 
             GL.BindImageTexture(0, fieldInTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
 

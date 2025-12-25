@@ -13,6 +13,7 @@ uniform float uDt;
 uniform int   uSize;
 uniform float uMyWeight;
 uniform float uCompeteWeight;
+uniform float uDecay;
 
 float gaussianGrowth(float u)
 {
@@ -26,7 +27,7 @@ void main()
     if (p.x >= uSize || p.y >= uSize)
         return;
 
-    float a = imageLoad(fieldIn, p).r;
+    float current = imageLoad(fieldIn, p).r;
     float my = imageLoad(myConvIn, p).r;
     float compete = imageLoad(competeConvIn, p).r;
 
@@ -34,7 +35,10 @@ void main()
     my /= float(uSize * uSize);
     compete /= float(uSize * uSize);
 
-    float g =  gaussianGrowth(my * uMyWeight + compete * uCompeteWeight);
-    float next = clamp(a + uDt * g, 0.0, 1.0);
+    float growth =  gaussianGrowth(my * uMyWeight + compete * uCompeteWeight);
+
+    float res = current + uDt * (growth - current * uDecay);
+
+    float next = clamp(res, 0.0, 1.0);
     imageStore(fieldOut, p, vec4(next, 0.0, 0.0, 0.0));
 }
