@@ -16,10 +16,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="shaders\fft_cooley.comp" />
-    <EmbeddedResource Include="shaders\fft_stockham.comp" />
     <EmbeddedResource Include="shaders\growth.comp" />
     <EmbeddedResource Include="shaders\multiply.comp" />
-    <EmbeddedResource Include="shaders\fft_pass.comp" />
     <EmbeddedResource Include="shaders\debug.frag" />
     <EmbeddedResource Include="shaders\debug.vert" />
   </ItemGroup>

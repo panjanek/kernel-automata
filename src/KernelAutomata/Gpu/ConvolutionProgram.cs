@@ -80,20 +80,13 @@ namespace KernelAutomata.Gpu
 
         void BindFFTImages(int src, int dst)
         {
-            GL.BindImageTexture(0, src, 0, false, 0,
-                TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
-
-            GL.BindImageTexture(1, dst, 0, false, 0,
-                TextureAccess.WriteOnly, SizedInternalFormat.Rgba32f);
+            GL.BindImageTexture(0, src, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
+            GL.BindImageTexture(1, dst, 0, false, 0, TextureAccess.WriteOnly, SizedInternalFormat.Rgba32f);
         }
 
         void Dispatch1D(int size)
         {
-            GL.DispatchCompute(
-                (size + 15) / 16,
-                1,
-                size);
-
+            GL.DispatchCompute((size + 255) / 256, 1, size);
             GL.MemoryBarrier(MemoryBarrierFlags.ShaderImageAccessBarrierBit);
         }
 
