@@ -97,5 +97,21 @@ namespace KernelAutomata
                 lastCheckTime = now;
             }
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var workArea = SystemParameters.WorkArea;
+
+            // Determine maximum square size
+            double size = Math.Min(workArea.Width, workArea.Height);
+
+            // Apply square dimensions
+            Width = size;
+            Height = size;
+
+            // Optional: center manually if needed
+            Left = workArea.Left + (workArea.Width - size) / 2;
+            Top = workArea.Top + (workArea.Height - size) / 2;
+        }
     }
 }

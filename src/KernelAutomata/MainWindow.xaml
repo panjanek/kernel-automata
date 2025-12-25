@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KernelAutomata"
         mc:Ignorable="d"
-        Title="KernelAutomata" Width="Auto" Height="Auto" WindowState ="Maximized" MinWidth="720" MinHeight="576">
+        Title="KernelAutomata" Width="Auto" Height="Auto" MinWidth="576" MinHeight="576" Loaded="Window_Loaded">
 
     <Grid Name="parent" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Loaded="parent_Loaded">
         <Grid Name="placeholder" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
