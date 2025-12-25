@@ -87,7 +87,7 @@ namespace KernelAutomata.Utils
                 width, height, 1);
         }
 
-        public static float[] ReadTextyre(int tex, int width, int height)
+        public static float[] ReadTexture(int tex, int width, int height)
         {
             float[] data = new float[width * height * 4];
             GL.BindTexture(TextureTarget.Texture2D, tex);

@@ -124,10 +124,10 @@ namespace KernelAutomata.Gpu
         public void Draw()
         {
             red.Convolve(kernel.FftTex, kernel.FftTex);
-            red.Grow(1, red.MyConvTex, green.CompeteConvTex);
+            red.Grow(red.MyConvTex, green.CompeteConvTex, 0.01f, 0.1f, 0.015f);
 
             green.Convolve(kernel.FftTex, kernel.FftTex);
-            green.Grow(2, red.MyConvTex, green.CompeteConvTex);
+            green.Grow(green.MyConvTex, red.CompeteConvTex, 0.02f, 0.1f, 0.015f);
 
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);

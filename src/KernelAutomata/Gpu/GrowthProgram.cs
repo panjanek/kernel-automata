@@ -18,9 +18,9 @@ namespace KernelAutomata.Gpu
 
         public void DispatchGrowth(
             int fieldInTex,
-            int myChannel,
-            int conv1Tex,
-            int conv2Tex,
+            int myConvTex,
+            int competeConvTex,
+            float competeWeight,
             int fieldOutTex,
             int size,
             float mu,
@@ -33,12 +33,12 @@ namespace KernelAutomata.Gpu
             GL.Uniform1(GL.GetUniformLocation(program, "uSigma"), sigma);
             GL.Uniform1(GL.GetUniformLocation(program, "uDt"), dt);
             GL.Uniform1(GL.GetUniformLocation(program, "uSize"), size);
-            GL.Uniform1(GL.GetUniformLocation(program, "uMyChannel"), myChannel);
+            GL.Uniform1(GL.GetUniformLocation(program, "uCompeteWeight"), competeWeight);
 
             GL.BindImageTexture(0, fieldInTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
 
-            GL.BindImageTexture(1, conv1Tex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
-            GL.BindImageTexture(2, conv2Tex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
+            GL.BindImageTexture(1, myConvTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
+            GL.BindImageTexture(2, competeConvTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
 
             GL.BindImageTexture(3, fieldOutTex, 0, false, 0, TextureAccess.WriteOnly, SizedInternalFormat.Rgba32f);
 
