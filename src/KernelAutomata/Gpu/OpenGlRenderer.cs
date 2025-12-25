@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.Integration;
+using System.Windows.Media;
 using KernelAutomata.Models;
 using KernelAutomata.Utils;
 using OpenTK.GLControl;
@@ -23,6 +24,7 @@ namespace KernelAutomata.Gpu
 {
     public class OpenGlRenderer
     {
+        public const double ZoomingSpeed = 0.0005;
         public int FrameCounter => frameCounter;
 
         private Panel placeholder;
@@ -30,6 +32,12 @@ namespace KernelAutomata.Gpu
         private WindowsFormsHost host;
 
         private GLControl glControl;
+
+        private DraggingHandler dragging;
+
+        private Vector2 center = new Vector2(0.5f, 0.5f);
+
+        private float zoom = 1.0f;
 
         private Simulation simulation;
 
@@ -111,6 +119,28 @@ namespace KernelAutomata.Gpu
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
 
+            dragging = new DraggingHandler(glControl, (pos, left) => true, (prev, curr) =>
+            {
+                var delta = prev - curr;
+                float screenToTexX = (float)simulation.fieldSize / glControl.ClientSize.Width;
+                float screenToTexY = (float)simulation.fieldSize / glControl.ClientSize.Height;
+                center.X += delta.X / (simulation.fieldSize * zoom / screenToTexX);
+                center.Y -= delta.Y / (simulation.fieldSize * zoom / screenToTexY);
+            });
+
+            glControl.MouseWheel += GlControl_MouseWheel;
+
+        }
+
+        private void GlControl_MouseWheel(object? sender, MouseEventArgs e)
+        {
+            var pos = new Vector2(e.X, e.Y);
+            float zoomRatio = (float)(1.0 + ZoomingSpeed * e.Delta);
+            float newZoom = zoom * zoomRatio;
+            Vector2 mouseUV = new Vector2(pos.X / glControl.ClientSize.Width, 1.0f - pos.Y / glControl.ClientSize.Height);
+            Vector2 mouseTex = (mouseUV - new Vector2(0.5f, 0.5f)) / zoom + center;
+            center = mouseTex - (mouseUV - new Vector2(0.5f)) / newZoom;
+            zoom = newZoom;
         }
 
         private void Placeholder_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -140,7 +170,7 @@ namespace KernelAutomata.Gpu
 
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
-            display.Run(red.FieldTex, green.FieldTex);
+            display.Run(red.FieldTex, green.FieldTex, center, zoom);
 
             //debug.Run(kernel1Tex, new Vector2(-1.0f, -1.0f), new Vector2(1.3f, 1.3f));
             //debug.Run(kernel2Tex, new Vector2(-1.2f, -1.2f), new Vector2(1.3f, 1.3f));

@@ -22,6 +22,10 @@ namespace KernelAutomata.Gpu
 
         private int sizeLocation;
 
+        private int centerLocation;
+
+        private int zoomLocation;
+
         private Vector2 offset = new Vector2(0, 0);
 
         private Vector2 size = new Vector2(1, 1);
@@ -37,9 +41,13 @@ namespace KernelAutomata.Gpu
             if (offsetLocation == -1) throw new Exception("Uniform 'offset' not found. Shader optimized it out?");
             sizeLocation = GL.GetUniformLocation(program, "size");
             if (sizeLocation == -1) throw new Exception("Uniform 'size' not found. Shader optimized it out?");
+            centerLocation = GL.GetUniformLocation(program, "uZoomCenter");
+            if (centerLocation == -1) throw new Exception("Uniform 'uZoomCenter' not found. Shader optimized it out?");
+            zoomLocation = GL.GetUniformLocation(program, "uZoom");
+            if (zoomLocation == -1) throw new Exception("Uniform 'uZoom' not found. Shader optimized it out?");
         }
 
-        public void Run(int textureRed, int textureGreen)
+        public void Run(int textureRed, int textureGreen, Vector2 center, float zoom)
         {
             GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.Blend);
@@ -53,8 +61,11 @@ namespace KernelAutomata.Gpu
             GL.BindTexture(TextureTarget.Texture2D, textureGreen);
             GL.Uniform1(stateGreenLocation, 1);
 
+            GL.Uniform1(zoomLocation, zoom);
+            GL.Uniform2(centerLocation, center.X, center.Y);
             GL.Uniform2(offsetLocation, offset);
             GL.Uniform2(sizeLocation, size);
+
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
         }
     }
