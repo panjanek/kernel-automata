@@ -9,12 +9,33 @@ namespace KernelAutomata.Utils
 {
     public static class KernelUtil
     {
+        public static float[] SumKernels(float[] kernel1, float weight1)
+        {
+            float[] result = new float[kernel1.Length];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = kernel1[i] * weight1;
+            }
+
+            return result;
+        }
         public static float[] SumKernels(float[] kernel1, float weight1, float[] kernel2, float weight2)
         {
             float[] result = new float[kernel1.Length];
             for(int i=0; i<result.Length; i++)
             {
                 result[i] = kernel1[i] * weight1 + kernel2[i] * weight2;
+            }
+
+            return result;
+        }
+
+        public static float[] SumKernels(float[] kernel1, float weight1, float[] kernel2, float weight2, float[] kernel3, float weight3)
+        {
+            float[] result = new float[kernel1.Length];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = kernel1[i] * weight1 + kernel2[i] * weight2 + kernel3[i] * weight3;
             }
 
             return result;

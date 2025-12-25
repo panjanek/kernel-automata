@@ -11,6 +11,7 @@ using System.Windows.Forms.Integration;
 using System.Windows.Media;
 using KernelAutomata.Models;
 using KernelAutomata.Utils;
+using OpenTK.Core;
 using OpenTK.GLControl;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
@@ -60,9 +61,13 @@ namespace KernelAutomata.Gpu
 
         private Channel green;
 
-        private Kernel kernel2Rings;
+        private Kernel redSelf;
 
-        private Kernel kernel1RingSmall;
+        private Kernel redOthers;
+
+        private Kernel greenSelf;
+
+        private Kernel greenOthers;
 
         private float aspectRatio => (float)(Math.Max(glControl?.ClientSize.Height ?? 1, 1)) / (float)(Math.Max(glControl?.ClientSize.Width ?? 1, 1));
 
@@ -109,17 +114,26 @@ namespace KernelAutomata.Gpu
             red = new Channel(simulation, convolution, growth);
             green = new Channel(simulation, convolution, growth);
 
-            float[] ring1 = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 10f, 4f);
-            float[] ring2 = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7);
+            float[] mediumRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 10f, 4f);
+            float[] largeRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7);
+            float[] smallRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 7, 2f);
 
-            kernel2Rings = new Kernel(simulation, convolution);
-            kernel2Rings.UploadData(KernelUtil.SumKernels(ring1, 1.0f, ring2, -0.36f));
+            redSelf = new Kernel(simulation, convolution);
+            redSelf.UploadData(KernelUtil.SumKernels(mediumRing, 1.0f, largeRing, -0.36f));
 
-            kernel1RingSmall = new Kernel(simulation, convolution);
-            kernel1RingSmall.UploadData(KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 7, 2f));
+            redOthers = new Kernel(simulation, convolution);
+            redOthers.UploadData(smallRing);
 
-            red.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.3f, 0.3f), 250, 25));
-            green.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.6f, 0.6f), 350, 100));
+            greenSelf = new Kernel(simulation, convolution);
+            greenSelf.UploadData(KernelUtil.SumKernels(KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 4, 2), -0.0f,
+                                                       KernelUtil.CreateGausianRing(simulation.fieldSize, 64, 12, 5), 1.0f,
+                                                       KernelUtil.CreateGausianRing(simulation.fieldSize, 64, 36, 8), -0.35f));
+
+            greenOthers = new Kernel(simulation, convolution);
+            greenOthers.UploadData(smallRing);
+
+            red.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.3f, 0.3f), 250 * simulation.fieldSize / 512, 25 * simulation.fieldSize / 512));
+            //green.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.6f, 0.6f), 350 * simulation.fieldSize / 512, 100 * simulation.fieldSize / 512));
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
@@ -166,11 +180,11 @@ namespace KernelAutomata.Gpu
         {
             if (!Paused)
             {
-                red.Convolve(kernel2Rings.FftTex, kernel1RingSmall.FftTex);
-                red.Grow(red.MyConvTex, green.CompeteConvTex, 1.0f, -0.05f, 0.098f, 0.014f, 0);
+                red.Convolve(redSelf.FftTex, greenOthers.FftTex);
+                red.Grow(red.MyConvTex, green.CompeteConvTex, 1.0f, 0.01f, 0.11f, 0.015f, 0);    //0.11 0.015
 
-                green.Convolve(kernel2Rings.FftTex, kernel1RingSmall.FftTex);
-                green.Grow(green.MyConvTex, red.CompeteConvTex, 1.0f, 0.11f, 0.11f, 0.015f, 0f);
+                //green.Convolve(greenSelf.FftTex, redOthers.FftTex);
+                //green.Grow(green.MyConvTex, red.CompeteConvTex, 1.0f, 0.01f, 0.108f, 0.015f, 0);
             }
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
