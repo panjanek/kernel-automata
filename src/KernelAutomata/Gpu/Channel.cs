@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using KernelAutomata.Models;
+using KernelAutomata.Utils;
 using OpenTK.Graphics.OpenGL;
 
 namespace KernelAutomata.Gpu

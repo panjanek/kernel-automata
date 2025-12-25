@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KernelAutomata.Models
+namespace KernelAutomata.Utils
 {
     public static class MathUtil
     {

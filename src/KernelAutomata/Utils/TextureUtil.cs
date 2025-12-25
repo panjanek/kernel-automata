@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 
-namespace KernelAutomata.Gpu
+namespace KernelAutomata.Utils
 {
     public static class TextureUtil
     {
@@ -39,7 +39,7 @@ namespace KernelAutomata.Gpu
                 0,
                 PixelFormat.Rgba,
                 PixelType.Float,
-                IntPtr.Zero
+                nint.Zero
             );
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);

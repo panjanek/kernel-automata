@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Mathematics;
 
-namespace KernelAutomata.Models
+namespace KernelAutomata.Utils
 {
     public static class FieldUtil
     {

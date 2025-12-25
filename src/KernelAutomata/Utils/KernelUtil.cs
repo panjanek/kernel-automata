@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KernelAutomata.Models
+namespace KernelAutomata.Utils
 {
     public static class KernelUtil
     {
@@ -44,11 +44,11 @@ namespace KernelAutomata.Models
 
             for (int y = 0; y < N; y++)
             {
-                int dy = (y <= N / 2) ? y : y - N;
+                int dy = y <= N / 2 ? y : y - N;
 
                 for (int x = 0; x < N; x++)
                 {
-                    int dx = (x <= N / 2) ? x : x - N;
+                    int dx = x <= N / 2 ? x : x - N;
 
                     float r = MathF.Sqrt(dx * dx + dy * dy);
 
