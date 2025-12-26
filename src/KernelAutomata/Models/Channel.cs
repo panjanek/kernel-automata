@@ -39,6 +39,12 @@ namespace KernelAutomata.Models
                 kernels[k] = new Kernel(simulation.fieldSize, gpuContext);
         }
 
+        public void RecalculateKernels()
+        {
+            for (int k = 0; k < kernels.Length; k++)
+                kernels[k].Recalculate();
+        }
+
         public void Convolve(params Kernel[] kernels)
         {
             gpu.Convolve(kernels.Select(k=>k.gpu.FftTex).ToArray());
