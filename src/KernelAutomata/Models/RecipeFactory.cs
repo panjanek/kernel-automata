@@ -111,7 +111,7 @@ namespace KernelAutomata.Models
                          {
                              mu = 0.11f,
                              sigma = 0.015f,
-                             decay = 0,
+                             decay = 0.0f,
                              kernels =
                              [
                                  new KernelRecipe()
@@ -128,17 +128,17 @@ namespace KernelAutomata.Models
                                  {
                                      weight = 1.0f,
                                      rings = [
-                                         new RingRecipe() { maxR = 32, center = 10, width = 4, weight = 0.3f },
-                                         new RingRecipe() { maxR = 32, center = 3, width = 2, weight = -0.6f },
+                                         new RingRecipe() { maxR = 32, center = 10, width = 4, weight = 1.0f },
+                                         new RingRecipe() { maxR = 32, center = 4, width = 2, weight = -0.3f },
                                          ]
                                  }
                              ]
                          },
                          new ChannelRecipe()
                          {
-                             mu = 0.13f,
+                             mu = 0.149f,
                              sigma = 0.02f,
-                             decay = 0.1f,
+                             decay = 0.0f,
                              kernels =
                              [
                                  new KernelRecipe()
@@ -146,14 +146,14 @@ namespace KernelAutomata.Models
                                      weight = 1.0f,
                                      rings =
                                      [
-                                         new RingRecipe() { maxR = 32, center = 10, width = 4, weight = 1.0f },
-                                         new RingRecipe() { maxR = 32, center = 3, width = 2, weight = -0.1f }
+                                         new RingRecipe() { maxR = 32, center = 10, width = 5, weight = 0.7f },
+                                         new RingRecipe() { maxR = 64, center = 40, width = 5, weight = -0.2f }
                                      ]
 
                                  },
                                  new KernelRecipe()
                                  {
-                                     weight = 0.0f,
+                                     weight = 0.01f,
                                      rings = [new RingRecipe() { maxR = 32, center = 7, width = 2, weight = 1.0f }]
                                  }
                              ]
