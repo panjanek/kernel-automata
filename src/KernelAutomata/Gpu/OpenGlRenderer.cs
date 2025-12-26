@@ -113,20 +113,20 @@ namespace KernelAutomata.Gpu
             //                                           KernelUtil.CreateGausianRing(simulation.fieldSize, 64, 12, 5), 1.0f,
             //                                           KernelUtil.CreateGausianRing(simulation.fieldSize, 64, 36, 8), -0.35f));
 
-            Kernel redSelfKernel = new Kernel(simulation.fieldSize);
+            Kernel redSelfKernel = new Kernel(simulation.fieldSize, gpuContext);
             redSelfKernel.rings[0].Set(32, 10, 4, 1.0f);
             redSelfKernel.rings[1].Set(32, 24, 7, -0.36f);
             redSelfKernel.Recalculate();
             redSelf = new GpuKernel(simulation.fieldSize, gpuContext.convolutionProgram);
             redSelf.UploadData(redSelfKernel.kernelBuffer);
 
-            Kernel smallRingKernel = new Kernel(simulation.fieldSize);
+            Kernel smallRingKernel = new Kernel(simulation.fieldSize, gpuContext);
             smallRingKernel.rings[0].Set(32, 7, 2f, 1.0f);
             smallRingKernel.Recalculate();
             redOthers = new GpuKernel(simulation.fieldSize, gpuContext.convolutionProgram);
             redOthers.UploadData(smallRingKernel.kernelBuffer);
 
-            Kernel greenSelfKernel = new Kernel(simulation.fieldSize);
+            Kernel greenSelfKernel = new Kernel(simulation.fieldSize, gpuContext);
             greenSelfKernel.rings[0].Set(32, 4, 2, 0.0f);
             greenSelfKernel.rings[1].Set(64, 12, 5, 1.0f);
             greenSelfKernel.rings[2].Set(64, 36, 8, -0.35f);
@@ -189,7 +189,7 @@ namespace KernelAutomata.Gpu
                 red.Grow(red.ConvTex[0], green.ConvTex[1], 1.0f, 0.01f, 0.11f, 0.015f, 0, simulation.dt);    //0.11 0.015
 
                 green.Convolve(greenSelf.FftTex, redOthers.FftTex);
-                green.Grow(green.ConvTex[0], red.ConvTex[1], 1.0f, 0.01f, 0.108f, 0.015f, 0, simulation.dt);
+                green.Grow(green.ConvTex[0], red.ConvTex[1], 1.0f, 0.5f, 0.108f, 0.015f, 0, simulation.dt);
             }
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);

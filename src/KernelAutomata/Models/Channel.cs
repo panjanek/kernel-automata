@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using KernelAutomata.Gpu;
+using KernelAutomata.Utils;
 
 namespace KernelAutomata.Models
 {
@@ -21,6 +22,11 @@ namespace KernelAutomata.Models
             this.simulation = simulation;
             this.gpuContext = gpuContext;
             gpu = new GpuChannel(simulation.fieldSize, simulation.channels, gpuContext.convolutionProgram, gpuContext.growthProgram);
+        }
+
+        public void Convolve(params Kernel[] kernels)
+        {
+            gpu.Convolve(kernels.Select(k=>k.gpu.FftTex).ToArray());
         }
     }
 }

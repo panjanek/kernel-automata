@@ -48,13 +48,6 @@ namespace KernelAutomata.Gpu
                 inverse: false
             );
             TextureUtil.CopyTexture2D(resTex, kernelFftTex, size, size);
-
-            //denormalize, debug only;
-            var kernelMax1 = kernelSum1.Max();
-            for (int i = 0; i < kernelSum1.Length; i++) kernelSum1[i] /= kernelMax1;
-            GL.BindTexture(TextureTarget.Texture2D, kernelTex);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, size, size, PixelFormat.Rgba, PixelType.Float, kernelSum1);
-
         }
 
         public int FftTex => kernelFftTex;

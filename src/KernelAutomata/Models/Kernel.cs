@@ -9,13 +9,16 @@ namespace KernelAutomata.Models
 {
     public class Kernel
     {
-        public Kernel(int size)
+        private GpuContext gpuContext;
+        public Kernel(int size, GpuContext gpuContext)
         {
+            this.gpuContext = gpuContext;
             fieldSize = size;
             rings = new Ring[5];
             for(int r=0; r<rings.Length; r++)
                 rings[r] = new Ring(size);
             kernelBuffer = new float[fieldSize * fieldSize * 4];
+            gpu = new GpuKernel(fieldSize, gpuContext.convolutionProgram);
         }
 
         public GpuKernel gpu;
@@ -41,6 +44,8 @@ namespace KernelAutomata.Models
                         kernelBuffer[j] += ring.ringBuffer[j] * ring.weight;
                 }
             }
+
+            //gpu.UploadData(kernelBuffer);
         }
     }
 }
