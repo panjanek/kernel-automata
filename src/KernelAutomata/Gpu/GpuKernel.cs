@@ -9,7 +9,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace KernelAutomata.Gpu
 {
-    public class Kernel
+    public class GpuKernel
     {
         private int sourceTex;
 
@@ -23,7 +23,7 @@ namespace KernelAutomata.Gpu
 
         private ConvolutionProgram convolution;
 
-        public Kernel(Simulation sim, ConvolutionProgram conv) 
+        public GpuKernel(Simulation sim, ConvolutionProgram conv) 
         {
             convolution = conv;
             simulation = sim;

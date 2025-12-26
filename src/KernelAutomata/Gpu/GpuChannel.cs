@@ -10,7 +10,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace KernelAutomata.Gpu
 {
-    public class Channel
+    public class GpuChannel
     {
         private int fieldTex;
 
@@ -24,7 +24,7 @@ namespace KernelAutomata.Gpu
 
         private GrowthProgram growth;
 
-        public Channel(Simulation sim, ConvolutionProgram conv, GrowthProgram gr)
+        public GpuChannel(Simulation sim, ConvolutionProgram conv, GrowthProgram gr)
         {
             simulation = sim;
             convolution = conv;
