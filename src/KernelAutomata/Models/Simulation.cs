@@ -68,11 +68,20 @@ namespace KernelAutomata.Models
 
         public void Step()
         {
-            channels[0].Convolve();
-            channels[0].Grow(channels[0].gpu.ConvTex[0], channels[1].gpu.ConvTex[1]);
-
-            channels[1].Convolve();
-            channels[1].Grow(channels[1].gpu.ConvTex[0], channels[0].gpu.ConvTex[1]);
+            for(int c=0; c<channels.Length; c++)
+            {
+                var channel = channels[c];
+                channel.Convolve();
+                if (channels.Length == 1)
+                {
+                    channel.Grow(channels[0].gpu.ConvTex[0], -1);
+                }
+                else if (channels.Length == 2)
+                {
+                    var differentChannel = channels[1 - c];
+                    channel.Grow(channel.gpu.ConvTex[0], differentChannel.gpu.ConvTex[1]);
+                }
+            }
         }
     }
 }

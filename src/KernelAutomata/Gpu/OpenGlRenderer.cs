@@ -44,8 +44,6 @@ namespace KernelAutomata.Gpu
 
         private int frameCounter;
 
-        
-
         private float aspectRatio => (float)(Math.Max(simulation.gpuContext.glControl?.ClientSize.Height ?? 1, 1)) / (float)(Math.Max(simulation.gpuContext.glControl?.ClientSize.Width ?? 1, 1));
 
         public OpenGlRenderer(Panel placeholder, Simulation simulation)
@@ -65,7 +63,6 @@ namespace KernelAutomata.Gpu
             });
 
             simulation.gpuContext.glControl.MouseWheel += GlControl_MouseWheel;
-
             simulation.gpuContext.SetViewportAndInvalidate();
         }    
 
@@ -79,8 +76,6 @@ namespace KernelAutomata.Gpu
             center = new Vector2(mouseTex.X - (mouseUV.X - 0.5f) / (newZoom* aspectRatio), mouseTex.Y - (mouseUV.Y - 0.5f) / newZoom);           
             zoom = newZoom;
         }
-
-
 
         public void Step()
         {

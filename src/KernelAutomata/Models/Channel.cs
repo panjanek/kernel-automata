@@ -52,7 +52,6 @@ namespace KernelAutomata.Models
 
         public void Grow(int myConv, int competeConv)
         {
-            
             gpu.Grow(myConv, competeConv, kernels[0].kernelWeight, kernels[1].kernelWeight, growthMu, growthSigma, decay, simulation.dt);
         }
 
