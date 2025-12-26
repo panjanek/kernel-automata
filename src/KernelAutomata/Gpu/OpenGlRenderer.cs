@@ -195,10 +195,10 @@ namespace KernelAutomata.Gpu
             if (!Paused)
             {
                 red.Convolve(redSelf.FftTex, greenOthers.FftTex);
-                red.Grow(red.MyConvTex, green.CompeteConvTex, 1.0f, 0.01f, 0.11f, 0.015f, 0);    //0.11 0.015
+                red.Grow(red.ConvTex[0], green.ConvTex[1], 1.0f, 0.01f, 0.11f, 0.015f, 0);    //0.11 0.015
 
                 green.Convolve(greenSelf.FftTex, redOthers.FftTex);
-                green.Grow(green.MyConvTex, red.CompeteConvTex, 1.0f, 0.01f, 0.108f, 0.015f, 0);
+                green.Grow(green.ConvTex[0], red.ConvTex[1], 1.0f, 0.01f, 0.108f, 0.015f, 0);
             }
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);

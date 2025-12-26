@@ -16,21 +16,7 @@ namespace KernelAutomata.Gpu
 
         private int fieldNextTex;
 
-        private int myTmpTex;
-
-        private int mySourceTex;
-
-        private int myFftTmpTex;
-
-        private int myConvTex;
-
-        private int competeTmpTex;
-
-        private int competeSourceTex;
-
-        private int competeFftTmpTex;
-
-        private int competeConvTex;
+        private ConvolutionTextureSet[] convTextures;
 
         private Simulation simulation;
 
@@ -48,13 +34,10 @@ namespace KernelAutomata.Gpu
             fieldTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
             fieldNextTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
 
-            //tmp buffers
-            myTmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            mySourceTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            myFftTmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            competeTmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            competeSourceTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            competeFftTmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            //convolution buffers and helper buffers
+            convTextures = new ConvolutionTextureSet[sim.channels];
+            for (int c = 0; c < convTextures.Length; c++)
+                convTextures[c] = new ConvolutionTextureSet(sim.fieldSize);
         }
 
         public void UploadData(float[] fieldData)
@@ -64,29 +47,20 @@ namespace KernelAutomata.Gpu
 
             GL.BindTexture(TextureTarget.Texture2D, fieldTex);
             GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, fieldData);
-
         }
 
-        public void Convolve(int myKernelFftTex, int competeKernelFftTex)
+        public void Convolve(params int[] kernelsFftTex)
         {
-            TextureUtil.CopyTexture2D(fieldTex, mySourceTex, simulation.fieldSize, simulation.fieldSize);
-            myConvTex = convolution.ConvolveFFT(
-                mySourceTex,
-                myKernelFftTex,
-                myFftTmpTex,
-                myTmpTex,
-                simulation.fieldSize);
-
-            TextureUtil.CopyTexture2D(fieldTex, competeSourceTex, simulation.fieldSize, simulation.fieldSize);
-            competeConvTex = convolution.ConvolveFFT(
-                competeSourceTex,
-                competeKernelFftTex,
-                competeFftTmpTex,
-                competeTmpTex,
-                simulation.fieldSize);
-
-
-
+            for (int i = 0; i < kernelsFftTex.Length; i++)
+            {
+                TextureUtil.CopyTexture2D(fieldTex, convTextures[i].sourceTex, simulation.fieldSize, simulation.fieldSize);
+                convTextures[i].convTex = convolution.ConvolveFFT(
+                    convTextures[i].sourceTex,
+                    kernelsFftTex[i],
+                    convTextures[i].fftTmpTex,
+                    convTextures[i].tmpTex,
+                    simulation.fieldSize);
+            }
         }
 
         public void Grow(int myConv, int competeConv, float myWeight, float competeWeight, float mu, float sigma, float decay)
@@ -95,10 +69,26 @@ namespace KernelAutomata.Gpu
             (fieldTex, fieldNextTex) = (fieldNextTex, fieldTex);
         }
 
-        public int MyConvTex => myConvTex;
-
-        public int CompeteConvTex => competeConvTex;
+        public int[] ConvTex => convTextures.Select(t => t.convTex).ToArray();
 
         public int FieldTex => fieldNextTex;
+    }
+
+    public class ConvolutionTextureSet
+    {
+        public ConvolutionTextureSet(int size)
+        {
+            tmpTex = TextureUtil.CreateComplexTexture(size);
+            sourceTex = TextureUtil.CreateComplexTexture(size);
+            fftTmpTex = TextureUtil.CreateComplexTexture(size);
+        }
+
+        public int tmpTex;
+
+        public int sourceTex;
+
+        public int fftTmpTex;
+
+        public int convTex;
     }
 }
