@@ -25,18 +25,24 @@ namespace KernelAutomata.Models
 
         private GpuContext gpuContext;
 
-        public Channel(Simulation simulation, GpuContext gpuContext, float mu, float sigma, float dec)
+        public Channel(Simulation simulation, GpuContext gpuContext, ChannelRecipe recipe)
         {
             this.simulation = simulation;
             this.gpuContext = gpuContext;
-            growthMu = mu;
-            growthSigma = sigma;
-            decay = dec;
             gpu = new GpuChannel(simulation.fieldSize, simulation.channels.Length, gpuContext.convolutionProgram, gpuContext.growthProgram);
 
             kernels = new Kernel[simulation.channels.Length];
             for (int k = 0; k < kernels.Length; k++)
                 kernels[k] = new Kernel(simulation.fieldSize, gpuContext);
+
+            UpdateRecipe(recipe);
+        }
+
+        public void UpdateRecipe(ChannelRecipe recipe)
+        {
+            growthMu = recipe.mu;
+            growthSigma = recipe.sigma;
+            decay = recipe.decay;
         }
 
         public void RecalculateKernels()

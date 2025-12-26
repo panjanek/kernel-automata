@@ -18,6 +18,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 using Panel = System.Windows.Controls.Panel;
@@ -44,6 +45,8 @@ namespace KernelAutomata.Gpu
 
         private int frameCounter;
 
+        private int emptyTex;
+
         private float aspectRatio => (float)(Math.Max(simulation.gpuContext.glControl?.ClientSize.Height ?? 1, 1)) / (float)(Math.Max(simulation.gpuContext.glControl?.ClientSize.Width ?? 1, 1));
 
         public OpenGlRenderer(Panel placeholder, Simulation simulation)
@@ -51,6 +54,7 @@ namespace KernelAutomata.Gpu
             this.placeholder = placeholder;
             this.simulation = simulation;
             simulation.gpuContext.glControl.Paint += GlControl_Paint;
+            emptyTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
 
             dragging = new DraggingHandler(simulation.gpuContext.glControl, (pos, left) => true, (prev, curr) =>
             {
@@ -88,7 +92,7 @@ namespace KernelAutomata.Gpu
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
             var channel1Tex = simulation.channels[0].gpu.FieldTex;
-            var channel2Tex = simulation.channels.Length == 2 ? simulation.channels[1].gpu.FieldTex : -1;
+            var channel2Tex = simulation.channels.Length == 2 ? simulation.channels[1].gpu.FieldTex : emptyTex;
             simulation.gpuContext.displayProgram.Run(channel1Tex, channel2Tex, center, zoom, aspectRatio);
             simulation.gpuContext.glControl.SwapBuffers();
             frameCounter++;

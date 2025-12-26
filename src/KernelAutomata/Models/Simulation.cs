@@ -12,26 +12,35 @@ namespace KernelAutomata.Models
     public class Simulation
     {
         public GpuContext gpuContext;
-        public Simulation(int size, int channelCount, GpuContext gpu)
+        public Simulation(SimulationRecipe recipe, GpuContext gpu)
         {
-            if (channelCount == 0 || channelCount > 2)
-                throw new Exception($"Invalid channels count {channelCount}");
+            if (recipe.channels.Length == 0 || recipe.channels.Length > 2)
+                throw new Exception($"Invalid channels count {recipe.channels.Length}");
 
             if (!GpuContext.ValidSizes.Contains(fieldSize))
                 throw new Exception($"Invalid field size {fieldSize}");
 
-            if (size != gpu.fieldSize)
-                throw new Exception($"Simulation field size {size} must match gpu context size {gpu.fieldSize}");
+            if (recipe.size != gpu.fieldSize)
+                throw new Exception($"Simulation field size {recipe.size} must match gpu context size {gpu.fieldSize}");
 
             gpuContext = gpu;
-            fieldSize = size;
-            channels = new Channel[channelCount];
+            fieldSize = recipe.size;
+            channels = new Channel[recipe.channels.Length];
+            dt = recipe.dt;
+
+            for(int c=0; c<channels.Length; c++)
+            {
+
+            }
+
 
 
             if (channels.Length == 1)
             {
-                var red = new Channel(this, gpuContext, 0.11f, 0.015f, 0);
-                red.kernels[0].kernelWeight = 1.0f;                    //1.0 -0.36
+                ;
+                //var red = new Channel(this, gpuContext, 0.11f, 0.015f, 0);
+                var red = new Channel(this, gpuContext, new ChannelRecipe() { mu = 0.11f, sigma = 0.015f, decay = 0 });
+                red.kernels[0].kernelWeight = 1.0f;                           //1.0 -0.36
                 red.kernels[0].rings[0].Set(32, 10, 4, 1.0f);
                 red.kernels[0].rings[1].Set(32, 24, 7, -0.36f);
                 red.RecalculateKernels();
@@ -40,8 +49,11 @@ namespace KernelAutomata.Models
             }
             else if (channels.Length == 2)
             {
-                var red = new Channel(this, gpuContext, 0.11f, 0.015f, 0);
-                var green = new Channel(this, gpuContext, 0.108f, 0.015f, 0);
+                //var red = new Channel(this, gpuContext, 0.11f, 0.015f, 0);
+                //var green = new Channel(this, gpuContext, 0.108f, 0.015f, 0);
+
+                var red = new Channel(this, gpuContext, new ChannelRecipe() { mu = 0.11f, sigma = 0.015f, decay = 0 });
+                var green = new Channel(this, gpuContext, new ChannelRecipe() { mu = 0.108f, sigma = 0.015f, decay = 0 });
 
                 red.kernels[0].kernelWeight = 1.0f;                    //1.0 -0.36
                 red.kernels[0].rings[0].Set(32, 10, 4, 1.0f);
@@ -68,7 +80,20 @@ namespace KernelAutomata.Models
                 channels[0] = red;
                 channels[1] = green;
             }
-            
+        }
+
+        public void UpdateRecipe(SimulationRecipe recipe)
+        {
+            if (recipe.size != fieldSize)
+                throw new Exception($"Cannot change size (from {fieldSize} to {recipe.size}). Must recreate simulation and GPU context");
+
+            if (recipe.channels.Length != channels.Length)
+                throw new Exception($"Cannot change channels count (from {channels.Length} to {recipe.channels.Length}). Must recreate simulation and GPU context");
+
+            for(int c=0; c<channels.Length; c++)
+            {
+                channels[c].UpdateRecipe(recipe.channels[c]);
+            }
         }
 
         public int fieldSize = 512*2;

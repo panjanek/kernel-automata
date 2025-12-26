@@ -30,18 +30,18 @@ namespace KernelAutomata
         private long lastCheckFrameCount;
         public MainWindow()
         {
-            InitializeComponent();
-
-            
+            InitializeComponent(); 
         }
 
         private void parent_Loaded(object sender, RoutedEventArgs e)
         {
-            int size = 1024;
-            int channels = 1;
+            SimulationRecipe channles2recipe = new SimulationRecipe();
+            channles2recipe.size = 1024;
+            channles2recipe.channels = new ChannelRecipe[2];
+            channles2recipe.dt = 0.1f;
 
-            var gpu = new GpuContext(size, placeholder);
-            simulation = new Simulation(size, channels, gpu);
+            var gpu = new GpuContext(channles2recipe.size, placeholder);
+            simulation = new Simulation(channles2recipe, gpu);
 
             renderer = new OpenGlRenderer(placeholder, simulation);
             KeyDown += MainWindow_KeyDown;
