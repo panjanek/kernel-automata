@@ -137,7 +137,7 @@ namespace KernelAutomata.Models
                                          ]
                                  }
                              ],
-                             initialization = new InitializationRecipe() { centerX = 0.3f, centerY = 0.3f, noiseRadius = 0.5f, blobRadius = 0.05f, density = 0.5f }
+                             initialization = new InitializationRecipe() { centerX = 0.5f, centerY = 0.5f, noiseRadius = 0.5f, blobRadius = 0.0f, density = 0.5f }
                          },
                          new ChannelRecipe()
                          {
@@ -162,7 +162,7 @@ namespace KernelAutomata.Models
                                      rings = [new RingRecipe() { maxR = 32, center = 7, width = 2, weight = 1.0f }]
                                  }
                              ],
-                             initialization = new InitializationRecipe() { centerX = 0.6f, centerY = 0.5f, noiseRadius = 0.7f, blobRadius = 0.1f, density = 0.5f }
+                             initialization = new InitializationRecipe() { centerX = 0.5f, centerY = 0.5f, noiseRadius = 0.5f, blobRadius = 0.0f, density = 0.5f }
                          }
                     ]
             };
