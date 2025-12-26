@@ -10,7 +10,7 @@ namespace KernelAutomata.Models
     {
         public int fieldSize = 512*2;
 
-        public int channels = 2;
+        public int channelsCount = 2;
 
         public float dt = 0.1f;
     }

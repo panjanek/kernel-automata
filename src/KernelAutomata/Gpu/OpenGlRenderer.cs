@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Media;
 using KernelAutomata.Models;
@@ -55,12 +56,6 @@ namespace KernelAutomata.Gpu
 
         private Channel green;
 
-        Kernel redSelfKernel;
-
-        Kernel smallRingKernel;
-
-        Kernel greenSelfKernel;
-
         private float aspectRatio => (float)(Math.Max(glControl?.ClientSize.Height ?? 1, 1)) / (float)(Math.Max(glControl?.ClientSize.Width ?? 1, 1));
 
         public OpenGlRenderer(Panel placeholder, Simulation simulation)
@@ -103,20 +98,33 @@ namespace KernelAutomata.Gpu
             red = new Channel(simulation, gpuContext, 0.11f, 0.015f, 0);
             green = new Channel(simulation, gpuContext, 0.108f, 0.015f, 0);
 
-            redSelfKernel = new Kernel(simulation.fieldSize, gpuContext);
-            redSelfKernel.rings[0].Set(32, 10, 4, 1.0f);
-            redSelfKernel.rings[1].Set(32, 24, 7, -0.36f);
-            redSelfKernel.Recalculate();
 
-            smallRingKernel = new Kernel(simulation.fieldSize, gpuContext);
-            smallRingKernel.rings[0].Set(32, 7, 2f, 1.0f);
-            smallRingKernel.Recalculate();
+            red.kernels[0].rings[0].Set(32, 10, 4, 1.0f);
+            red.kernels[0].rings[1].Set(32, 24, 7, -0.36f);
+            red.kernels[0].Recalculate();
+            //redSelfKernel = new Kernel(simulation.fieldSize, gpuContext);
+           // redSelfKernel.rings[0].Set(32, 10, 4, 1.0f);
+            //redSelfKernel.rings[1].Set(32, 24, 7, -0.36f);
+            //redSelfKernel.Recalculate();
 
-            greenSelfKernel = new Kernel(simulation.fieldSize, gpuContext);
-            greenSelfKernel.rings[0].Set(32, 4, 2, 0.0f);
-            greenSelfKernel.rings[1].Set(64, 12, 5, 1.0f);
-            greenSelfKernel.rings[2].Set(64, 36, 8, -0.35f);
-            greenSelfKernel.Recalculate();
+            red.kernels[1].rings[0].Set(32, 7, 2f, 1.0f);
+            red.kernels[1].Recalculate();
+            //smallRingKernel = new Kernel(simulation.fieldSize, gpuContext);
+            //smallRingKernel.rings[0].Set(32, 7, 2f, 1.0f);
+            //smallRingKernel.Recalculate();
+
+            green.kernels[0].rings[0].Set(32, 4, 2, 0.0f);
+            green.kernels[0].rings[1].Set(64, 12, 5, 1.0f);
+            green.kernels[0].rings[2].Set(64, 36, 8, -0.35f);
+            green.kernels[0].Recalculate();
+            //greenSelfKernel = new Kernel(simulation.fieldSize, gpuContext);
+           // greenSelfKernel.rings[0].Set(32, 4, 2, 0.0f);
+            //greenSelfKernel.rings[1].Set(64, 12, 5, 1.0f);
+            //greenSelfKernel.rings[2].Set(64, 36, 8, -0.35f);
+           //greenSelfKernel.Recalculate();
+
+            green.kernels[1].rings[0].Set(32, 7, 2f, 1.0f);
+            green.kernels[1].Recalculate();
 
             red.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.3f, 0.3f), 250 * simulation.fieldSize / 512, 25 * simulation.fieldSize / 512));
             green.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.6f, 0.6f), 350 * simulation.fieldSize / 512, 100 * simulation.fieldSize / 512));
@@ -166,10 +174,10 @@ namespace KernelAutomata.Gpu
         {
             if (!Paused)
             {
-                red.Convolve(redSelfKernel, smallRingKernel);
+                red.Convolve(red.kernels[0], red.kernels[1]);
                 red.Grow(red.gpu.ConvTex[0], green.gpu.ConvTex[1], 1.0f, 0.01f);    //0.11 0.015
 
-                green.Convolve(greenSelfKernel, smallRingKernel);
+                green.Convolve(green.kernels[0], green.kernels[1]);
                 green.Grow(green.gpu.ConvTex[0], red.gpu.ConvTex[1], 1.0f, 0.5f);
             }
 

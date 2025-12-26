@@ -19,6 +19,8 @@ namespace KernelAutomata.Models
 
         public float decay;
 
+        public Kernel[] kernels;
+
         public GpuChannel gpu;
 
         private GpuContext gpuContext;
@@ -30,7 +32,11 @@ namespace KernelAutomata.Models
             growthMu = mu;
             growthSigma = sigma;
             decay = dec;
-            gpu = new GpuChannel(simulation.fieldSize, simulation.channels, gpuContext.convolutionProgram, gpuContext.growthProgram);
+            gpu = new GpuChannel(simulation.fieldSize, simulation.channelsCount, gpuContext.convolutionProgram, gpuContext.growthProgram);
+
+            kernels = new Kernel[simulation.channelsCount];
+            for (int k = 0; k < kernels.Length; k++)
+                kernels[k] = new Kernel(simulation.fieldSize, gpuContext);
         }
 
         public void Convolve(params Kernel[] kernels)
