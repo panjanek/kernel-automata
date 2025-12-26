@@ -118,8 +118,18 @@ namespace KernelAutomata.Gpu
             float[] largeRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7);
             float[] smallRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 7, 2f);
 
+            KernelDefinition redSelfKernel = new KernelDefinition(simulation.fieldSize);
+            redSelfKernel.rings[0].Set(32, 10, 4, 1.0f);
+            redSelfKernel.rings[1].Set(32, 24, 7, -0.36f);
+            redSelfKernel.Recalculate();
+
+            var test2 = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7);
+
             redSelf = new Kernel(simulation, convolution);
-            redSelf.UploadData(KernelUtil.SumKernels(mediumRing, 1.0f, largeRing, -0.36f));
+            var orig = KernelUtil.SumKernels(mediumRing, 1.0f, largeRing, -0.36f);
+            
+            redSelf.UploadData(redSelfKernel.kernelBuffer);
+            //redSelf.UploadData(orig);
 
             redOthers = new Kernel(simulation, convolution);
             redOthers.UploadData(smallRing);
@@ -133,7 +143,7 @@ namespace KernelAutomata.Gpu
             greenOthers.UploadData(smallRing);
 
             red.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.3f, 0.3f), 250 * simulation.fieldSize / 512, 25 * simulation.fieldSize / 512));
-            //green.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.6f, 0.6f), 350 * simulation.fieldSize / 512, 100 * simulation.fieldSize / 512));
+            green.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.6f, 0.6f), 350 * simulation.fieldSize / 512, 100 * simulation.fieldSize / 512));
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
@@ -183,8 +193,8 @@ namespace KernelAutomata.Gpu
                 red.Convolve(redSelf.FftTex, greenOthers.FftTex);
                 red.Grow(red.MyConvTex, green.CompeteConvTex, 1.0f, 0.01f, 0.11f, 0.015f, 0);    //0.11 0.015
 
-                //green.Convolve(greenSelf.FftTex, redOthers.FftTex);
-                //green.Grow(green.MyConvTex, red.CompeteConvTex, 1.0f, 0.01f, 0.108f, 0.015f, 0);
+                green.Convolve(greenSelf.FftTex, redOthers.FftTex);
+                green.Grow(green.MyConvTex, red.CompeteConvTex, 1.0f, 0.01f, 0.108f, 0.015f, 0);
             }
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
