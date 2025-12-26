@@ -45,7 +45,7 @@ namespace KernelAutomata.Models
                 }
             }
 
-            //gpu.UploadData(kernelBuffer);
+            gpu.UploadData(kernelBuffer);
         }
     }
 }
