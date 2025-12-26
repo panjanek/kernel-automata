@@ -114,33 +114,37 @@ namespace KernelAutomata.Gpu
             red = new Channel(simulation, convolution, growth);
             green = new Channel(simulation, convolution, growth);
 
-            float[] mediumRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 10f, 4f);
-            float[] largeRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7);
-            float[] smallRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 7, 2f);
+            //float[] mediumRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 10f, 4f);
+            //float[] largeRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7);
+            //float[] smallRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 7, 2f);
+            //redSelf.UploadData(KernelUtil.SumKernels(mediumRing, 1.0f, largeRing, -0.36f));
+            //greenSelf.UploadData(KernelUtil.SumKernels(KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 4, 2), -0.0f,
+            //                                           KernelUtil.CreateGausianRing(simulation.fieldSize, 64, 12, 5), 1.0f,
+            //                                           KernelUtil.CreateGausianRing(simulation.fieldSize, 64, 36, 8), -0.35f));
 
             KernelDefinition redSelfKernel = new KernelDefinition(simulation.fieldSize);
             redSelfKernel.rings[0].Set(32, 10, 4, 1.0f);
             redSelfKernel.rings[1].Set(32, 24, 7, -0.36f);
             redSelfKernel.Recalculate();
-
-            var test2 = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7);
-
             redSelf = new Kernel(simulation, convolution);
-            var orig = KernelUtil.SumKernels(mediumRing, 1.0f, largeRing, -0.36f);
-            
             redSelf.UploadData(redSelfKernel.kernelBuffer);
-            //redSelf.UploadData(orig);
 
+            KernelDefinition smallRingKernel = new KernelDefinition(simulation.fieldSize);
+            smallRingKernel.rings[0].Set(32, 7, 2f, 1.0f);
+            smallRingKernel.Recalculate();
             redOthers = new Kernel(simulation, convolution);
-            redOthers.UploadData(smallRing);
+            redOthers.UploadData(smallRingKernel.kernelBuffer);
 
+            KernelDefinition greenSelfKernel = new KernelDefinition(simulation.fieldSize);
+            greenSelfKernel.rings[0].Set(32, 4, 2, 0.0f);
+            greenSelfKernel.rings[1].Set(64, 12, 5, 1.0f);
+            greenSelfKernel.rings[2].Set(64, 36, 8, -0.35f);
+            greenSelfKernel.Recalculate();
             greenSelf = new Kernel(simulation, convolution);
-            greenSelf.UploadData(KernelUtil.SumKernels(KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 4, 2), -0.0f,
-                                                       KernelUtil.CreateGausianRing(simulation.fieldSize, 64, 12, 5), 1.0f,
-                                                       KernelUtil.CreateGausianRing(simulation.fieldSize, 64, 36, 8), -0.35f));
+            greenSelf.UploadData(greenSelfKernel.kernelBuffer);
 
             greenOthers = new Kernel(simulation, convolution);
-            greenOthers.UploadData(smallRing);
+            greenOthers.UploadData(smallRingKernel.kernelBuffer);
 
             red.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.3f, 0.3f), 250 * simulation.fieldSize / 512, 25 * simulation.fieldSize / 512));
             green.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.6f, 0.6f), 350 * simulation.fieldSize / 512, 100 * simulation.fieldSize / 512));
