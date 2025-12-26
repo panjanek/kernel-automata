@@ -18,54 +18,57 @@ namespace KernelAutomata.Gpu
 
         private ConvolutionTextureSet[] convTextures;
 
-        private Simulation simulation;
+        private int fieldSize;
+
+        private int channelsCount;
 
         private ConvolutionProgram convolution;
 
         private GrowthProgram growth;
 
-        public GpuChannel(Simulation sim, ConvolutionProgram conv, GrowthProgram gr)
+        public GpuChannel(int size, int channelsCnt, ConvolutionProgram conv, GrowthProgram gr)
         {
-            simulation = sim;
+            fieldSize = size;
+            channelsCount = channelsCnt;
             convolution = conv;
             growth = gr;
 
             //field ping pong buffers
-            fieldTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            fieldNextTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            fieldTex = TextureUtil.CreateComplexTexture(fieldSize);
+            fieldNextTex = TextureUtil.CreateComplexTexture(fieldSize);
 
             //convolution buffers and helper buffers
-            convTextures = new ConvolutionTextureSet[sim.channels];
+            convTextures = new ConvolutionTextureSet[channelsCount];
             for (int c = 0; c < convTextures.Length; c++)
-                convTextures[c] = new ConvolutionTextureSet(sim.fieldSize);
+                convTextures[c] = new ConvolutionTextureSet(fieldSize);
         }
 
         public void UploadData(float[] fieldData)
         {
-            if (fieldData.Length != simulation.fieldSize * simulation.fieldSize * 4)
-                throw new Exception($"Invalid size of initialization array {fieldData.Length}, shoule be {simulation.fieldSize * simulation.fieldSize * 4}");
+            if (fieldData.Length != fieldSize * fieldSize * 4)
+                throw new Exception($"Invalid size of initialization array {fieldData.Length}, shoule be {fieldSize * fieldSize * 4}");
 
             GL.BindTexture(TextureTarget.Texture2D, fieldTex);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, fieldData);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, fieldSize, fieldSize, PixelFormat.Rgba, PixelType.Float, fieldData);
         }
 
         public void Convolve(params int[] kernelsFftTex)
         {
             for (int i = 0; i < kernelsFftTex.Length; i++)
             {
-                TextureUtil.CopyTexture2D(fieldTex, convTextures[i].sourceTex, simulation.fieldSize, simulation.fieldSize);
+                TextureUtil.CopyTexture2D(fieldTex, convTextures[i].sourceTex, fieldSize, fieldSize);
                 convTextures[i].convTex = convolution.ConvolveFFT(
                     convTextures[i].sourceTex,
                     kernelsFftTex[i],
                     convTextures[i].fftTmpTex,
                     convTextures[i].tmpTex,
-                    simulation.fieldSize);
+                    fieldSize);
             }
         }
 
-        public void Grow(int myConv, int competeConv, float myWeight, float competeWeight, float mu, float sigma, float decay)
+        public void Grow(int myConv, int competeConv, float myWeight, float competeWeight, float mu, float sigma, float decay, float dt)
         {
-            growth.DispatchGrowth(fieldTex, myConv, competeConv, myWeight, competeWeight, fieldNextTex, simulation.fieldSize, mu, sigma, simulation.dt, decay);
+            growth.DispatchGrowth(fieldTex, myConv, competeConv, myWeight, competeWeight, fieldNextTex, fieldSize, mu, sigma, dt, decay);
             (fieldTex, fieldNextTex) = (fieldNextTex, fieldTex);
         }
 

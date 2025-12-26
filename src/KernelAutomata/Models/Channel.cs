@@ -4,19 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
+using KernelAutomata.Gpu;
 
 namespace KernelAutomata.Models
 {
     public class Channel
     {
-        private int fieldSize;
+        private Simulation simulation;
 
-        public Kernel[] kernels;
+        public GpuChannel gpu;
 
-        public Channel(int fieldSize, int channelsCount)
+        private GpuContext gpuContext;
+
+        public Channel(Simulation simulation, GpuContext gpuContext)
         {
-            this.fieldSize = fieldSize;
-            kernels = new Kernel[channelsCount];
+            this.simulation = simulation;
+            this.gpuContext = gpuContext;
+            gpu = new GpuChannel(simulation.fieldSize, simulation.channels, gpuContext.convolutionProgram, gpuContext.growthProgram);
         }
     }
 }

@@ -45,7 +45,7 @@ namespace KernelAutomata.Gpu
 
         private Simulation simulation;
 
-        private GpuContext gpu;
+        private GpuContext gpuContext;
 
         private int frameCounter;
 
@@ -99,11 +99,11 @@ namespace KernelAutomata.Gpu
             GL.BindVertexArray(dummyVao);
 
             //shader programs
-            gpu = new GpuContext(simulation.fieldSize);
+            gpuContext = new GpuContext(simulation.fieldSize);
 
             // channels
-            red = new GpuChannel(simulation, gpu.convolutionProgram, gpu.growthProgram);
-            green = new GpuChannel(simulation, gpu.convolutionProgram, gpu.growthProgram);
+            red = new GpuChannel(simulation.fieldSize, simulation.channels, gpuContext.convolutionProgram, gpuContext.growthProgram);
+            green = new GpuChannel(simulation.fieldSize, simulation.channels, gpuContext.convolutionProgram, gpuContext.growthProgram);
 
             //float[] mediumRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 10f, 4f);
             //float[] largeRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7);
@@ -117,13 +117,13 @@ namespace KernelAutomata.Gpu
             redSelfKernel.rings[0].Set(32, 10, 4, 1.0f);
             redSelfKernel.rings[1].Set(32, 24, 7, -0.36f);
             redSelfKernel.Recalculate();
-            redSelf = new GpuKernel(simulation.fieldSize, gpu.convolutionProgram);
+            redSelf = new GpuKernel(simulation.fieldSize, gpuContext.convolutionProgram);
             redSelf.UploadData(redSelfKernel.kernelBuffer);
 
             Kernel smallRingKernel = new Kernel(simulation.fieldSize);
             smallRingKernel.rings[0].Set(32, 7, 2f, 1.0f);
             smallRingKernel.Recalculate();
-            redOthers = new GpuKernel(simulation.fieldSize, gpu.convolutionProgram);
+            redOthers = new GpuKernel(simulation.fieldSize, gpuContext.convolutionProgram);
             redOthers.UploadData(smallRingKernel.kernelBuffer);
 
             Kernel greenSelfKernel = new Kernel(simulation.fieldSize);
@@ -131,10 +131,10 @@ namespace KernelAutomata.Gpu
             greenSelfKernel.rings[1].Set(64, 12, 5, 1.0f);
             greenSelfKernel.rings[2].Set(64, 36, 8, -0.35f);
             greenSelfKernel.Recalculate();
-            greenSelf = new GpuKernel(simulation.fieldSize, gpu.convolutionProgram);
+            greenSelf = new GpuKernel(simulation.fieldSize, gpuContext.convolutionProgram);
             greenSelf.UploadData(greenSelfKernel.kernelBuffer);
 
-            greenOthers = new GpuKernel(simulation.fieldSize, gpu.convolutionProgram);
+            greenOthers = new GpuKernel(simulation.fieldSize, gpuContext.convolutionProgram);
             greenOthers.UploadData(smallRingKernel.kernelBuffer);
 
             red.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.3f, 0.3f), 250 * simulation.fieldSize / 512, 25 * simulation.fieldSize / 512));
@@ -186,10 +186,10 @@ namespace KernelAutomata.Gpu
             if (!Paused)
             {
                 red.Convolve(redSelf.FftTex, greenOthers.FftTex);
-                red.Grow(red.ConvTex[0], green.ConvTex[1], 1.0f, 0.01f, 0.11f, 0.015f, 0);    //0.11 0.015
+                red.Grow(red.ConvTex[0], green.ConvTex[1], 1.0f, 0.01f, 0.11f, 0.015f, 0, simulation.dt);    //0.11 0.015
 
                 green.Convolve(greenSelf.FftTex, redOthers.FftTex);
-                green.Grow(green.ConvTex[0], red.ConvTex[1], 1.0f, 0.01f, 0.108f, 0.015f, 0);
+                green.Grow(green.ConvTex[0], red.ConvTex[1], 1.0f, 0.01f, 0.108f, 0.015f, 0, simulation.dt);
             }
 
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
@@ -198,7 +198,7 @@ namespace KernelAutomata.Gpu
 
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
-            gpu.displayProgram.Run(red.FieldTex, green.FieldTex, center, zoom, aspectRatio);
+            gpuContext.displayProgram.Run(red.FieldTex, green.FieldTex, center, zoom, aspectRatio);
 
             //debug.Run(kernel1Tex, new Vector2(-1.0f, -1.0f), new Vector2(1.3f, 1.3f));
             //debug.Run(kernel2Tex, new Vector2(-1.2f, -1.2f), new Vector2(1.3f, 1.3f));
