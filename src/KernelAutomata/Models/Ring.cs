@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KernelAutomata.Models
 {
-    public class RingDefinition
+    public class Ring
     {
         public float maxR;
 
@@ -19,7 +19,7 @@ namespace KernelAutomata.Models
         public float[] ringBuffer;
 
         private int fieldSize;
-        public RingDefinition(int size)
+        public Ring(int size)
         {
             fieldSize = size;
             ringBuffer = new float[fieldSize * fieldSize * 4];

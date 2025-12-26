@@ -45,13 +45,7 @@ namespace KernelAutomata.Gpu
 
         private Simulation simulation;
 
-        private DebugProgram debug;
-
-        private ConvolutionProgram convolution;
-
-        private GrowthProgram growth;
-
-        private DisplayProgram display;
+        private GpuContext gpu;
 
         private int frameCounter;
 
@@ -105,14 +99,11 @@ namespace KernelAutomata.Gpu
             GL.BindVertexArray(dummyVao);
 
             //shader programs
-            debug = new DebugProgram();
-            display = new DisplayProgram();
-            convolution = new ConvolutionProgram();
-            growth = new GrowthProgram();
+            gpu = new GpuContext(simulation.fieldSize);
 
             // channels
-            red = new GpuChannel(simulation, convolution, growth);
-            green = new GpuChannel(simulation, convolution, growth);
+            red = new GpuChannel(simulation, gpu.convolutionProgram, gpu.growthProgram);
+            green = new GpuChannel(simulation, gpu.convolutionProgram, gpu.growthProgram);
 
             //float[] mediumRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 10f, 4f);
             //float[] largeRing = KernelUtil.CreateGausianRing(simulation.fieldSize, 32, 24, 7);
@@ -122,28 +113,28 @@ namespace KernelAutomata.Gpu
             //                                           KernelUtil.CreateGausianRing(simulation.fieldSize, 64, 12, 5), 1.0f,
             //                                           KernelUtil.CreateGausianRing(simulation.fieldSize, 64, 36, 8), -0.35f));
 
-            KernelDefinition redSelfKernel = new KernelDefinition(simulation.fieldSize);
+            Kernel redSelfKernel = new Kernel(simulation.fieldSize);
             redSelfKernel.rings[0].Set(32, 10, 4, 1.0f);
             redSelfKernel.rings[1].Set(32, 24, 7, -0.36f);
             redSelfKernel.Recalculate();
-            redSelf = new GpuKernel(simulation, convolution);
+            redSelf = new GpuKernel(simulation.fieldSize, gpu.convolutionProgram);
             redSelf.UploadData(redSelfKernel.kernelBuffer);
 
-            KernelDefinition smallRingKernel = new KernelDefinition(simulation.fieldSize);
+            Kernel smallRingKernel = new Kernel(simulation.fieldSize);
             smallRingKernel.rings[0].Set(32, 7, 2f, 1.0f);
             smallRingKernel.Recalculate();
-            redOthers = new GpuKernel(simulation, convolution);
+            redOthers = new GpuKernel(simulation.fieldSize, gpu.convolutionProgram);
             redOthers.UploadData(smallRingKernel.kernelBuffer);
 
-            KernelDefinition greenSelfKernel = new KernelDefinition(simulation.fieldSize);
+            Kernel greenSelfKernel = new Kernel(simulation.fieldSize);
             greenSelfKernel.rings[0].Set(32, 4, 2, 0.0f);
             greenSelfKernel.rings[1].Set(64, 12, 5, 1.0f);
             greenSelfKernel.rings[2].Set(64, 36, 8, -0.35f);
             greenSelfKernel.Recalculate();
-            greenSelf = new GpuKernel(simulation, convolution);
+            greenSelf = new GpuKernel(simulation.fieldSize, gpu.convolutionProgram);
             greenSelf.UploadData(greenSelfKernel.kernelBuffer);
 
-            greenOthers = new GpuKernel(simulation, convolution);
+            greenOthers = new GpuKernel(simulation.fieldSize, gpu.convolutionProgram);
             greenOthers.UploadData(smallRingKernel.kernelBuffer);
 
             red.UploadData(FieldUtil.RandomRingWithDisk(simulation.fieldSize, new Vector2(0.3f, 0.3f), 250 * simulation.fieldSize / 512, 25 * simulation.fieldSize / 512));
@@ -207,7 +198,7 @@ namespace KernelAutomata.Gpu
 
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
-            display.Run(red.FieldTex, green.FieldTex, center, zoom, aspectRatio);
+            gpu.displayProgram.Run(red.FieldTex, green.FieldTex, center, zoom, aspectRatio);
 
             //debug.Run(kernel1Tex, new Vector2(-1.0f, -1.0f), new Vector2(1.3f, 1.3f));
             //debug.Run(kernel2Tex, new Vector2(-1.2f, -1.2f), new Vector2(1.3f, 1.3f));

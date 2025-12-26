@@ -19,41 +19,41 @@ namespace KernelAutomata.Gpu
 
         private int kernelFftTex;
 
-        private Simulation simulation;
+        private int size;
 
         private ConvolutionProgram convolution;
 
-        public GpuKernel(Simulation sim, ConvolutionProgram conv) 
+        public GpuKernel(int size, ConvolutionProgram conv) 
         {
             convolution = conv;
-            simulation = sim;
-            kernelTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            kernelFftTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            sourceTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
-            tmpTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
+            this.size = size;
+            kernelTex = TextureUtil.CreateComplexTexture(size);
+            kernelFftTex = TextureUtil.CreateComplexTexture(size);
+            sourceTex = TextureUtil.CreateComplexTexture(size);
+            tmpTex = TextureUtil.CreateComplexTexture(size);
         }
 
         public void UploadData(float[] kernelSum1)
         {
-            if (kernelSum1.Length != simulation.fieldSize * simulation.fieldSize * 4)
-                throw new Exception($"Invalid size of initialization array {kernelSum1.Length}, shoule be {simulation.fieldSize * simulation.fieldSize * 4}");
+            if (kernelSum1.Length != size * size * 4)
+                throw new Exception($"Invalid size of initialization array {kernelSum1.Length}, shoule be {size * size * 4}");
 
             GL.BindTexture(TextureTarget.Texture2D, kernelTex);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernelSum1);
-            TextureUtil.CopyTexture2D(kernelTex, sourceTex, simulation.fieldSize, simulation.fieldSize);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, size, size, PixelFormat.Rgba, PixelType.Float, kernelSum1);
+            TextureUtil.CopyTexture2D(kernelTex, sourceTex, size, size);
             int resTex = convolution.DispatchFFT(
                 sourceTex,
                 tmpTex,
-                simulation.fieldSize,
+                size,
                 inverse: false
             );
-            TextureUtil.CopyTexture2D(resTex, kernelFftTex, simulation.fieldSize, simulation.fieldSize);
+            TextureUtil.CopyTexture2D(resTex, kernelFftTex, size, size);
 
             //denormalize, debug only;
             var kernelMax1 = kernelSum1.Max();
             for (int i = 0; i < kernelSum1.Length; i++) kernelSum1[i] /= kernelMax1;
             GL.BindTexture(TextureTarget.Texture2D, kernelTex);
-            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, kernelSum1);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, size, size, PixelFormat.Rgba, PixelType.Float, kernelSum1);
 
         }
 
