@@ -79,7 +79,7 @@ namespace KernelAutomata.Models
                     [
                          new ChannelRecipe()
                          {
-                             mu = 0.11f,
+                             mu = 0.107f,
                              sigma = 0.015f,
                              decay = 0,
                              kernels =
@@ -104,7 +104,7 @@ namespace KernelAutomata.Models
                          },
                          new ChannelRecipe()
                          {
-                             mu = 0.108f,
+                             mu = 0.107f,
                              sigma = 0.015f,
                              decay = 0,
                              kernels =

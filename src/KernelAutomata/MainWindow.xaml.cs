@@ -35,14 +35,14 @@ namespace KernelAutomata
 
         private void parent_Loaded(object sender, RoutedEventArgs e)
         {
-            //var recipe = RecipeFactory.TwoChannelsOrbs();
+            var recipe = RecipeFactory.TwoChannelsOrbs();
             //var recipe = RecipeFactory.OneChannelOrbs();
             //var recipe = RecipeFactory.TwoChannelsCaterpillar();
 
 
             //RecipeFactory.SaveToFile(recipe, "c://tmp//orbs-ch2.json");
 
-            var recipe = RecipeFactory.LoadFromResource("caterpillar1-ch2.json");
+            //var recipe = RecipeFactory.LoadFromResource("caterpillar1-ch2.json");
             //var recipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
             //var recipe = RecipeFactory.LoadFromResource("orbs-ch2.json");
 
@@ -105,7 +105,7 @@ namespace KernelAutomata
             if (timespan.TotalSeconds >= 0.0001)
             {
                 double fps = frames / timespan.TotalSeconds;
-                Title = $"ChaosExplorer. " +
+                Title = $"KernelAutomata. " +
                         $"fps:{fps.ToString("0.0")} ";
 
                 lastCheckFrameCount = renderer.FrameCounter;
