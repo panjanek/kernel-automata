@@ -35,9 +35,9 @@ namespace KernelAutomata
 
         private void parent_Loaded(object sender, RoutedEventArgs e)
         {
-            //var recipe = RecipeFactory.TwoChannelsOrbs();
+            var recipe = RecipeFactory.TwoChannelsOrbs();
             //var recipe = RecipeFactory.OneChannelOrbs();
-            var recipe = RecipeFactory.TwoChannelsCaterpillar();
+            //var recipe = RecipeFactory.TwoChannelsCaterpillar();
 
             var gpu = new GpuContext(recipe.size, placeholder);
             simulation = new Simulation(recipe, gpu);

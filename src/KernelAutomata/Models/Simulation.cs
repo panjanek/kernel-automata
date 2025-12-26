@@ -73,12 +73,12 @@ namespace KernelAutomata.Models
                 channel.Convolve();
                 if (channels.Length == 1)
                 {
-                    channel.Grow(channels[0].gpu.ConvTex[0], -1);
+                    channel.Grow(channels[0].gpu.ConvTex[0], channels[0].kernels[0].kernelWeight, -1, 0);
                 }
                 else if (channels.Length == 2)
                 {
                     var differentChannel = channels[1 - c];
-                    channel.Grow(channel.gpu.ConvTex[0], differentChannel.gpu.ConvTex[1]);
+                    channel.Grow(channel.gpu.ConvTex[0], channel.kernels[0].kernelWeight, differentChannel.gpu.ConvTex[1], differentChannel.kernels[1].kernelWeight);
                 }
             }
         }

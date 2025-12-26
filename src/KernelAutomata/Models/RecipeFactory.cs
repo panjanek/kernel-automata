@@ -65,7 +65,7 @@ namespace KernelAutomata.Models
                                  },
                                  new KernelRecipe()
                                  {
-                                     weight = 0.01f,
+                                     weight = 0.5f,
                                      rings = [new RingRecipe() { maxR = 32, center = 7, width = 2, weight = 1.0f }]
                                  }
                              ]
@@ -90,7 +90,7 @@ namespace KernelAutomata.Models
                                  },
                                  new KernelRecipe()
                                  {
-                                     weight = 0.5f,
+                                     weight = 0.01f,
                                      rings = [new RingRecipe() { maxR = 32, center = 7, width = 2, weight = 1.0f }]
                                  }
                              ]
@@ -98,9 +98,6 @@ namespace KernelAutomata.Models
                     ]
             };
         }
-
-
-
 
         public static SimulationRecipe TwoChannelsCaterpillar()
         {
@@ -129,16 +126,19 @@ namespace KernelAutomata.Models
                                  },
                                  new KernelRecipe()
                                  {
-                                     weight = 0.01f,
-                                     rings = [new RingRecipe() { maxR = 32, center = 7, width = 2, weight = 1.0f }]
+                                     weight = 1.0f,
+                                     rings = [
+                                         new RingRecipe() { maxR = 32, center = 10, width = 4, weight = 0.3f },
+                                         new RingRecipe() { maxR = 32, center = 3, width = 2, weight = -0.6f },
+                                         ]
                                  }
                              ]
                          },
                          new ChannelRecipe()
                          {
-                             mu = 0.108f,
-                             sigma = 0.015f,
-                             decay = 0,
+                             mu = 0.13f,
+                             sigma = 0.02f,
+                             decay = 0.1f,
                              kernels =
                              [
                                  new KernelRecipe()
@@ -146,15 +146,14 @@ namespace KernelAutomata.Models
                                      weight = 1.0f,
                                      rings =
                                      [
-                                         new RingRecipe() { maxR = 32, center = 4, width = 2, weight = 0f },
-                                         new RingRecipe() { maxR = 64, center = 12, width = 5, weight = 1.0f },
-                                         new RingRecipe() { maxR = 64, center = 36, width = 8, weight = -0.35f }
+                                         new RingRecipe() { maxR = 32, center = 10, width = 4, weight = 1.0f },
+                                         new RingRecipe() { maxR = 32, center = 3, width = 2, weight = -0.1f }
                                      ]
 
                                  },
                                  new KernelRecipe()
                                  {
-                                     weight = 0.5f,
+                                     weight = 0.0f,
                                      rings = [new RingRecipe() { maxR = 32, center = 7, width = 2, weight = 1.0f }]
                                  }
                              ]
