@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using KernelAutomata.Gpu;
 using KernelAutomata.Utils;
 using OpenTK.Mathematics;
@@ -30,14 +31,23 @@ namespace KernelAutomata.Models
 
             for(int c=0; c<channels.Length; c++)
             {
-
+                channels[c] = new Channel(this, gpuContext, recipe.channels[c]);
             }
 
+            if (channels.Length == 2)
+            {
+                channels[0].UploadData(FieldUtil.RandomRingWithDisk(fieldSize, new Vector2(0.3f, 0.3f), 250 * fieldSize / 512, 25 * fieldSize / 512));
+                channels[1].UploadData(FieldUtil.RandomRingWithDisk(fieldSize, new Vector2(0.6f, 0.6f), 350 * fieldSize / 512, 100 * fieldSize / 512));
+            }
+            else
+            {
+                channels[0].UploadData(FieldUtil.RandomRingWithDisk(fieldSize, new Vector2(0.3f, 0.3f), 250 * fieldSize / 512, 25 * fieldSize / 512));
+            }
 
-
+            /*
             if (channels.Length == 1)
             {
-                ;
+             
                 //var red = new Channel(this, gpuContext, 0.11f, 0.015f, 0);
                 var red = new Channel(this, gpuContext, new ChannelRecipe() { mu = 0.11f, sigma = 0.015f, decay = 0 });
                 red.kernels[0].kernelWeight = 1.0f;                           //1.0 -0.36
@@ -79,7 +89,7 @@ namespace KernelAutomata.Models
 
                 channels[0] = red;
                 channels[1] = green;
-            }
+            }*/
         }
 
         public void UpdateRecipe(SimulationRecipe recipe)

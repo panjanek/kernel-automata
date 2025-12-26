@@ -35,13 +35,11 @@ namespace KernelAutomata
 
         private void parent_Loaded(object sender, RoutedEventArgs e)
         {
-            SimulationRecipe channles2recipe = new SimulationRecipe();
-            channles2recipe.size = 1024;
-            channles2recipe.channels = new ChannelRecipe[2];
-            channles2recipe.dt = 0.1f;
+            //var recipe = RecipeFactory.TwoChannelsOrbs();
+            var recipe = RecipeFactory.OneChannelOrbs();
 
-            var gpu = new GpuContext(channles2recipe.size, placeholder);
-            simulation = new Simulation(channles2recipe, gpu);
+            var gpu = new GpuContext(recipe.size, placeholder);
+            simulation = new Simulation(recipe, gpu);
 
             renderer = new OpenGlRenderer(placeholder, simulation);
             KeyDown += MainWindow_KeyDown;

@@ -10,7 +10,7 @@ namespace KernelAutomata.Models
     public class Kernel
     {
         private GpuContext gpuContext;
-        public Kernel(int size, GpuContext gpuContext)
+        public Kernel(int size, GpuContext gpuContext, KernelRecipe recipe)
         {
             this.gpuContext = gpuContext;
             fieldSize = size;
@@ -19,6 +19,32 @@ namespace KernelAutomata.Models
                 rings[r] = new Ring(size);
             kernelBuffer = new float[fieldSize * fieldSize * 4];
             gpu = new GpuKernel(fieldSize, gpuContext.convolutionProgram);
+            UpdateRecipe(recipe);
+        }
+
+        public void UpdateRecipe(KernelRecipe recipe)
+        {
+            kernelWeight = recipe.weight;
+            for(int r=0; r<rings.Length; r++)
+            {
+                if (r >= recipe.rings.Length)
+                {
+                    rings[r].maxR = 0;
+                    rings[r].width = 0;
+                    rings[r].center = 0;
+                    rings[r].weight = 0;
+                }
+                else
+                {
+                    var ringRecipe = recipe.rings[r];
+                    rings[r].maxR = ringRecipe.maxR;
+                    rings[r].width = ringRecipe.width;
+                    rings[r].center = ringRecipe.center;
+                    rings[r].weight = ringRecipe.weight;
+                }
+            }
+
+            Recalculate();
         }
 
         public GpuKernel gpu;

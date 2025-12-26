@@ -33,7 +33,7 @@ namespace KernelAutomata.Models
 
             kernels = new Kernel[simulation.channels.Length];
             for (int k = 0; k < kernels.Length; k++)
-                kernels[k] = new Kernel(simulation.fieldSize, gpuContext);
+                kernels[k] = new Kernel(simulation.fieldSize, gpuContext, recipe.kernels[k]);
 
             UpdateRecipe(recipe);
         }
@@ -43,6 +43,13 @@ namespace KernelAutomata.Models
             growthMu = recipe.mu;
             growthSigma = recipe.sigma;
             decay = recipe.decay;
+            if (recipe.kernels.Length != kernels.Length)
+                throw new Exception($"Cannot change kernels/channels count from {kernels.Length} to {recipe.kernels.Length}. Must recreate simulation and gpu context");
+
+            for(int k=0; k<kernels.Length; k++)
+            {
+                kernels[k].UpdateRecipe(recipe.kernels[k]);
+            }
         }
 
         public void RecalculateKernels()

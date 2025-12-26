@@ -22,5 +22,25 @@ namespace KernelAutomata.Models
         public float sigma;
 
         public float decay;
+
+        public KernelRecipe[] kernels;
+    }
+
+    public class KernelRecipe
+    {
+        public float weight;
+
+        public RingRecipe[] rings;
+    }
+
+    public class RingRecipe
+    {
+        public float maxR;
+
+        public float center;
+
+        public float width;
+
+        public float weight;
     }
 }
