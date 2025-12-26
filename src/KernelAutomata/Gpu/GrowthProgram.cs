@@ -35,8 +35,8 @@ namespace KernelAutomata.Gpu
             GL.Uniform1(GL.GetUniformLocation(program, "uSigma"), sigma);
             GL.Uniform1(GL.GetUniformLocation(program, "uDt"), dt);
             GL.Uniform1(GL.GetUniformLocation(program, "uSize"), size);
-            GL.Uniform1(GL.GetUniformLocation(program, "uMyWeight"), myWeight);
-            GL.Uniform1(GL.GetUniformLocation(program, "uCompeteWeight"), competeWeight);
+            GL.Uniform1(GL.GetUniformLocation(program, "uWeight1"), myWeight);
+            GL.Uniform1(GL.GetUniformLocation(program, "uWeight2"), competeWeight);
             GL.Uniform1(GL.GetUniformLocation(program, "uDecay"), decay);
 
             GL.BindImageTexture(0, fieldInTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);

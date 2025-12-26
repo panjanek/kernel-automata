@@ -3,16 +3,16 @@
 layout (local_size_x = 16, local_size_y = 16) in;
 
 layout (rgba32f, binding = 0) readonly  uniform image2D fieldIn;
-layout (rgba32f, binding = 1) readonly  uniform image2D myConvIn;
-layout (rgba32f, binding = 2) readonly  uniform image2D competeConvIn;
+layout (rgba32f, binding = 1) readonly  uniform image2D conv1;
+layout (rgba32f, binding = 2) readonly  uniform image2D conv2;
 layout (rgba32f, binding = 3) writeonly uniform image2D fieldOut;
 
 uniform float uMu;
 uniform float uSigma;
 uniform float uDt;
 uniform int   uSize;
-uniform float uMyWeight;
-uniform float uCompeteWeight;
+uniform float uWeight1;
+uniform float uWeight2;
 uniform float uDecay;
 
 float gaussianGrowth(float u)
@@ -28,14 +28,18 @@ void main()
         return;
 
     float current = imageLoad(fieldIn, p).r;
-    float my = imageLoad(myConvIn, p).r;
-    float compete = imageLoad(competeConvIn, p).r;
 
-    // Normalize inverse FFT
-    my /= float(uSize * uSize);
-    compete /= float(uSize * uSize);
+    float c1 = imageLoad(conv1, p).r;
+    c1 /= float(uSize * uSize);
+    float growth = c1 * uWeight1;
+    if (uWeight2 != 0)
+    {
+        float c2 = imageLoad(conv2, p).r;
+        c2 /= float(uSize * uSize);
+        growth += c2 * uWeight2;
+    }
 
-    float growth =  gaussianGrowth(my * uMyWeight + compete * uCompeteWeight);
+    growth = gaussianGrowth(growth);
 
     float res = current + uDt * (growth - current * uDecay);
 
