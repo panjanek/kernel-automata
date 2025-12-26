@@ -10,6 +10,17 @@ namespace KernelAutomata.Models
     public class Kernel
     {
         private GpuContext gpuContext;
+
+        public GpuKernel gpu;
+
+        public float kernelWeight = 1.0f;
+
+        public int fieldSize;
+
+        public Ring[] rings;
+
+        public float[] kernelBuffer;
+
         public Kernel(int size, GpuContext gpuContext, KernelRecipe recipe)
         {
             this.gpuContext = gpuContext;
@@ -47,17 +58,8 @@ namespace KernelAutomata.Models
             Recalculate();
         }
 
-        public GpuKernel gpu;
 
-        public float kernelWeight = 1.0f;
-
-        public int fieldSize;
-
-        public Ring[] rings;
-
-        public float[] kernelBuffer;
-
-        public void Recalculate()
+        private void Recalculate()
         {
             Array.Fill<float>(kernelBuffer, 0);
             for (int i = 0; i < rings.Length; i++)

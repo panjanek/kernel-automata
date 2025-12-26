@@ -52,12 +52,6 @@ namespace KernelAutomata.Models
             }
         }
 
-        public void RecalculateKernels()
-        {
-            for (int k = 0; k < kernels.Length; k++)
-                kernels[k].Recalculate();
-        }
-
         public void Convolve()
         {
             gpu.Convolve(kernels.Select(k=>k.gpu.FftTex).ToArray());
