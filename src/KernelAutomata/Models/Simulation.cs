@@ -39,16 +39,6 @@ namespace KernelAutomata.Models
             {
                 channels[c] = new Channel(this, gpuContext, recipe.channels[c]);
             }
-
-            if (channels.Length == 2)
-            {
-                channels[0].UploadData(FieldUtil.RandomRingWithDisk(fieldSize, new Vector2(0.3f, 0.3f), 250 * fieldSize / 512, 25 * fieldSize / 512));
-                channels[1].UploadData(FieldUtil.RandomRingWithDisk(fieldSize, new Vector2(0.6f, 0.6f), 350 * fieldSize / 512, 100 * fieldSize / 512));
-            }
-            else
-            {
-                channels[0].UploadData(FieldUtil.RandomRingWithDisk(fieldSize, new Vector2(0.3f, 0.3f), 250 * fieldSize / 512, 25 * fieldSize / 512));
-            }
         }
 
         public void UpdateRecipe(SimulationRecipe recipe)
@@ -63,6 +53,12 @@ namespace KernelAutomata.Models
             {
                 channels[c].UpdateRecipe(recipe.channels[c]);
             }
+        }
+
+        public void ResetFields()
+        {
+            foreach (var channel in channels)
+                channel.ResetField();
         }
 
         public void Step()

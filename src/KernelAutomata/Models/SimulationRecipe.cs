@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +25,8 @@ namespace KernelAutomata.Models
         public float decay;
 
         public KernelRecipe[] kernels;
+
+        public InitializationRecipe initialization;
     }
 
     public class KernelRecipe
@@ -42,5 +45,18 @@ namespace KernelAutomata.Models
         public float width;
 
         public float weight;
+    }
+
+    public class InitializationRecipe
+    {
+        public float centerX;
+
+        public float centerY;
+
+        public float density;
+
+        public float noiseRadius;
+
+        public float blobRadius;
     }
 }

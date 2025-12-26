@@ -25,17 +25,23 @@ namespace KernelAutomata.Models
 
         private GpuContext gpuContext;
 
+        private InitializationRecipe initializationRecipe;
+
+        private float[] initBuffer;
+
         public Channel(Simulation simulation, GpuContext gpuContext, ChannelRecipe recipe)
         {
             this.simulation = simulation;
             this.gpuContext = gpuContext;
             gpu = new GpuChannel(simulation.fieldSize, simulation.channels.Length, gpuContext.convolutionProgram, gpuContext.growthProgram);
+            initBuffer = new float[simulation.fieldSize * simulation.fieldSize * 4];
 
             kernels = new Kernel[simulation.channels.Length];
             for (int k = 0; k < kernels.Length; k++)
                 kernels[k] = new Kernel(simulation.fieldSize, gpuContext, recipe.kernels[k]);
 
             UpdateRecipe(recipe);
+            ResetField();
         }
 
         public void UpdateRecipe(ChannelRecipe recipe)
@@ -50,6 +56,8 @@ namespace KernelAutomata.Models
             {
                 kernels[k].UpdateRecipe(recipe.kernels[k]);
             }
+
+            initializationRecipe = recipe.initialization;
         }
 
         public void Convolve()
@@ -59,9 +67,13 @@ namespace KernelAutomata.Models
 
         public void Grow(int myConv, float myWeight, int differentConv, float differentWeight)
         {
-            //var myWeight = kernels[0].kernelWeight;
-            //var differentWeight = kernels.Length == 2 ? kernels[1].kernelWeight : 0;
             gpu.Grow(myConv, differentConv, myWeight, differentWeight, growthMu, growthSigma, decay, simulation.dt);
+        }
+
+        public void ResetField()
+        {
+            var data = FieldUtil.RandomRingWithDisk(simulation.fieldSize, initializationRecipe.centerX, initializationRecipe.centerY, initializationRecipe.noiseRadius, initializationRecipe.blobRadius);
+            gpu.UploadData(data);
         }
 
         public void UploadData(float[] fieldData)

@@ -41,6 +41,7 @@ namespace KernelAutomata
 
             var gpu = new GpuContext(recipe.size, placeholder);
             simulation = new Simulation(recipe, gpu);
+            simulation.ResetFields();
 
             renderer = new OpenGlRenderer(placeholder, simulation);
             KeyDown += MainWindow_KeyDown;
