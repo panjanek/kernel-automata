@@ -11,10 +11,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="recipes\orbs-ch1.json" />
+    <None Remove="recipes\orbs-ch2.json" />
     <None Remove="shaders\debug.vert" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="recipes\caterpillar1-ch2.json" />
+    <EmbeddedResource Include="recipes\orbs-ch1.json" />
+    <EmbeddedResource Include="recipes\orbs-ch2.json" />
     <EmbeddedResource Include="shaders\display.vert" />
     <EmbeddedResource Include="shaders\display.frag" />
     <EmbeddedResource Include="shaders\fft_cooley.comp" />

@@ -37,7 +37,15 @@ namespace KernelAutomata
         {
             //var recipe = RecipeFactory.TwoChannelsOrbs();
             //var recipe = RecipeFactory.OneChannelOrbs();
-            var recipe = RecipeFactory.TwoChannelsCaterpillar();
+            //var recipe = RecipeFactory.TwoChannelsCaterpillar();
+
+
+            //RecipeFactory.SaveToFile(recipe, "c://tmp//orbs-ch2.json");
+
+            var recipe = RecipeFactory.LoadFromResource("caterpillar1-ch2.json");
+            //var recipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
+            //var recipe = RecipeFactory.LoadFromResource("orbs-ch2.json");
+
 
             var gpu = new GpuContext(recipe.size, placeholder);
             simulation = new Simulation(recipe, gpu);
