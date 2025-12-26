@@ -31,11 +31,14 @@ namespace KernelAutomata
         public MainWindow()
         {
             InitializeComponent();
-            simulation = new Simulation();
+
+            
         }
 
         private void parent_Loaded(object sender, RoutedEventArgs e)
         {
+            var gpu = new GpuContext(1024, placeholder);
+            simulation = new Simulation(1024, 2, gpu);
             renderer = new OpenGlRenderer(placeholder, simulation);
             KeyDown += MainWindow_KeyDown;
             System.Timers.Timer systemTimer = new System.Timers.Timer() { Interval = 10 };
@@ -55,7 +58,7 @@ namespace KernelAutomata
                 {
                     try
                     {
-                        renderer.Draw();
+                        renderer.Step();
                     }
                     catch (Exception ex)
                     {

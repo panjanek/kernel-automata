@@ -32,9 +32,9 @@ namespace KernelAutomata.Models
             growthMu = mu;
             growthSigma = sigma;
             decay = dec;
-            gpu = new GpuChannel(simulation.fieldSize, simulation.channelsCount, gpuContext.convolutionProgram, gpuContext.growthProgram);
+            gpu = new GpuChannel(simulation.fieldSize, simulation.channels.Length, gpuContext.convolutionProgram, gpuContext.growthProgram);
 
-            kernels = new Kernel[simulation.channelsCount];
+            kernels = new Kernel[simulation.channels.Length];
             for (int k = 0; k < kernels.Length; k++)
                 kernels[k] = new Kernel(simulation.fieldSize, gpuContext);
         }
@@ -45,14 +45,15 @@ namespace KernelAutomata.Models
                 kernels[k].Recalculate();
         }
 
-        public void Convolve(params Kernel[] kernels)
+        public void Convolve()
         {
             gpu.Convolve(kernels.Select(k=>k.gpu.FftTex).ToArray());
         }
 
-        public void Grow(int myConv, int competeConv, float myWeight, float competeWeight)
+        public void Grow(int myConv, int competeConv)
         {
-            gpu.Grow(myConv, competeConv, myWeight, competeWeight, growthMu, growthSigma, decay, simulation.dt);
+            
+            gpu.Grow(myConv, competeConv, kernels[0].kernelWeight, kernels[1].kernelWeight, growthMu, growthSigma, decay, simulation.dt);
         }
 
         public void UploadData(float[] fieldData)
