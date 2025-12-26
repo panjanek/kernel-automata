@@ -27,7 +27,18 @@ namespace KernelAutomata.Models
             fieldSize = size;
             channels = new Channel[channelCount];
 
-            if (channels.Length == 2)
+
+            if (channels.Length == 1)
+            {
+                var red = new Channel(this, gpuContext, 0.11f, 0.015f, 0);
+                red.kernels[0].kernelWeight = 1.0f;                    //1.0 -0.36
+                red.kernels[0].rings[0].Set(32, 10, 4, 1.0f);
+                red.kernels[0].rings[1].Set(32, 24, 7, -0.36f);
+                red.RecalculateKernels();
+                red.UploadData(FieldUtil.RandomRingWithDisk(fieldSize, new Vector2(0.3f, 0.3f), 250 * fieldSize / 512, 25 * fieldSize / 512));
+                channels[0] = red;
+            }
+            else if (channels.Length == 2)
             {
                 var red = new Channel(this, gpuContext, 0.11f, 0.015f, 0);
                 var green = new Channel(this, gpuContext, 0.108f, 0.015f, 0);

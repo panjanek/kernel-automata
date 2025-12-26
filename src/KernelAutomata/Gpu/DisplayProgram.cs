@@ -57,13 +57,18 @@ namespace KernelAutomata.Gpu
             GL.Disable(EnableCap.Blend);
             GL.UseProgram(program);
 
+            //first channel "red" - always present
             GL.ActiveTexture(TextureUnit.Texture0);
             GL.BindTexture(TextureTarget.Texture2D, textureRed);
             GL.Uniform1(stateRedLocation, 0);
 
-            GL.ActiveTexture(TextureUnit.Texture1);
-            GL.BindTexture(TextureTarget.Texture2D, textureGreen);
-            GL.Uniform1(stateGreenLocation, 1);
+            //second channel "green"
+            if (textureGreen != -1)
+            {
+                GL.ActiveTexture(TextureUnit.Texture1);
+                GL.BindTexture(TextureTarget.Texture2D, textureGreen);
+                GL.Uniform1(stateGreenLocation, 1);
+            }
 
             GL.Uniform1(zoomLocation, zoom);
             GL.Uniform2(centerLocation, center.X, center.Y);

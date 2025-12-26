@@ -37,8 +37,12 @@ namespace KernelAutomata
 
         private void parent_Loaded(object sender, RoutedEventArgs e)
         {
-            var gpu = new GpuContext(1024, placeholder);
-            simulation = new Simulation(1024, 2, gpu);
+            int size = 1024;
+            int channels = 1;
+
+            var gpu = new GpuContext(size, placeholder);
+            simulation = new Simulation(size, channels, gpu);
+
             renderer = new OpenGlRenderer(placeholder, simulation);
             KeyDown += MainWindow_KeyDown;
             System.Timers.Timer systemTimer = new System.Timers.Timer() { Interval = 10 };

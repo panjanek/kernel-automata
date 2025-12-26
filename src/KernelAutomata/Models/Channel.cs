@@ -50,9 +50,11 @@ namespace KernelAutomata.Models
             gpu.Convolve(kernels.Select(k=>k.gpu.FftTex).ToArray());
         }
 
-        public void Grow(int myConv, int competeConv)
+        public void Grow(int myConv, int differentConv)
         {
-            gpu.Grow(myConv, competeConv, kernels[0].kernelWeight, kernels[1].kernelWeight, growthMu, growthSigma, decay, simulation.dt);
+            var myWeight = kernels[0].kernelWeight;
+            var differentWeight = kernels.Length == 2 ? kernels[1].kernelWeight : 0;
+            gpu.Grow(myConv, differentConv, myWeight, differentWeight, growthMu, growthSigma, decay, simulation.dt);
         }
 
         public void UploadData(float[] fieldData)

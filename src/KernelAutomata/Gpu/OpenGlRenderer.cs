@@ -87,7 +87,9 @@ namespace KernelAutomata.Gpu
 
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
-            simulation.gpuContext.displayProgram.Run(simulation.channels[0].gpu.FieldTex, simulation.channels[1].gpu.FieldTex, center, zoom, aspectRatio);
+            var channel1Tex = simulation.channels[0].gpu.FieldTex;
+            var channel2Tex = simulation.channels.Length == 2 ? simulation.channels[1].gpu.FieldTex : -1;
+            simulation.gpuContext.displayProgram.Run(channel1Tex, channel2Tex, center, zoom, aspectRatio);
             simulation.gpuContext.glControl.SwapBuffers();
             frameCounter++;
         }
