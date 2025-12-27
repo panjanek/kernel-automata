@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:KernelAutomata.Gui"
         mc:Ignorable="d"
         Title="ConfigWindow" 
-        Height="800" 
+        Height="900" 
         Width="500"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterOwner"
@@ -129,25 +129,36 @@
                 <Slider Grid.Row="7" Grid.Column="3" Minimum="-1" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.1.decay" Margin="5,5,0,0"/>
                 <TextBlock Grid.Row="7" Grid.Column="4" Tag="channels.1.decay" Background="DimGray" FontFamily="Courier New" Margin="5,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
                 
-                <TextBlock Grid.Row="8" Grid.Column="0" Grid.RowSpan="3" Text="Kernel of my channel" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap"/>
-                <local:FunctionGraph Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" Tag="channels.0.kernels.0" Height="50" Margin="5,5,0,0"/>
-                <local:FunctionGraph Grid.Row="8" Grid.Column="3" Grid.ColumnSpan="2" Tag="channels.1.kernels.0" Height="50" Margin="5,5,0,0"/>
+                <!-- kernel of this channel -->
+                <TextBlock Grid.Row="8" Grid.Column="0" Grid.RowSpan="3" Text="Kernel of this channel" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap"/>
+                <local:FunctionGraph Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" Tag="channels.0.kernels.0" Height="50" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
+                <local:FunctionGraph Grid.Row="8" Grid.Column="3" Grid.ColumnSpan="2" Tag="channels.1.kernels.0" Height="50" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
+                <local:KernelImage Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Tag="channels.0.kernels.0" Stretch="Uniform" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
+                <local:KernelImage Grid.Row="9" Grid.Column="3" Grid.ColumnSpan="2" Tag="channels.1.kernels.0" Stretch="Uniform" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
 
-                <local:KernelImage Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Tag="channels.0.kernels.0" Stretch="Uniform" Margin="5,5,0,0"/>
-                <local:KernelImage Grid.Row="9" Grid.Column="3" Grid.ColumnSpan="2" Tag="channels.1.kernels.0" Stretch="Uniform" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="10" Grid.Column="0" Grid.RowSpan="1" Text="kernel weight" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap"/>
+                <Slider Grid.Row="10" Grid.Column="1" Minimum="-2" Maximum="2" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.0.kernels.0.weight" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="10" Grid.Column="2" Tag="channels.0.kernels.0.weight" Background="DimGray" FontFamily="Courier New" Margin="5,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+                <Slider Grid.Row="10" Grid.Column="3" Minimum="-1" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.1.kernels.0.weight" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="10" Grid.Column="4" Tag="channels.1.kernels.0.weight" Background="DimGray" FontFamily="Courier New" Margin="5,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+                <Button Grid.Row="11" Grid.Column="1" Content="edit kernel" Grid.ColumnSpan="2" Margin="5,5,0,0" Tag="channels.0.kernels.0" Click="OpenKernelConfig_Click"/>
+                <Button Grid.Row="11" Grid.Column="3" Content="edit kernel" Grid.ColumnSpan="2" Margin="5,5,0,0" Tag="channels.1.kernels.0" Click="OpenKernelConfig_Click"/>
 
-                <Button Grid.Row="10" Grid.Column="1" Content="▼" Grid.ColumnSpan="2" Margin="5,5,0,0"/>
-                <Button Grid.Row="10" Grid.Column="3" Content="▼" Grid.ColumnSpan="2" Margin="5,5,0,0"/>
+                <!-- kernel of opposing channel -->
+                <TextBlock Grid.Row="12" Grid.Column="0" Grid.RowSpan="3" Text="Kernel for opposite channel" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap"/>
+                <local:FunctionGraph Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" Tag="channels.0.kernels.1" Height="50" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
+                <local:FunctionGraph Grid.Row="12" Grid.Column="3" Grid.ColumnSpan="2" Tag="channels.1.kernels.1" Height="50" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
+                <local:KernelImage Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="2" Tag="channels.0.kernels.1" Stretch="Uniform" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
+                <local:KernelImage Grid.Row="13" Grid.Column="3" Grid.ColumnSpan="2" Tag="channels.1.kernels.1" Stretch="Uniform" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
 
-                <TextBlock Grid.Row="11" Grid.Column="0" Grid.RowSpan="3" Text="Kernel for opposite channel" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap"/>
-                <local:FunctionGraph Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="2" Tag="channels.0.kernels.1" Height="50" Margin="5,5,0,0"/>
-                <local:FunctionGraph Grid.Row="11" Grid.Column="3" Grid.ColumnSpan="2" Tag="channels.1.kernels.1" Height="50" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="14" Grid.Column="0" Grid.RowSpan="1" Text="kernel weight" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap"/>
+                <Slider Grid.Row="14" Grid.Column="1" Minimum="-2" Maximum="2" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.0.kernels.1.weight" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="14" Grid.Column="2" Tag="channels.0.kernels.1.weight" Background="DimGray" FontFamily="Courier New" Margin="5,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+                <Slider Grid.Row="14" Grid.Column="3" Minimum="-1" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.1.kernels.1.weight" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="14" Grid.Column="4" Tag="channels.1.kernels.1.weight" Background="DimGray" FontFamily="Courier New" Margin="5,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
 
-                <local:KernelImage Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" Tag="channels.0.kernels.1" Stretch="Uniform" Margin="5,5,0,0"/>
-                <local:KernelImage Grid.Row="12" Grid.Column="3" Grid.ColumnSpan="2" Tag="channels.1.kernels.1" Stretch="Uniform" Margin="5,5,0,0"/>
-
-                <Button Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="2" Content="▼" Margin="5,5,0,0"/>
-                <Button Grid.Row="13" Grid.Column="3" Grid.ColumnSpan="2" Content="▼" Margin="5,5,0,0"/>
+                <Button Grid.Row="15" Grid.Column="1" Grid.ColumnSpan="2" Content="edit kernel" Margin="5,5,0,0" Tag="channels.0.kernels.1" Click="OpenKernelConfig_Click"/>
+                <Button Grid.Row="15" Grid.Column="3" Grid.ColumnSpan="2" Content="edit kernel" Margin="5,5,0,0" Tag="channels.1.kernels.1" Click="OpenKernelConfig_Click"/>
 
             </Grid>
         </DockPanel>

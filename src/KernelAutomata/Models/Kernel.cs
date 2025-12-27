@@ -44,6 +44,8 @@ namespace KernelAutomata.Models
                     rings[r].width = 0;
                     rings[r].center = 0;
                     rings[r].weight = 0;
+                    rings[r].innerSlope = 0;
+                    rings[r].outerSlope = 0;
                 }
                 else
                 {
@@ -52,6 +54,8 @@ namespace KernelAutomata.Models
                     rings[r].width = ringRecipe.width;
                     rings[r].center = ringRecipe.center;
                     rings[r].weight = ringRecipe.weight;
+                    rings[r].innerSlope = ringRecipe.innerSlope;
+                    rings[r].outerSlope = ringRecipe.outerSlope;
                 }
             }
 

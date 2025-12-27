@@ -28,6 +28,10 @@ namespace KernelAutomata.Gui
     public partial class ConfigWindow : Window
     {
         private AppContext app;
+
+        private bool updating;
+
+        private KernelConfig kernelWindow;
         public ConfigWindow(AppContext app)
         {
             this.app = app;
@@ -42,7 +46,7 @@ namespace KernelAutomata.Gui
 
         private void global_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (fieldSize != null && channelsCount != null)
+            if (fieldSize != null && channelsCount != null && !updating)
             {
                 var sizeStr = WpfUtil.GetComboSelectionAsString(fieldSize);
                 var channlesCountStr = WpfUtil.GetComboSelectionAsString(channelsCount);
@@ -69,6 +73,7 @@ namespace KernelAutomata.Gui
 
         private void UpdateActiveControls(SimulationRecipe recipe)
         {
+            updating = true;
             WpfUtil.SetComboStringSelection(fieldSize, $"{recipe.size}x{recipe.size}");
             WpfUtil.SetComboStringSelection(channelsCount, recipe.channels.Length.ToString());
             foreach (var slider in WpfUtil.FindVisualChildren<Slider>(this))
@@ -80,6 +85,7 @@ namespace KernelAutomata.Gui
                     slider.Value = ReflectionUtil.GetObjectValue<float>(recipe, tag); 
                 }
             }
+            updating = false;
         }
 
         private void UpdatePassiveControls(SimulationRecipe recipe)
@@ -159,13 +165,16 @@ namespace KernelAutomata.Gui
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            var tag = WpfUtil.GetTagAsString(sender);
-            if (!string.IsNullOrWhiteSpace(tag))
+            if (!updating)
             {
-                ReflectionUtil.SetObjectValue<float>(app.recipe, tag, (float)e.NewValue);
-                app.simulation.UpdateRecipe(app.recipe);
-                app.simulation.ResetFields();
-                UpdatePassiveControls(app.recipe);
+                var tag = WpfUtil.GetTagAsString(sender);
+                if (!string.IsNullOrWhiteSpace(tag))
+                {
+                    ReflectionUtil.SetObjectValue<float>(app.recipe, tag, (float)e.NewValue);
+                    app.simulation.UpdateRecipe(app.recipe);
+                    app.simulation.ResetFields();
+                    UpdatePassiveControls(app.recipe);
+                }
             }
         }
 
@@ -174,6 +183,33 @@ namespace KernelAutomata.Gui
             var tag = WpfUtil.GetTagAsString(sender);
             if (!string.IsNullOrWhiteSpace(tag))
                 WpfUtil.FindVisualChildren<Slider>(this).Where(s => WpfUtil.GetTagAsString(s) == tag).FirstOrDefault()?.Focus();
+        }
+
+        private void OpenKernelConfig_Click(object sender, RoutedEventArgs e)
+        {
+            OpenKernelConfigurationDialog(WpfUtil.GetTagAsString(sender));
+        }
+
+        private void KernelGraph_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            OpenKernelConfigurationDialog(WpfUtil.GetTagAsString(sender));
+        }
+
+        private void OpenKernelConfigurationDialog(string tag)
+        {
+            if (!string.IsNullOrWhiteSpace(tag))
+            {
+                if (kernelWindow != null)
+                    kernelWindow.Close();
+                var kernelRecipe = ReflectionUtil.GetObjectValue<KernelRecipe>(app.recipe, tag);
+                kernelWindow = new KernelConfig(kernelRecipe, () =>
+                {
+                    app.simulation.UpdateRecipe(app.recipe);
+                    app.simulation.ResetFields();
+                    UpdatePassiveControls(app.recipe);
+                });
+                kernelWindow.Show();
+            }
         }
     }
 }

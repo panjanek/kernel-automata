@@ -51,6 +51,10 @@ namespace KernelAutomata.Models
         public float width;
 
         public float weight;
+
+        public float innerSlope = 1.0f;
+
+        public float outerSlope = 1.0f;
     }
 
     public class InitializationRecipe

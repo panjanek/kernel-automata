@@ -16,6 +16,10 @@ namespace KernelAutomata.Models
 
         public float weight;
 
+        public float innerSlope;
+
+        public float outerSlope;
+
         public float[] ringBuffer;
 
         private int fieldSize;
@@ -43,10 +47,7 @@ namespace KernelAutomata.Models
             }
 
             int N = fieldSize;
-
-            //float[,] kernel = new float[N, N];
             float sum = 0f;
-
             for (int y = 0; y < N; y++)
             {
                 int dy = y <= N / 2 ? y : y - N;
@@ -54,18 +55,14 @@ namespace KernelAutomata.Models
                 for (int x = 0; x < N; x++)
                 {
                     int dx = x <= N / 2 ? x : x - N;
-
                     float r = MathF.Sqrt(dx * dx + dy * dy);
-
                     if (r > maxR)
                     {
-                        //kernel[x, y] = 0f;
                         ringBuffer[(x * fieldSize + y)*4] = 0f;
                         continue;
                     }
 
-                    float v = Gauss(r, center, width);
-                    //kernel[x, y] = v;
+                    float v = GaussianBell(r, center, width, innerSlope, outerSlope);
                     ringBuffer[(x * fieldSize + y) * 4] = v;
                     sum += v;
                 }
@@ -74,32 +71,19 @@ namespace KernelAutomata.Models
             // Normalize so sum(kernel) = 1
             if (sum > 0f)
             {
-                for (int y = 0; y < N; y++)
-                    for (int x = 0; x < N; x++)
-                        //kernel[x, y] /= sum;
-                        ringBuffer[(x * fieldSize + y) * 4] /= sum;
-            }
-
-            //Flatten4Channels(kernel, 0, ringBuffer);
-        }
-
-        private static void Flatten4Channels(float[,] array2D, int channel, float[] output)
-        {
-            int idx = 0;
-            int size = array2D.GetLength(0);
-            for (int x = 0; x < size; x++)
-            {
-                for (int y = 0; y < size; y++)
-                {
-                    output[idx * 4 + channel] = array2D[x, y];
-                    idx++;
-                }
+                for (int i = 0; i < ringBuffer.Length; i++)
+                    ringBuffer[i] /= sum;
             }
         }
 
-        public static float Gauss(float r, float r1, float sigma)
+        public static float GaussianBell(float r, float center, float width, float innerSlope = 1.0f, float outerSlope = 1.0f)
         {
-            return (float)Math.Exp(-(r - r1) * (r - r1) / (2 * sigma * sigma));
+            var val = (float)Math.Exp(-(r - center) * (r - center) / (2 * width * width));
+            if (r > center && outerSlope != 0 && outerSlope != 1)
+                val = (float)Math.Pow(val, outerSlope);
+            if (r < center && innerSlope != 0 && innerSlope != 1)
+                val = (float)Math.Pow(val, innerSlope);
+            return val;
         }
     }
 }
