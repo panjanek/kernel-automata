@@ -64,6 +64,11 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/> <!-- 9 -->
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Field size" VerticalAlignment="Center" Margin="0,0,8,0"/>
@@ -82,6 +87,24 @@
                     <ComboBoxItem>2</ComboBoxItem>
                 </ComboBox>
 
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Integration step dt" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <Slider Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Minimum="0.001" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="dt"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Channels" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="Red" VerticalAlignment="Center" Margin="0,0,8,0" Background="Magenta" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+                <TextBlock Grid.Row="3" Grid.Column="2" Text="Green" VerticalAlignment="Center" Margin="0,0,8,0" Background="Aquamarine" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="spike µ" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <Slider Grid.Row="4" Grid.Column="1" Minimum="0" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.0.mu"/>
+                <Slider Grid.Row="4" Grid.Column="2" Minimum="0" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.1.mu"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="spike σ" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <Slider Grid.Row="5" Grid.Column="1" Minimum="0" Maximum="0.2" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.0.sigma"/>
+                <Slider Grid.Row="5" Grid.Column="2" Minimum="0" Maximum="0.2" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.1.sigma"/>
+
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="decay" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <Slider Grid.Row="6" Grid.Column="1" Minimum="-1" Maximum="1" ValueChanged="Slider_ValueChanged" Tag="channels.0.decay"/>
+                <Slider Grid.Row="6" Grid.Column="2" Minimum="-1" Maximum="1" ValueChanged="Slider_ValueChanged" Tag="channels.1.decay"/>
 
             </Grid>
         </DockPanel>

@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using ComboBox = System.Windows.Controls.ComboBox;
+using Binding = System.Windows.Data.Binding;
+using ToolTip = System.Windows.Controls.ToolTip;
 
 namespace KernelAutomata.Gui
 {
@@ -30,6 +35,65 @@ namespace KernelAutomata.Gui
                     var comboItem = item as ComboBoxItem;
                     comboItem.IsSelected = comboItem.Content?.ToString() == value;
                 }
+            }
+        }
+
+        public static string GetTagAsString(object element)
+        {
+            if (element is FrameworkElement)
+            {
+                var el = (FrameworkElement)element;
+                if (el.Tag is string)
+                    return el.Tag as string;
+                else
+                    return null;
+            }
+            else
+                return null;
+        }
+
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject parent)
+        where T : DependencyObject
+        {
+            if (parent == null)
+                yield break;
+
+            int count = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < count; i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is T t)
+                    yield return t;
+
+                foreach (var descendant in FindVisualChildren<T>(child))
+                    yield return descendant;
+            }
+        }
+
+        public static void AddTooltipToSlider(Slider slider)
+        {
+            if (slider.ToolTip == null)
+            {
+                var textBlock = new TextBlock();
+
+                textBlock.SetBinding(TextBlock.TextProperty, new Binding("Value")
+                {
+                    Source = slider,
+                    StringFormat = "0.000"
+                });
+
+
+                var toolTip = new ToolTip
+                {
+                    Placement = System.Windows.Controls.Primitives.PlacementMode.Mouse,
+                    StaysOpen = true,
+                    Content = textBlock
+                };
+
+                slider.ToolTip = toolTip;
+                slider.PreviewMouseLeftButtonDown += (_, _) => toolTip.IsOpen = true;
+                slider.PreviewMouseLeftButtonUp += (_, _) => toolTip.IsOpen = false;
             }
         }
     }

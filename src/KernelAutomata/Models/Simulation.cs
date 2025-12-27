@@ -49,6 +49,7 @@ namespace KernelAutomata.Models
             if (recipe.channels.Length != channels.Length)
                 throw new Exception($"Cannot change channels count (from {channels.Length} to {recipe.channels.Length}). Must recreate simulation and GPU context");
 
+            dt = recipe.dt;
             for(int c=0; c<channels.Length; c++)
             {
                 channels[c].UpdateRecipe(recipe.channels[c]);
