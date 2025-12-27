@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="KernelAutomata.Gui.RingConfigurator"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:KernelAutomata.Gui"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="50"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="weight" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <Slider Grid.Row="1" Grid.Column="1" Minimum="-2" Maximum="2" SmallChange="0.001" LargeChange="0.01" ValueChanged="Slider_ValueChanged" Tag="weight" VerticalAlignment="Center" Margin="0,5,0,0"/>
+        <TextBlock Grid.Row="1" Grid.Column="2" Tag="weight"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="center" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <Slider Grid.Row="2" Grid.Column="1" Minimum="0.001" Maximum="100" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="center" VerticalAlignment="Center" Margin="0,5,0,0"/>
+        <TextBlock Grid.Row="2" Grid.Column="2" Tag="center"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="width" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <Slider Grid.Row="3" Grid.Column="1" Minimum="1" Maximum="100" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="width" VerticalAlignment="Center" Margin="0,5,0,0"/>
+        <TextBlock Grid.Row="3" Grid.Column="2" Tag="width"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="maxR" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <Slider Grid.Row="4" Grid.Column="1" Minimum="10" Maximum="256" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="maxR" VerticalAlignment="Center" Margin="0,5,0,0"/>
+        <TextBlock Grid.Row="4" Grid.Column="2" Tag="maxR"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="inner slope" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <Slider Grid.Row="5" Grid.Column="1" Minimum="0.1" Maximum="30" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="innerSlope" VerticalAlignment="Center" Margin="0,5,0,0"/>
+        <TextBlock Grid.Row="5" Grid.Column="2" Tag="innerSlope"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="outer slope" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <Slider Grid.Row="6" Grid.Column="1" Minimum="0.1" Maximum="30" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="outerSlope" VerticalAlignment="Center" Margin="0,5,0,0"/>
+        <TextBlock Grid.Row="6" Grid.Column="2" Tag="outerSlope"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+    </Grid>
+</UserControl>

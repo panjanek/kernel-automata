@@ -31,7 +31,7 @@ namespace KernelAutomata.Gui
 
         private bool updating;
 
-        private KernelConfig kernelWindow;
+        private KernelConfigWindow kernelWindow;
         public ConfigWindow(AppContext app)
         {
             this.app = app;
@@ -202,7 +202,7 @@ namespace KernelAutomata.Gui
                 if (kernelWindow != null)
                     kernelWindow.Close();
                 var kernelRecipe = ReflectionUtil.GetObjectValue<KernelRecipe>(app.recipe, tag);
-                kernelWindow = new KernelConfig(kernelRecipe, () =>
+                kernelWindow = new KernelConfigWindow(kernelRecipe, () =>
                 {
                     app.simulation.UpdateRecipe(app.recipe);
                     app.simulation.ResetFields();

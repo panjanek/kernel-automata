@@ -30,8 +30,15 @@ namespace KernelAutomata.Models
 
         public double GrowthFunction(double u)
         {
-            double x = (u - mu) / sigma;
-            return (2.0 * Math.Exp(-x * x) - 1.0);
+            if (sigma > 0.0001)
+            {
+                double x = (u - mu) / sigma;
+                return (2.0 * Math.Exp(-x * x) - 1.0);
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 
@@ -39,7 +46,7 @@ namespace KernelAutomata.Models
     {
         public float weight;
 
-        public RingRecipe[] rings;
+        public RingRecipe[] rings { get; set; }
     }
 
     public class RingRecipe
