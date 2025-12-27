@@ -51,7 +51,7 @@ namespace KernelAutomata.Gui
                         if (newChannelsCount == 1)
                             recipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
                         else
-                            recipe = RecipeFactory.LoadFromResource("orbs-ch2.json");
+                            recipe = RecipeFactory.LoadFromResource("caterpillar1-ch2.json");
                     }
 
                     recipe.size = newSize;
