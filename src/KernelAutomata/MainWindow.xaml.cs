@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using KernelAutomata.Gpu;
 using KernelAutomata.Gui;
 using KernelAutomata.Models;
+using AppContext = KernelAutomata.Models.AppContext;
 using Application = System.Windows.Application;
 
 namespace KernelAutomata
@@ -23,11 +24,7 @@ namespace KernelAutomata
     {
         private ConfigWindow configWindow;
 
-        private OpenGlRenderer renderer;
-
-        public Simulation simulation;
-
-        public SimulationRecipe recipe;
+        private AppContext app;
 
         private bool uiPending;
 
@@ -49,9 +46,19 @@ namespace KernelAutomata
             //RecipeFactory.SaveToFile(recipe, "c://tmp//orbs-ch2.json");
 
             //var recipe = RecipeFactory.LoadFromResource("caterpillar1-ch2.json");
-            var recipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
+
+
+            app = new Models.AppContext()
+            {
+                mainWindow = this,
+                placeholder = this.placeholder
+            };
+
+            app.StartNewSimulation(RecipeFactory.LoadFromResource("orbs-ch1.json"));
+
+
             //var recipe = RecipeFactory.LoadFromResource("orbs-ch2.json");
-            StartNewSimulation(recipe);
+
             /*
             var gpu = new GpuContext(recipe.size, placeholder);
             simulation = new Simulation(recipe, gpu);
@@ -66,23 +73,13 @@ namespace KernelAutomata
             infoTimer.Tick += InfoTimer_Tick;
             infoTimer.Start();
 
-            configWindow = new ConfigWindow(this);
+            configWindow = new ConfigWindow(app);
             configWindow.Show();
             configWindow.Activate();
             Closing += (s, e) => { };
         }
 
-        public void StartNewSimulation(SimulationRecipe recipe)
-        {
-            if (simulation!=null)
-                simulation.Destroy();
 
-            var gpu = new GpuContext(recipe.size, placeholder);
-            simulation = new Simulation(recipe, gpu);
-            simulation.ResetFields();
-            renderer = new OpenGlRenderer(placeholder, simulation);
-            this.recipe = recipe;
-        }
 
         private void SystemTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
@@ -93,7 +90,7 @@ namespace KernelAutomata
                 {
                     try
                     {
-                        renderer.Step();
+                        app.renderer.Step();
                     }
                     catch (Exception ex)
                     {
@@ -115,7 +112,7 @@ namespace KernelAutomata
             switch (e.Key)
             {
                 case Key.Space:
-                    renderer.Paused = !renderer.Paused;
+                    app.renderer.Paused = !app.renderer.Paused;
                     break;
             }
         }
@@ -124,14 +121,14 @@ namespace KernelAutomata
         {
             var now = DateTime.Now;
             var timespan = now - lastCheckTime;
-            double frames = renderer.FrameCounter - lastCheckFrameCount;
+            double frames = app.renderer.FrameCounter - lastCheckFrameCount;
             if (timespan.TotalSeconds >= 0.0001)
             {
                 double fps = frames / timespan.TotalSeconds;
                 Title = $"KernelAutomata. " +
                         $"fps:{fps.ToString("0.0")} ";
 
-                lastCheckFrameCount = renderer.FrameCounter;
+                lastCheckFrameCount = app.renderer.FrameCounter;
                 lastCheckTime = now;
             }
         }

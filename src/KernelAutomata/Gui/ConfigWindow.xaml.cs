@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using KernelAutomata.Models;
 using KernelAutomata.Utils;
+using AppContext = KernelAutomata.Models.AppContext;
 
 namespace KernelAutomata.Gui
 {
@@ -22,15 +23,15 @@ namespace KernelAutomata.Gui
     /// </summary>
     public partial class ConfigWindow : Window
     {
-        private MainWindow mainWindow;
-        public ConfigWindow(MainWindow mainWindow)
+        private AppContext app;
+        public ConfigWindow(AppContext app)
         {
-            this.mainWindow = mainWindow;
+            this.app = app;
             InitializeComponent();
             customTitleBar.MouseLeftButtonDown += (s, e) => { if (e.ButtonState == MouseButtonState.Pressed) DragMove(); };
             minimizeButton.Click += (s,e) => WindowState = WindowState.Minimized;
             Closing += (s, e) => { e.Cancel = true; WindowState = WindowState.Minimized; };
-            ContentRendered += (s, e) => { UpdateControls(mainWindow.recipe); };
+            ContentRendered += (s, e) => { UpdateControls(app.recipe); };
             Loaded += (s, e) => { };
             
         }
@@ -45,7 +46,7 @@ namespace KernelAutomata.Gui
                 {
                     int newSize = int.Parse(sizeStr.Split('x')[0]);
                     int newChannelsCount = int.Parse(channlesCountStr);
-                    var recipe = mainWindow.recipe;
+                    var recipe = app.recipe;
                     if (recipe.channels.Length != newChannelsCount)
                     {
                         if (newChannelsCount == 1)
@@ -55,7 +56,7 @@ namespace KernelAutomata.Gui
                     }
 
                     recipe.size = newSize;
-                    mainWindow.StartNewSimulation(recipe);
+                    app.StartNewSimulation(recipe);
                     UpdateControls(recipe);
 
                 }
@@ -83,9 +84,9 @@ namespace KernelAutomata.Gui
             var tag = WpfUtil.GetTagAsString(sender);
             if (!string.IsNullOrWhiteSpace(tag))
             {
-                ReflectionUtil.SetObjectValue<float>(mainWindow.recipe, tag, (float)e.NewValue);
-                mainWindow.simulation.UpdateRecipe(mainWindow.recipe);
-                mainWindow.simulation.ResetFields();
+                ReflectionUtil.SetObjectValue<float>(app.recipe, tag, (float)e.NewValue);
+                app.simulation.UpdateRecipe(app.recipe);
+                app.simulation.ResetFields();
             }
         }
     }
