@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -34,7 +35,7 @@ namespace KernelAutomata.Gui
             customTitleBar.MouseLeftButtonDown += (s, e) => { if (e.ButtonState == MouseButtonState.Pressed) DragMove(); };
             minimizeButton.Click += (s,e) => WindowState = WindowState.Minimized;
             Closing += (s, e) => { e.Cancel = true; WindowState = WindowState.Minimized; };
-            ContentRendered += (s, e) => { UpdateControls(app.recipe); UpdateGraphs(app.recipe); };
+            ContentRendered += (s, e) => { UpdateActiveControls(app.recipe); UpdatePassiveControls(app.recipe); };
             Loaded += (s, e) => { };
             
         }
@@ -60,13 +61,13 @@ namespace KernelAutomata.Gui
 
                     recipe.size = newSize;
                     app.StartNewSimulation(recipe);
-                    UpdateControls(recipe);
-                    UpdateGraphs(recipe);
+                    UpdateActiveControls(recipe);
+                    UpdatePassiveControls(recipe);
                 }
             }
         }
 
-        private void UpdateControls(SimulationRecipe recipe)
+        private void UpdateActiveControls(SimulationRecipe recipe)
         {
             WpfUtil.SetComboStringSelection(fieldSize, $"{recipe.size}x{recipe.size}");
             WpfUtil.SetComboStringSelection(channelsCount, recipe.channels.Length.ToString());
@@ -81,7 +82,7 @@ namespace KernelAutomata.Gui
             }
         }
 
-        private void UpdateGraphs(SimulationRecipe recipe)
+        private void UpdatePassiveControls(SimulationRecipe recipe)
         {
             foreach (var graph in WpfUtil.FindVisualChildren<FunctionGraph>(this))
             {
@@ -105,7 +106,7 @@ namespace KernelAutomata.Gui
                             int channelIdx = int.Parse(tagSplit[1]);
                             int kernelIdx = int.Parse(tagSplit[3]);
                             var kernel = app.simulation.channels[channelIdx].kernels[kernelIdx];
-                            var globalMaxR = app.recipe.channels.SelectMany(c => kernel.rings.Where(r=>r.weight != 0).Select(r => (int)Math.Ceiling(r.maxR))).Max();
+                            var globalMaxR = app.recipe.channels.SelectMany(c => kernel.rings.Where(r => r.weight != 0).Select(r => (int)Math.Ceiling(r.maxR))).Max();
                             var intersection = new double[globalMaxR];
                             for (int x = 0; x < intersection.Length; x++)
                                 intersection[x] = kernel.kernelBuffer[x * 4] * 1000;
@@ -123,7 +124,7 @@ namespace KernelAutomata.Gui
                 }
             }
 
-            foreach(var image in WpfUtil.FindVisualChildren<KernelImage>(this))
+            foreach (var image in WpfUtil.FindVisualChildren<KernelImage>(this))
             {
                 var tag = WpfUtil.GetTagAsString(image);
                 if (!string.IsNullOrWhiteSpace(tag))
@@ -143,6 +144,17 @@ namespace KernelAutomata.Gui
                     }
                 }
             }
+
+            foreach (var text in WpfUtil.FindVisualChildren<TextBlock>(this))
+            {
+                var tag = WpfUtil.GetTagAsString(text);
+                if (!string.IsNullOrWhiteSpace(tag))
+                {
+                    var value = ReflectionUtil.GetObjectValue<float>(app.recipe, tag);
+                    text.Text = value.ToString("0.000", CultureInfo.InvariantCulture);
+
+                }
+            }
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -153,8 +165,15 @@ namespace KernelAutomata.Gui
                 ReflectionUtil.SetObjectValue<float>(app.recipe, tag, (float)e.NewValue);
                 app.simulation.UpdateRecipe(app.recipe);
                 app.simulation.ResetFields();
-                UpdateGraphs(app.recipe);
+                UpdatePassiveControls(app.recipe);
             }
+        }
+
+        private void infoText_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var tag = WpfUtil.GetTagAsString(sender);
+            if (!string.IsNullOrWhiteSpace(tag))
+                WpfUtil.FindVisualChildren<Slider>(this).Where(s => WpfUtil.GetTagAsString(s) == tag).FirstOrDefault()?.Focus();
         }
     }
 }
