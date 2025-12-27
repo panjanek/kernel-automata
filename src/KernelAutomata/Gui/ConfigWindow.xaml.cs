@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using KernelAutomata.Models;
 
 namespace KernelAutomata.Gui
 {
@@ -43,6 +44,18 @@ namespace KernelAutomata.Gui
                 {
                     int newSize = int.Parse(sizeStr.Split('x')[0]);
                     int newChannelsCount = int.Parse(channlesCountStr);
+                    var recipe = mainWindow.recipe;
+                    if (recipe.channels.Length != newChannelsCount)
+                    {
+                        if (newChannelsCount == 1)
+                            recipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
+                        else
+                            recipe = RecipeFactory.LoadFromResource("orbs-ch2.json");
+                    }
+
+                    recipe.size = newSize;
+                    mainWindow.StartNewSimulation(recipe);
+
                 }
             }
         }

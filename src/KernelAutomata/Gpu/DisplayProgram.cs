@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using KernelAutomata.Utils;
+using OpenTK.GLControl;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;

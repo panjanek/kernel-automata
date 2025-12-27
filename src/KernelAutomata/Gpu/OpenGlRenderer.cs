@@ -93,6 +93,12 @@ namespace KernelAutomata.Gpu
         {
             lock (simulation)
             {
+                //clear
+                GL.Viewport(0, 0, simulation.gpuContext.glControl.Width, simulation.gpuContext.glControl.Height);
+                GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+                GL.ClearColor(0f, 0f, 0f, 1f);
+                GL.Clear(ClearBufferMask.ColorBufferBit);
+
                 var channel1Tex = simulation.channels[0].gpu.FieldTex;
                 var channel2Tex = simulation.channels.Length == 2 ? simulation.channels[1].gpu.FieldTex : emptyTex;
                 simulation.gpuContext.displayProgram.Run(channel1Tex, channel2Tex, center, zoom, aspectRatio);

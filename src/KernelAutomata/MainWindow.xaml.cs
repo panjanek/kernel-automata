@@ -25,7 +25,9 @@ namespace KernelAutomata
 
         private OpenGlRenderer renderer;
 
-        private Simulation simulation;
+        public Simulation simulation;
+
+        public SimulationRecipe recipe;
 
         private bool uiPending;
 
@@ -49,10 +51,6 @@ namespace KernelAutomata
             //var recipe = RecipeFactory.LoadFromResource("caterpillar1-ch2.json");
             var recipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
             //var recipe = RecipeFactory.LoadFromResource("orbs-ch2.json");
-
-
-
-
             StartNewSimulation(recipe);
             /*
             var gpu = new GpuContext(recipe.size, placeholder);
@@ -76,10 +74,14 @@ namespace KernelAutomata
 
         public void StartNewSimulation(SimulationRecipe recipe)
         {
+            if (simulation!=null)
+                simulation.Destroy();
+
             var gpu = new GpuContext(recipe.size, placeholder);
             simulation = new Simulation(recipe, gpu);
             simulation.ResetFields();
             renderer = new OpenGlRenderer(placeholder, simulation);
+            this.recipe = recipe;
         }
 
         private void SystemTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
