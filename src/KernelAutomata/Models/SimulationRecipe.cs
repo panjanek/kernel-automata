@@ -27,6 +27,12 @@ namespace KernelAutomata.Models
         public KernelRecipe[] kernels;
 
         public InitializationRecipe initialization;
+
+        public double GrowthFunction(double u)
+        {
+            double x = (u - mu) / sigma;
+            return (2.0 * Math.Exp(-x * x) - 1.0);
+        }
     }
 
     public class KernelRecipe

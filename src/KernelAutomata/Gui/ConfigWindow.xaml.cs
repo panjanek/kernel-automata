@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using KernelAutomata.Models;
 using KernelAutomata.Utils;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using AppContext = KernelAutomata.Models.AppContext;
+using Window = System.Windows.Window;
 
 namespace KernelAutomata.Gui
 {
@@ -31,7 +34,7 @@ namespace KernelAutomata.Gui
             customTitleBar.MouseLeftButtonDown += (s, e) => { if (e.ButtonState == MouseButtonState.Pressed) DragMove(); };
             minimizeButton.Click += (s,e) => WindowState = WindowState.Minimized;
             Closing += (s, e) => { e.Cancel = true; WindowState = WindowState.Minimized; };
-            ContentRendered += (s, e) => { UpdateControls(app.recipe); };
+            ContentRendered += (s, e) => { UpdateControls(app.recipe); UpdateGraphs(app.recipe); };
             Loaded += (s, e) => { };
             
         }
@@ -58,7 +61,7 @@ namespace KernelAutomata.Gui
                     recipe.size = newSize;
                     app.StartNewSimulation(recipe);
                     UpdateControls(recipe);
-
+                    UpdateGraphs(recipe);
                 }
             }
         }
@@ -73,8 +76,71 @@ namespace KernelAutomata.Gui
                 var tag = WpfUtil.GetTagAsString(slider);
                 if (!string.IsNullOrWhiteSpace(tag))
                 {
-                    slider.Value = ReflectionUtil.GetObjectValue<float>(recipe, tag);
+                    slider.Value = ReflectionUtil.GetObjectValue<float>(recipe, tag); 
+                }
+            }
+        }
 
+        private void UpdateGraphs(SimulationRecipe recipe)
+        {
+            foreach (var graph in WpfUtil.FindVisualChildren<FunctionGraph>(this))
+            {
+                var tag = WpfUtil.GetTagAsString(graph);
+                if (!string.IsNullOrWhiteSpace(tag))
+                {
+                    var tagSplit = tag.Split('.');
+                    if (tagSplit.Length == 2)
+                    {
+                        var channel = ReflectionUtil.GetObjectValue<ChannelRecipe>(recipe, tag);
+                        if (channel != null)
+                            graph.Draw(200, 0, 1, x => channel.GrowthFunction(x));
+                        else
+                            graph.Children.Clear();
+                    }
+                    else if (tagSplit.Length == 4)
+                    {
+                        var kernelRec = ReflectionUtil.GetObjectValue<KernelRecipe>(recipe, tag);
+                        if (kernelRec != null)
+                        {
+                            int channelIdx = int.Parse(tagSplit[1]);
+                            int kernelIdx = int.Parse(tagSplit[3]);
+                            var kernel = app.simulation.channels[channelIdx].kernels[kernelIdx];
+                            var globalMaxR = app.recipe.channels.SelectMany(c => kernel.rings.Where(r=>r.weight != 0).Select(r => (int)Math.Ceiling(r.maxR))).Max();
+                            var intersection = new double[globalMaxR];
+                            for (int x = 0; x < intersection.Length; x++)
+                                intersection[x] = kernel.kernelBuffer[x * 4] * 1000;
+                            graph.Draw(globalMaxR, 0, globalMaxR, x =>
+                            {
+                                int ix = (int)x;
+                                if (ix < 0) ix = 0;
+                                if (ix >= intersection.Length) ix = intersection.Length - 1;
+                                return intersection[ix];
+                            });
+
+                        }
+                    }
+
+                }
+            }
+
+            foreach(var image in WpfUtil.FindVisualChildren<KernelImage>(this))
+            {
+                var tag = WpfUtil.GetTagAsString(image);
+                if (!string.IsNullOrWhiteSpace(tag))
+                {
+                    var tagSplit = tag.Split('.');
+                    if (tagSplit.Length == 4)
+                    {
+                        var kernelRec = ReflectionUtil.GetObjectValue<KernelRecipe>(recipe, tag);
+                        if (kernelRec != null)
+                        {
+                            int channelIdx = int.Parse(tagSplit[1]);
+                            int kernelIdx = int.Parse(tagSplit[3]);
+                            var kernel = app.simulation.channels[channelIdx].kernels[kernelIdx];
+                            var globalMaxR = app.recipe.channels.SelectMany(c => kernel.rings.Where(r => r.weight != 0).Select(r => (int)Math.Ceiling(r.maxR))).Max();
+                            image.Draw(kernel.kernelBuffer, kernel.fieldSize, globalMaxR);
+                        }
+                    }
                 }
             }
         }
@@ -87,6 +153,7 @@ namespace KernelAutomata.Gui
                 ReflectionUtil.SetObjectValue<float>(app.recipe, tag, (float)e.NewValue);
                 app.simulation.UpdateRecipe(app.recipe);
                 app.simulation.ResetFields();
+                UpdateGraphs(app.recipe);
             }
         }
     }

@@ -54,7 +54,11 @@ namespace KernelAutomata
                 placeholder = this.placeholder
             };
 
-            app.StartNewSimulation(RecipeFactory.LoadFromResource("orbs-ch1.json"));
+            var initRecipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
+            initRecipe.channels[0].kernels[0].rings[0].maxR = 64;
+            initRecipe.channels[0].kernels[0].rings[1].maxR = 64;
+
+            app.StartNewSimulation(initRecipe);
 
 
             //var recipe = RecipeFactory.LoadFromResource("orbs-ch2.json");
