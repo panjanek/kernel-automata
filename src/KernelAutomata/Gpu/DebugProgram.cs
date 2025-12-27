@@ -43,5 +43,10 @@ namespace KernelAutomata.Gpu
             GL.Uniform2(sizeLocation, size);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
         }
+
+        public void Destroy()
+        {
+            if (program != 0) GL.DeleteProgram(program);
+        }
     }
 }

@@ -1,0 +1,89 @@
+﻿<Window x:Class="KernelAutomata.Gui.ConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KernelAutomata.Gui"
+        mc:Ignorable="d"
+        Title="ConfigWindow" 
+        Height="430" 
+        Width="600"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterOwner"
+        WindowState="Normal"
+        ShowInTaskbar="True"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Opacity="0.85">
+    <Border Background="#CC2B2B2B"
+            CornerRadius="6"
+            BorderBrush="#444"
+            BorderThickness="1">
+        <DockPanel>
+            <!-- Custom Title Bar -->
+            <Grid Height="32"
+                  DockPanel.Dock="Top"
+                  Background="#FF1E1E1E"
+                  Name="customTitleBar">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Title -->
+                <TextBlock Text="Configuration"
+                           VerticalAlignment="Center"
+                           Margin="10,0,0,0"
+                           Foreground="White"
+                           FontWeight="SemiBold"/>
+
+                <!-- Minimize Button -->
+                <Button Grid.Column="1"
+                        Content="─"
+                        FontSize="14"
+                        Foreground="White"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Name="minimizeButton"
+                        Cursor="Hand"/>
+
+            </Grid>
+
+            <!-- Window Content -->
+            <Grid Margin="10">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Field size" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <ComboBox Name="fieldSize" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="global_SelectionChanged">
+                    <ComboBoxItem>128x128</ComboBoxItem>
+                    <ComboBoxItem>256x256</ComboBoxItem>
+                    <ComboBoxItem>512x512</ComboBoxItem>
+                    <ComboBoxItem IsSelected="True">1024x1024</ComboBoxItem>
+                    <ComboBoxItem>4096x4096</ComboBoxItem>
+                    <ComboBoxItem>8192x8192</ComboBoxItem>
+                </ComboBox>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Field size" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <ComboBox Name="channelsCount" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="global_SelectionChanged">
+                    <ComboBoxItem IsSelected="True">1</ComboBoxItem>
+                    <ComboBoxItem>2</ComboBoxItem>
+                </ComboBox>
+
+
+            </Grid>
+        </DockPanel>
+    </Border>
+</Window>

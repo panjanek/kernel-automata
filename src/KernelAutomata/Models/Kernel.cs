@@ -58,6 +58,10 @@ namespace KernelAutomata.Models
             Recalculate();
         }
 
+        public void Destroy()
+        {
+            gpu.Destroy();
+        }
 
         private void Recalculate()
         {

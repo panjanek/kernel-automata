@@ -81,6 +81,13 @@ namespace KernelAutomata.Models
             gpu.UploadData(fieldData);
         }
 
+        public void Destroy()
+        {
+            gpu.Destroy();
+            foreach (var kernel in kernels)
+                kernel.Destroy();
+        }
+
         private void FillInitBufferWithRandomData()
         {
             Random rng = new Random(1);

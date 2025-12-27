@@ -50,6 +50,14 @@ namespace KernelAutomata.Gpu
             TextureUtil.CopyTexture2D(resTex, kernelFftTex, size, size);
         }
 
+        public void Destroy()
+        {
+            if (sourceTex != 0) GL.DeleteTexture(sourceTex);
+            if (tmpTex != 0) GL.DeleteTexture(tmpTex);
+            if (kernelTex != 0) GL.DeleteTexture(kernelTex);
+            if (kernelFftTex != 0) GL.DeleteTexture(kernelFftTex);
+        }
+
         public int FftTex => kernelFftTex;
     }
 }

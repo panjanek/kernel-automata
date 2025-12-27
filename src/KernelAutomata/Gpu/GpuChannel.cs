@@ -75,6 +75,14 @@ namespace KernelAutomata.Gpu
         public int[] ConvTex => convTextures.Select(t => t.convTex).ToArray();
 
         public int FieldTex => fieldNextTex;
+
+        public void Destroy()
+        {
+            if (fieldTex != 0) GL.DeleteTexture(fieldTex);
+            if (fieldNextTex != 0) GL.DeleteTexture(fieldNextTex);
+            foreach (var texSet in convTextures)
+                texSet.Destroy();
+        }
     }
 
     public class ConvolutionTextureSet
@@ -93,5 +101,12 @@ namespace KernelAutomata.Gpu
         public int fftTmpTex;
 
         public int convTex;
+
+        public void Destroy()
+        {
+            if (tmpTex != 0) GL.DeleteTexture(tmpTex);
+            if (sourceTex != 0) GL.DeleteTexture(sourceTex);
+            if (fftTmpTex != 0) GL.DeleteTexture(fftTmpTex);
+        }
     }
 }

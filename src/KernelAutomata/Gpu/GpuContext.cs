@@ -16,9 +16,11 @@ namespace KernelAutomata.Gpu
     {
         public static readonly int[] ValidSizes = [128, 256, 512, 1024, 2048, 4096];
 
-        public WindowsFormsHost host;
+        private WindowsFormsHost host;
 
         public GLControl glControl;
+
+        private System.Windows.Controls.Panel placeholder;
 
         private int dummyVao;
         public GpuContext(int size, System.Windows.Controls.Panel placeholder)
@@ -26,6 +28,7 @@ namespace KernelAutomata.Gpu
             if (!ValidSizes.Contains(size))
                 throw new Exception($"Invalid field size {fieldSize}");
 
+            this.placeholder = placeholder;
             fieldSize = size;
             host = new WindowsFormsHost();
             host.Visibility = Visibility.Visible;
@@ -76,6 +79,31 @@ namespace KernelAutomata.Gpu
         {
             GL.Viewport(0, 0, glControl.Width, glControl.Height);
             glControl.Invalidate();
+        }
+
+        public void Destroy()
+        {
+            if (glControl == null || glControl.IsDisposed)
+                return;
+
+            glControl.MakeCurrent();
+            convolutionProgram.Destroy();
+            growthProgram.Destroy();
+            displayProgram.Destroy();
+            debugProgram.Destroy();
+            if (dummyVao != 0) GL.DeleteVertexArray(dummyVao);
+
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GL.BindVertexArray(0);
+
+            placeholder.Children.Clear();
+
+            GL.Finish();
+            glControl.Dispose();
+            host.Child = null;
+            host.Dispose();
         }
         private void Placeholder_SizeChanged(object sender, SizeChangedEventArgs e)
         {

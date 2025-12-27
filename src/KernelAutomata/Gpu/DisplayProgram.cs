@@ -79,5 +79,10 @@ namespace KernelAutomata.Gpu
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
         }
+
+        public void Destroy()
+        {
+            if (program != 0) GL.DeleteProgram(program);
+        }
     }
 }

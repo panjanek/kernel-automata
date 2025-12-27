@@ -10,7 +10,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using KernelAutomata.Gpu;
+using KernelAutomata.Gui;
 using KernelAutomata.Models;
+using Application = System.Windows.Application;
 
 namespace KernelAutomata
 {
@@ -19,6 +21,8 @@ namespace KernelAutomata
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ConfigWindow configWindow;
+
         private OpenGlRenderer renderer;
 
         private Simulation simulation;
@@ -30,28 +34,32 @@ namespace KernelAutomata
         private long lastCheckFrameCount;
         public MainWindow()
         {
-            InitializeComponent(); 
+            InitializeComponent();
+            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
         }
 
         private void parent_Loaded(object sender, RoutedEventArgs e)
         {
-            var recipe = RecipeFactory.TwoChannelsOrbs();
+            //var recipe = RecipeFactory.TwoChannelsOrbs();
             //var recipe = RecipeFactory.OneChannelOrbs();
             //var recipe = RecipeFactory.TwoChannelsCaterpillar();
-
 
             //RecipeFactory.SaveToFile(recipe, "c://tmp//orbs-ch2.json");
 
             //var recipe = RecipeFactory.LoadFromResource("caterpillar1-ch2.json");
-            //var recipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
+            var recipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
             //var recipe = RecipeFactory.LoadFromResource("orbs-ch2.json");
 
 
+
+
+            StartNewSimulation(recipe);
+            /*
             var gpu = new GpuContext(recipe.size, placeholder);
             simulation = new Simulation(recipe, gpu);
             simulation.ResetFields();
-
             renderer = new OpenGlRenderer(placeholder, simulation);
+            */
             KeyDown += MainWindow_KeyDown;
             System.Timers.Timer systemTimer = new System.Timers.Timer() { Interval = 10 };
             systemTimer.Elapsed += SystemTimer_Elapsed;
@@ -59,6 +67,19 @@ namespace KernelAutomata
             DispatcherTimer infoTimer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1.0) };
             infoTimer.Tick += InfoTimer_Tick;
             infoTimer.Start();
+
+            configWindow = new ConfigWindow(this);
+            configWindow.Show();
+            configWindow.Activate();
+            Closing += (s, e) => { };
+        }
+
+        public void StartNewSimulation(SimulationRecipe recipe)
+        {
+            var gpu = new GpuContext(recipe.size, placeholder);
+            simulation = new Simulation(recipe, gpu);
+            simulation.ResetFields();
+            renderer = new OpenGlRenderer(placeholder, simulation);
         }
 
         private void SystemTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)

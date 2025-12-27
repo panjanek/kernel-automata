@@ -54,5 +54,10 @@ namespace KernelAutomata.Gpu
 
             GL.MemoryBarrier(MemoryBarrierFlags.ShaderImageAccessBarrierBit);
         }
+
+        public void Destroy()
+        {
+            if (program != 0) GL.DeleteProgram(program);
+        }
     }
 }

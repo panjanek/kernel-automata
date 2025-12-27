@@ -78,5 +78,14 @@ namespace KernelAutomata.Models
                 }
             }
         }
+
+        public void Destroy()
+        {
+            lock (this)
+            {
+                foreach (var channel in channels)
+                    channel.Destroy();
+            }
+        }
     }
 }

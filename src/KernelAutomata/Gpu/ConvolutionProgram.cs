@@ -126,5 +126,11 @@ namespace KernelAutomata.Gpu
 
             return convTex; // spatial-domain convolution result
         }
+
+        public void Destroy()
+        {
+            if (fftProgram != 0) GL.DeleteProgram(fftProgram);
+            if (multiplyProgram != 0) GL.DeleteProgram(multiplyProgram);
+        }
     }
 }

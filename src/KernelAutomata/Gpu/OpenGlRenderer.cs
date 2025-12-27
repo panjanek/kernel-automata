@@ -91,11 +91,19 @@ namespace KernelAutomata.Gpu
 
         private void GlControl_Paint(object? sender, PaintEventArgs e)
         {
-            var channel1Tex = simulation.channels[0].gpu.FieldTex;
-            var channel2Tex = simulation.channels.Length == 2 ? simulation.channels[1].gpu.FieldTex : emptyTex;
-            simulation.gpuContext.displayProgram.Run(channel1Tex, channel2Tex, center, zoom, aspectRatio);
-            simulation.gpuContext.glControl.SwapBuffers();
-            frameCounter++;
+            lock (simulation)
+            {
+                var channel1Tex = simulation.channels[0].gpu.FieldTex;
+                var channel2Tex = simulation.channels.Length == 2 ? simulation.channels[1].gpu.FieldTex : emptyTex;
+                simulation.gpuContext.displayProgram.Run(channel1Tex, channel2Tex, center, zoom, aspectRatio);
+                simulation.gpuContext.glControl.SwapBuffers();
+                frameCounter++;
+            }
+        }
+
+        public void Destroy()
+        {
+            if (emptyTex != 0) GL.DeleteTexture(emptyTex);
         }
     }
 }
