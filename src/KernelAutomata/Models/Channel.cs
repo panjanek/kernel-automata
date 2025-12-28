@@ -81,7 +81,7 @@ namespace KernelAutomata.Models
 
         public void ResetField()
         {
-            FillInitBufferWithRandomData();
+            initializationRecipe.FillInitBufferWithRandomData(simulation.fieldSize, initBuffer);
             gpu.UploadData(initBuffer);
         }
 
@@ -95,32 +95,6 @@ namespace KernelAutomata.Models
             gpu.Destroy();
             foreach (var kernel in kernels)
                 kernel.Destroy();
-        }
-
-        private void FillInitBufferWithRandomData()
-        {
-            Random rng = new Random(1);
-
-            for (int i = 0; i < simulation.fieldSize * simulation.fieldSize; i++)
-            {
-                initBuffer[4 * i + 0] = (float)rng.NextDouble() * 0.5f;
-                initBuffer[4 * i + 1] = 0f;
-                initBuffer[4 * i + 2] = 0f;
-                initBuffer[4 * i + 3] = 0f;
-
-                var x = i % simulation.fieldSize;
-                var y = simulation.fieldSize - 1 - i / simulation.fieldSize;
-                var cx = initializationRecipe.centerX * simulation.fieldSize;
-                var cy = initializationRecipe.centerY * simulation.fieldSize;
-                var distX = MathUtil.GetTorusDistance(x, cx, simulation.fieldSize);
-                var distY = MathUtil.GetTorusDistance(y, cy, simulation.fieldSize);
-                var r = Math.Sqrt(distX * distX + distY * distY);
-                if (r < initializationRecipe.blobRadius * simulation.fieldSize)
-                    initBuffer[4 * i + 0] = 1.0f;
-
-                if (r > initializationRecipe.noiseRadius * simulation.fieldSize) 
-                    initBuffer[4 * i + 0] = 0.0f;
-            }
         }
     }
 }

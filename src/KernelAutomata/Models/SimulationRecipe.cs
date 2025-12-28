@@ -87,5 +87,39 @@ namespace KernelAutomata.Models
         public float noiseRadius;
 
         public float blobRadius;
+
+        public float mu;
+
+        public float sigma;
+
+        public void FillInitBufferWithRandomData(int size, float[] initBuffer)
+        {
+            Random rng = new Random(1);
+
+            for (int i = 0; i < size * size; i++)
+            {
+                var rnd = (float)rng.NextDouble();
+                initBuffer[4 * i + 0] = rnd * density;
+               
+
+
+                initBuffer[4 * i + 1] = 0f;
+                initBuffer[4 * i + 2] = 0f;
+                initBuffer[4 * i + 3] = 0f;
+
+                var x = i % size;
+                var y = size - 1 - i / size;
+                var cx = centerX * size;
+                var cy = centerY * size;
+                var distX = MathUtil.GetTorusDistance(x, cx, size);
+                var distY = MathUtil.GetTorusDistance(y, cy, size);
+                var r = Math.Sqrt(distX * distX + distY * distY);
+                if (r < blobRadius * size)
+                    initBuffer[4 * i + 0] = 1.0f;
+
+                if (r > noiseRadius * size)
+                    initBuffer[4 * i + 0] = 0.0f;
+            }
+        }
     }
 }

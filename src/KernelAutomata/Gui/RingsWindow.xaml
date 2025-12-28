@@ -89,7 +89,7 @@
                     <TextBlock Grid.Row="8" Grid.Column="0" Text="Ring 5" VerticalAlignment="Center" Margin="0,0,5,0" TextWrapping="Wrap" Background="LightGray" TextAlignment="Center"/>
                     <local:RingConfigurator Grid.Row="9" Grid.Column="0" DataContext="{Binding rings[4]}" DataCommitted="RingConfigurator_DataCommitted"/>
 
-                    <Button Grid.Row="10" Grid.Column="0" Click="CloseButton_Click">OK</Button>
+                    <Button Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="3" Click="CloseButton_Click" Margin="5">OK</Button>
                 </Grid>
             </ScrollViewer>
         </DockPanel>

@@ -36,6 +36,8 @@ namespace KernelAutomata.Gui
 
         private bool updating;
 
+        private StartConditionsWindow startConditionsWindow;
+
         public ConfigWindow(AppContext app)
         {
             this.app = app;
@@ -219,8 +221,17 @@ namespace KernelAutomata.Gui
         private void StartingConditions_Click(object sender, RoutedEventArgs e)
         {
             var tag = WpfUtil.GetTagAsString(sender);
-            var channel = ReflectionUtil.GetObjectValue<ChannelRecipe>(app.recipe, tag);
-            var aaa = channel;
+            var channelRecipe = ReflectionUtil.GetObjectValue<ChannelRecipe>(app.recipe, tag);
+            if (startConditionsWindow != null)
+                startConditionsWindow.Close();
+
+            int channelIdx = int.Parse(tag.Split('.')[1]);
+            startConditionsWindow = new StartConditionsWindow(channelIdx, channelRecipe, () =>
+            {
+                UpdateSimulationWithRecipe();
+            });
+
+            startConditionsWindow.Show();
         }
     }
 }
