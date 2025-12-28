@@ -17,6 +17,12 @@ namespace KernelAutomata.Models
 
         public float growthSigma;
 
+        public float growthMu2;
+
+        public float growthSigma2;
+
+        public float growthWeight2;
+
         public float decay;
 
         public Kernel[] kernels;
@@ -48,6 +54,9 @@ namespace KernelAutomata.Models
         {
             growthMu = recipe.mu;
             growthSigma = recipe.sigma;
+            growthMu2 = recipe.mu2;
+            growthSigma2 = recipe.sigma2;
+            growthWeight2 = recipe.weight2;
             decay = recipe.decay;
             if (recipe.kernels.Length != kernels.Length)
                 throw new Exception($"Cannot change kernels/channels count from {kernels.Length} to {recipe.kernels.Length}. Must recreate simulation and gpu context");
@@ -67,7 +76,7 @@ namespace KernelAutomata.Models
 
         public void Grow(int myConv, float myWeight, int differentConv, float differentWeight)
         {
-            gpu.Grow(myConv, differentConv, myWeight, differentWeight, growthMu, growthSigma, decay, simulation.dt);
+            gpu.Grow(myConv, differentConv, myWeight, differentWeight, growthMu, growthSigma, growthMu2, growthSigma2, growthWeight2, decay, simulation.dt);
         }
 
         public void ResetField()

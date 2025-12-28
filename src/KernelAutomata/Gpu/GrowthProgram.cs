@@ -26,6 +26,9 @@ namespace KernelAutomata.Gpu
             int size,
             float mu,
             float sigma,
+            float mu2,
+            float sigma2,
+            float weight2,
             float dt,
             float decay)
         {
@@ -33,6 +36,9 @@ namespace KernelAutomata.Gpu
 
             GL.Uniform1(GL.GetUniformLocation(program, "uMu"), mu);
             GL.Uniform1(GL.GetUniformLocation(program, "uSigma"), sigma);
+            GL.Uniform1(GL.GetUniformLocation(program, "uMu2"), mu2);
+            GL.Uniform1(GL.GetUniformLocation(program, "uSigma2"), sigma2);
+            GL.Uniform1(GL.GetUniformLocation(program, "uSpike2Weight"), weight2);
             GL.Uniform1(GL.GetUniformLocation(program, "uDt"), dt);
             GL.Uniform1(GL.GetUniformLocation(program, "uSize"), size);
             GL.Uniform1(GL.GetUniformLocation(program, "uWeight1"), myWeight);

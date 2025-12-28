@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KernelAutomata.Utils;
 
 namespace KernelAutomata.Models
 {
@@ -62,7 +63,7 @@ namespace KernelAutomata.Models
                         continue;
                     }
 
-                    float v = GaussianBell(r, center, width, innerSlope, outerSlope);
+                    float v = MathUtil.GaussianBell(r, center, width, innerSlope, outerSlope);
                     ringBuffer[(x * fieldSize + y) * 4] = v;
                     sum += v;
                 }
@@ -76,14 +77,6 @@ namespace KernelAutomata.Models
             }
         }
 
-        public static float GaussianBell(float r, float center, float width, float innerSlope = 1.0f, float outerSlope = 1.0f)
-        {
-            var val = (float)Math.Exp(-(r - center) * (r - center) / (2 * width * width));
-            if (r > center && outerSlope != 0 && outerSlope != 1)
-                val = (float)Math.Pow(val, outerSlope);
-            if (r < center && innerSlope != 0 && innerSlope != 1)
-                val = (float)Math.Pow(val, innerSlope);
-            return val;
-        }
+
     }
 }

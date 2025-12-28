@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using KernelAutomata.Utils;
 
 namespace KernelAutomata.Models
 {
@@ -22,6 +23,12 @@ namespace KernelAutomata.Models
 
         public float sigma;
 
+        public float mu2;
+
+        public float sigma2;
+
+        public float weight2;
+
         public float decay;
 
         public KernelRecipe[] kernels;
@@ -32,8 +39,13 @@ namespace KernelAutomata.Models
         {
             if (sigma > 0.0001)
             {
-                double x = (u - mu) / sigma;
-                return (2.0 * Math.Exp(-x * x) - 1.0);
+                var g = MathUtil.Growth(u, mu, sigma);
+                if (mu2 > 0.0001 && sigma2 > 0.0001 && weight2 > 0.0001)
+                {
+                    var g2 = MathUtil.Growth(u, mu2, sigma2);
+                    g = (g + g2*weight2) / (1 + weight2);
+                }
+                return g;
             }
             else
             {

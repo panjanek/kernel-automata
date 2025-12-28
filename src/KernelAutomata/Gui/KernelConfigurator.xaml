@@ -8,6 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
@@ -17,12 +18,12 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        
-        <Slider Grid.Row="0" Grid.Column="0" Minimum="-2" Maximum="2" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="weight" Margin="5,5,0,0"/>
-        <TextBlock Grid.Row="0" Grid.Column="1" Tag="weight" Background="DimGray" FontFamily="Courier New" Margin="5,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="weight" VerticalAlignment="Center" Margin="0,0,8,0"/>
+        <Slider Grid.Row="0" Grid.Column="1" Minimum="-2" Maximum="2" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="weight" Margin="5,5,0,0"/>
+        <TextBlock Grid.Row="0" Grid.Column="2" Tag="weight" Background="DimGray" FontFamily="Courier New" Margin="5,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
 
-        <local:FunctionGraph Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="graph" Height="50" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
-        <local:KernelImage Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="image" Stretch="Uniform" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
+        <local:FunctionGraph Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" x:Name="graph" Height="50" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
+        <local:KernelImage Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="image" Stretch="Uniform" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown"/>
 
     </Grid>
 </UserControl>

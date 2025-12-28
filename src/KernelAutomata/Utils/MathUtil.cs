@@ -43,5 +43,21 @@ namespace KernelAutomata.Utils
 
             return d;
         }
+
+        public static double Growth(double u, double mu, double sigma)
+        {
+            double x = (u - mu) / sigma;
+            return (2.0 * Math.Exp(-x * x) - 1.0);
+        }
+
+        public static float GaussianBell(float r, float center, float width, float innerSlope = 1.0f, float outerSlope = 1.0f)
+        {
+            var val = (float)Math.Exp(-(r - center) * (r - center) / (2 * width * width));
+            if (r > center && outerSlope != 0 && outerSlope != 1)
+                val = (float)Math.Pow(val, outerSlope);
+            if (r < center && innerSlope != 0 && innerSlope != 1)
+                val = (float)Math.Pow(val, innerSlope);
+            return val;
+        }
     }
 }

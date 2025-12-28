@@ -22,6 +22,15 @@ namespace KernelAutomata.Utils
             GL.TexParameter(TextureTarget.Texture2D,
                 TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 
+            // Clear to all zeros
+            float[] clearColor = new float[] { 0f, 0f, 0f, 0f };
+            GL.ClearTexImage(
+                tex,
+                0,
+                PixelFormat.Rgba,
+                PixelType.Float,
+                clearColor);
+
             GL.BindTexture(TextureTarget.Texture2D, 0);
             return tex;
         }

@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using KernelAutomata.Models;
 using KernelAutomata.Utils;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using AppContext = KernelAutomata.Models.AppContext;
 using Channel = KernelAutomata.Models.Channel;
@@ -106,6 +107,23 @@ namespace KernelAutomata.Gui
                         var value = ReflectionUtil.GetObjectValue<float>(app.recipe, tag);
                         text.Text = value.ToString("0.000", CultureInfo.InvariantCulture);
 
+                    }
+                }
+            }
+
+            foreach (var graph in WpfUtil.FindVisualChildren<FunctionGraph>(this))
+            {
+                if (!WpfUtil.CheckIfPathContains<KernelConfigurator>(graph))
+                {
+                    var tag = WpfUtil.GetTagAsString(graph);
+                    var tagSplit = tag.Split('.');
+                    if (tagSplit.Length == 2)
+                    {
+                        var channel = ReflectionUtil.GetObjectValue<ChannelRecipe>(recipe, tag);
+                        if (channel != null)
+                            graph.Draw(200, 0, 1, x => channel.GrowthFunction(x));
+                        else
+                            graph.Children.Clear();
                     }
                 }
             }

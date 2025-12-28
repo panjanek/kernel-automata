@@ -9,15 +9,18 @@ layout (rgba32f, binding = 3) writeonly uniform image2D fieldOut;
 
 uniform float uMu;
 uniform float uSigma;
+uniform float uMu2;
+uniform float uSigma2;
+uniform float uSpike2Weight;
 uniform float uDt;
 uniform int   uSize;
 uniform float uWeight1;
 uniform float uWeight2;
 uniform float uDecay;
 
-float gaussianGrowth(float u)
+float gaussianGrowth(float u, float mu, float sigma)
 {
-    float x = (u - uMu) / uSigma;
+    float x = (u - mu) / sigma;
     return 2.0 * exp(-x * x) - 1.0;
 }
 
@@ -39,9 +42,14 @@ void main()
         growth += c2 * uWeight2;
     }
 
-    growth = gaussianGrowth(growth);
+    float g = gaussianGrowth(growth, uMu, uSigma);
+    if (uMu2 > 0.0001 && uSigma2 > 0.0001 && uSpike2Weight > 0.0001)
+    {
+        float g2 = gaussianGrowth(growth, uMu2, uSigma2);
+        g = (g + g2 * uSpike2Weight) / (1 + uSpike2Weight);
+    }
 
-    float res = current + uDt * (growth - current * uDecay);
+    float res = current + uDt * (g - current * uDecay);
 
     float next = clamp(res, 0.0, 1.0);
     imageStore(fieldOut, p, vec4(next, 0.0, 0.0, 0.0));
