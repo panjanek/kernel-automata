@@ -13,9 +13,9 @@ using Image = System.Windows.Controls.Image;
 
 namespace KernelAutomata.Gui
 {
-    public class KernelImage : Image
+    public class RasterImage : Image
     {
-        public KernelImage()
+        public RasterImage()
             : base()
         {
             

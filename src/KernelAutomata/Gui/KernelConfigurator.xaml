@@ -23,7 +23,7 @@
         <TextBlock Grid.Row="0" Grid.Column="2" Tag="weight" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
         <local:FunctionGraph Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" x:Name="graph" Height="50" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown" ToolTip="Kernel value as a function of radial distance"/>
-        <local:KernelImage Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="image" Width="170" Height="170" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown" ToolTip="Kernel matrix visualization"/>
+        <local:RasterImage Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="image" Width="170" Height="170" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown" ToolTip="Kernel matrix visualization"/>
 
         <Button MinWidth="0" MinHeight="0" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5,10,5,5" Width="22" Padding="0" Height="22" FontSize="10" FontStyle="Oblique" Click="EditButton_Click">
             <TextBlock Text="✎"
