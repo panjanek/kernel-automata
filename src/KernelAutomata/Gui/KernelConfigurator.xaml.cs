@@ -131,15 +131,9 @@ namespace KernelAutomata.Gui
                 WpfUtil.FindVisualChildren<Slider>(this).Where(s => WpfUtil.GetTagAsString(s) == tag).FirstOrDefault()?.Focus();
         }
 
-        private void OpenKernelConfig_Click(object sender, RoutedEventArgs e)
-        {
-            OpenKernelConfigurationDialog();
-        }
+        private void EditButton_Click(object sender, RoutedEventArgs e) => OpenKernelConfigurationDialog();
 
-        private void KernelGraph_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            OpenKernelConfigurationDialog();
-        }
+        private void KernelGraph_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => OpenKernelConfigurationDialog();
 
         private void OpenKernelConfigurationDialog()
         {

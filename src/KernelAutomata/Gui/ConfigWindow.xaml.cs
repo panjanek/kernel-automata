@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -111,6 +112,8 @@ namespace KernelAutomata.Gui
                 }
             }
 
+            ToggleVisibility();
+
             foreach (var graph in WpfUtil.FindVisualChildren<FunctionGraph>(this))
             {
                 if (!WpfUtil.CheckIfPathContains<KernelConfigurator>(graph))
@@ -124,6 +127,39 @@ namespace KernelAutomata.Gui
                             graph.Draw(200, 0, 1, x => channel.GrowthFunction(x));
                         else
                             graph.Children.Clear();
+                    }
+                }
+            }
+
+
+
+        }
+
+        private void ToggleVisibility()
+        {
+            foreach (var ch in contentGrid.Children)
+            {
+                if (ch is FrameworkElement)
+                {
+                    var element = (FrameworkElement)ch;
+                    var row = (int)element.GetValue(Grid.RowProperty);
+                    var column = (int)element.GetValue(Grid.ColumnProperty);
+                    if (app.recipe.channels.Length == 1)
+                    {
+                        Width = 260 + 30;
+                        Height = 590;
+                        if (column >= 3 || row >= 12)
+                        {
+                            element.Visibility = Visibility.Collapsed;
+                            
+                        }
+                    }
+                    else if (app.recipe.channels.Length == 2)
+                    {
+                        Width = 420 + 30;
+                        Height = 840;
+                        element.Visibility = Visibility.Visible;
+                        
                     }
                 }
             }

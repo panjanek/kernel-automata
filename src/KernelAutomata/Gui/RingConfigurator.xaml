@@ -22,28 +22,28 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="weight" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="weight" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
         <Slider Grid.Row="1" Grid.Column="1" Minimum="-2" Maximum="2" SmallChange="0.001" LargeChange="0.01" ValueChanged="Slider_ValueChanged" Tag="weight" VerticalAlignment="Center" Margin="0,5,0,0"/>
-        <TextBlock Grid.Row="1" Grid.Column="2" Tag="weight"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+        <TextBlock Grid.Row="1" Grid.Column="2" Tag="weight"  FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="center" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="center" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
         <Slider Grid.Row="2" Grid.Column="1" Minimum="0.001" Maximum="100" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="center" VerticalAlignment="Center" Margin="0,5,0,0"/>
-        <TextBlock Grid.Row="2" Grid.Column="2" Tag="center"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+        <TextBlock Grid.Row="2" Grid.Column="2" Tag="center"  FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="width" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="width" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
         <Slider Grid.Row="3" Grid.Column="1" Minimum="1" Maximum="100" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="width" VerticalAlignment="Center" Margin="0,5,0,0"/>
-        <TextBlock Grid.Row="3" Grid.Column="2" Tag="width"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+        <TextBlock Grid.Row="3" Grid.Column="2" Tag="width"   FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="maxR" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="maxR" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
         <Slider Grid.Row="4" Grid.Column="1" Minimum="10" Maximum="256" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="maxR" VerticalAlignment="Center" Margin="0,5,0,0"/>
-        <TextBlock Grid.Row="4" Grid.Column="2" Tag="maxR"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+        <TextBlock Grid.Row="4" Grid.Column="2" Tag="maxR"  FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="inner slope" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="inner slope" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
         <Slider Grid.Row="5" Grid.Column="1" Minimum="0.1" Maximum="30" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="innerSlope" VerticalAlignment="Center" Margin="0,5,0,0"/>
-        <TextBlock Grid.Row="5" Grid.Column="2" Tag="innerSlope"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+        <TextBlock Grid.Row="5" Grid.Column="2" Tag="innerSlope"  FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-        <TextBlock Grid.Row="6" Grid.Column="0" Text="outer slope" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="outer slope" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
         <Slider Grid.Row="6" Grid.Column="1" Minimum="0.1" Maximum="30" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="outerSlope" VerticalAlignment="Center" Margin="0,5,0,0"/>
-        <TextBlock Grid.Row="6" Grid.Column="2" Tag="outerSlope"  Background="DimGray" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="12" MouseDown="infoText_MouseDown"/>
+        <TextBlock Grid.Row="6" Grid.Column="2" Tag="outerSlope"  FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
     </Grid>
 </UserControl>

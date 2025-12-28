@@ -15,8 +15,17 @@ namespace KernelAutomata.Gui
 {
     public class KernelImage : Image
     {
+        public KernelImage()
+            : base()
+        {
+            
+        }
+
         public void Draw(float[] buffer, int fieldSize, int maxR)
         {
+            var a = Width;
+            var bb = ActualWidth;
+            var cc = ActualHeight;
             int imageSize = 2 * maxR;
             var pixels = new byte[imageSize * imageSize * 4];
             double minVal = 1000000000;

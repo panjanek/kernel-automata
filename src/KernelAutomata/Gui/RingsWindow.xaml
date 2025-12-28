@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:KernelAutomata.Gui"
         mc:Ignorable="d"
         Title="KernelConfig" 
-        Height="830" 
-        Width="500"
+        Height="400" 
+        Width="350"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         WindowState="Normal"
@@ -51,44 +51,46 @@
                         Cursor="Hand"/>
             </Grid>
 
+            <ScrollViewer Margin="10" VerticalScrollBarVisibility="Auto"
+              HorizontalScrollBarVisibility="Disabled">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <!-- 9 -->
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <!-- 9 -->
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                    <!-- ring 1 -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Ring 1" VerticalAlignment="Center" Margin="0,0,10,0" TextWrapping="Wrap" Background="LightGray" TextAlignment="Center"/>
+                    <local:RingConfigurator Grid.Row="1" Grid.Column="0" DataContext="{Binding rings[0]}" DataCommitted="RingConfigurator_DataCommitted"/>
 
-                <!-- ring 1 -->
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Ring 1" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Background="DarkGray"/>
-                <local:RingConfigurator Grid.Row="1" Grid.Column="0" DataContext="{Binding rings[0]}" DataCommitted="RingConfigurator_DataCommitted"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Ring 2" VerticalAlignment="Center" Margin="0,0,10,0" TextWrapping="Wrap" Background="LightGray" TextAlignment="Center"/>
+                    <local:RingConfigurator Grid.Row="3" Grid.Column="0" DataContext="{Binding rings[1]}" DataCommitted="RingConfigurator_DataCommitted"/>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Ring 2" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Background="DarkGray"/>
-                <local:RingConfigurator Grid.Row="3" Grid.Column="0" DataContext="{Binding rings[1]}" DataCommitted="RingConfigurator_DataCommitted"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Ring 3" VerticalAlignment="Center" Margin="0,0,10,0" TextWrapping="Wrap" Background="LightGray" TextAlignment="Center"/>
+                    <local:RingConfigurator Grid.Row="5" Grid.Column="0" DataContext="{Binding rings[2]}" DataCommitted="RingConfigurator_DataCommitted"/>
 
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Ring 3" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Background="DarkGray"/>
-                <local:RingConfigurator Grid.Row="5" Grid.Column="0" DataContext="{Binding rings[2]}" DataCommitted="RingConfigurator_DataCommitted"/>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Ring 4" VerticalAlignment="Center" Margin="0,0,10,0" TextWrapping="Wrap" Background="LightGray" TextAlignment="Center"/>
+                    <local:RingConfigurator Grid.Row="7" Grid.Column="0" DataContext="{Binding rings[3]}" DataCommitted="RingConfigurator_DataCommitted"/>
 
-                <TextBlock Grid.Row="6" Grid.Column="0" Text="Ring 4" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Background="DarkGray"/>
-                <local:RingConfigurator Grid.Row="7" Grid.Column="0" DataContext="{Binding rings[3]}" DataCommitted="RingConfigurator_DataCommitted"/>
+                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Ring 5" VerticalAlignment="Center" Margin="0,0,10,0" TextWrapping="Wrap" Background="LightGray" TextAlignment="Center"/>
+                    <local:RingConfigurator Grid.Row="9" Grid.Column="0" DataContext="{Binding rings[4]}" DataCommitted="RingConfigurator_DataCommitted"/>
 
-                <TextBlock Grid.Row="8" Grid.Column="0" Text="Ring 5" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Background="DarkGray"/>
-                <local:RingConfigurator Grid.Row="9" Grid.Column="0" DataContext="{Binding rings[4]}" DataCommitted="RingConfigurator_DataCommitted"/>
-                
-                <Button Grid.Row="10" Grid.Column="0" Click="CloseButton_Click">OK</Button>
-            </Grid>
+                    <Button Grid.Row="10" Grid.Column="0" Click="CloseButton_Click">OK</Button>
+                </Grid>
+            </ScrollViewer>
         </DockPanel>
     </Border>
 </Window>
