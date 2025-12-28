@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -50,7 +51,6 @@ namespace KernelAutomata.Gui
             Closing += (s, e) => { e.Cancel = true; WindowState = WindowState.Minimized; };
             ContentRendered += (s, e) => { UpdateActiveControls(app.recipe); UpdatePassiveControls(app.recipe); };
             Loaded += (s, e) => { };
-            
         }
 
         private void global_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -234,6 +234,89 @@ namespace KernelAutomata.Gui
             });
 
             startConditionsWindow.Show();
+        }
+
+        private void KernelConfigurator_ContextMenu(object sender, MouseButtonEventArgs e)
+        {
+            var kernelConfigurator = (KernelConfigurator)sender;
+            var tag = WpfUtil.GetTagAsString(kernelConfigurator);
+            var kernelRecipe = ReflectionUtil.GetObjectValue<KernelRecipe>(app.recipe, tag);
+
+            var menu = (ContextMenu)FindResource("kernelContextMenu");
+            menu.Tag = tag;
+            for(int i=1; i<menu.Items.Count; i++)
+            {
+                ((MenuItem)(menu.Items[i])).IsEnabled = app.recipe.channels.Length > 1;
+            }
+
+            menu.PlacementTarget = (UIElement)sender;
+            menu.Placement = PlacementMode.MousePoint;
+            menu.IsOpen = true;
+        }
+
+        private void KernelContextMenu_Click(object sender, RoutedEventArgs e)
+        {
+            var item = ((MenuItem)sender);
+            var label = item.Header.ToString();
+            var tag = WpfUtil.GetTagAsString(item.Parent);
+            var tagSplit = tag.Split(".");
+            var channelIdx = int.Parse(tagSplit[1]);
+            var kernelIdx = int.Parse(tagSplit[3]);
+            var thisKernel = app.recipe.channels[channelIdx].kernels[kernelIdx];
+            if (label.Equals("Invert", StringComparison.InvariantCultureIgnoreCase))
+            {
+                foreach(var ring in thisKernel.rings)
+                {
+                    ring.weight = -ring.weight;
+                }
+            } 
+            else if (item.IsEnabled)
+            {
+                if (label.Equals("Swith horizontal", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var otherKernel = app.recipe.channels[1-channelIdx].kernels[kernelIdx];
+                    var copyThis = thisKernel.Clone();
+                    thisKernel.Overwrite(otherKernel);
+                    otherKernel.Overwrite(copyThis);
+                } 
+                else if (label.Equals("Swith vertical", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var otherKernel = app.recipe.channels[channelIdx].kernels[1-kernelIdx];
+                    var copyThis = thisKernel.Clone();
+                    thisKernel.Overwrite(otherKernel);
+                    otherKernel.Overwrite(copyThis);
+                }
+                else if (label.Equals("Swith diagonal", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var otherKernel = app.recipe.channels[1 - channelIdx].kernels[1 - kernelIdx];
+                    var copyThis = thisKernel.Clone();
+                    thisKernel.Overwrite(otherKernel);
+                    otherKernel.Overwrite(copyThis);
+                }
+                else if (label.Equals("Overwrite horizontal kernel", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var otherKernel = app.recipe.channels[1 - channelIdx].kernels[ kernelIdx];
+                    otherKernel.Overwrite(thisKernel);
+                }
+                else if (label.Equals("Overwrite vertical kernel", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var otherKernel = app.recipe.channels[channelIdx].kernels[1-kernelIdx];
+                    otherKernel.Overwrite(thisKernel);
+                }
+                else if (label.Equals("Overwrite diagonal", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var otherKernel = app.recipe.channels[1-channelIdx].kernels[1 - kernelIdx];
+                    otherKernel.Overwrite(thisKernel);
+                }
+            }
+
+            //update all
+            UpdateSimulationWithRecipe();
+            foreach (var kernelConfig in WpfUtil.FindVisualChildren<KernelConfigurator>(this))
+            {
+                kernelConfig.UpdateActiveControls();
+                kernelConfig.UpdatePassiveControls();
+            }
         }
     }
 }

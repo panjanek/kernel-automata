@@ -15,6 +15,21 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Opacity="0.85">
+
+    <Window.Resources>
+        <ContextMenu x:Key="kernelContextMenu">
+            <MenuItem Header="Invert" Click="KernelContextMenu_Click"/>
+            <MenuItem Header="Swith horizontal" Click="KernelContextMenu_Click"/>
+            <MenuItem Header="Swith vertical" Click="KernelContextMenu_Click"/>
+            <MenuItem Header="Swith diagonal" Click="KernelContextMenu_Click"/>
+            <MenuItem Header="Overwrite horizontal kernel" Click="KernelContextMenu_Click"/>
+            <MenuItem Header="Overwrite vertical kernel" Click="KernelContextMenu_Click"/>
+            <MenuItem Header="Overwrite diagonal" Click="KernelContextMenu_Click"/>
+        </ContextMenu>
+    </Window.Resources>
+
+
+
     <Border Background="#CC2B2B2B"
             CornerRadius="5"
             BorderBrush="#444"
@@ -244,13 +259,13 @@
 
                     <!-- kernel of this channel -->
                     <TextBlock Grid.Row="13" Grid.Column="0" Grid.RowSpan="1" Text="Kernel of this channel ⓘ" VerticalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Foreground="White" ToolTip="Kernel used for convolution of the channel with itself"/>
-                    <local:KernelConfigurator Tag="channels.0.kernels.0" KernelName="Channel 1, Self" Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[0].Kernels[0]}" KernelDataCommitted="Configurator_DataChanged"/>
-                    <local:KernelConfigurator Tag="channels.1.kernels.0" KernelName="Channel 2, Self" Grid.Row="13" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[0].Kernels[1]}" KernelDataCommitted="Configurator_DataChanged"/>
+                    <local:KernelConfigurator Tag="channels.0.kernels.0" PreviewMouseRightButtonDown="KernelConfigurator_ContextMenu" KernelName="Channel 1, Self" Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[0].Kernels[0]}" KernelDataCommitted="Configurator_DataChanged"/>
+                    <local:KernelConfigurator Tag="channels.1.kernels.0" PreviewMouseRightButtonDown="KernelConfigurator_ContextMenu" KernelName="Channel 2, Self" Grid.Row="13" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[1].Kernels[0]}" KernelDataCommitted="Configurator_DataChanged"/>
 
                     <!-- kernel of opposing channel -->
                     <TextBlock Grid.Row="14" Grid.Column="0" Grid.RowSpan="1" Text="Kernel for opposite channel ⓘ" VerticalAlignment="Center" Margin="0,0,0,0" TextWrapping="Wrap" Foreground="White" ToolTip="Kernel used for convolution with contrary channel"/>
-                    <local:KernelConfigurator Tag="channels.0.kernels.1" KernelName="Channel 1, Contrary" Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[1].Kernels[0]}" KernelDataCommitted="Configurator_DataChanged"/>
-                    <local:KernelConfigurator Tag="channels.1.kernels.1" KernelName="Channel 2, Contrary" Grid.Row="14" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[1].Kernels[1]}" KernelDataCommitted="Configurator_DataChanged"/>
+                    <local:KernelConfigurator Tag="channels.0.kernels.1" PreviewMouseRightButtonDown="KernelConfigurator_ContextMenu" KernelName="Channel 1, Contrary" Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[0].Kernels[1]}" KernelDataCommitted="Configurator_DataChanged"/>
+                    <local:KernelConfigurator Tag="channels.1.kernels.1" PreviewMouseRightButtonDown="KernelConfigurator_ContextMenu" KernelName="Channel 2, Contrary" Grid.Row="14" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[1].Kernels[1]}" KernelDataCommitted="Configurator_DataChanged"/>
                 </Grid>
             </Grid>
         </DockPanel>

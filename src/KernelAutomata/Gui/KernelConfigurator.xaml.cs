@@ -62,7 +62,7 @@ namespace KernelAutomata.Gui
             };
         }
 
-        private void UpdateActiveControls()
+        public void UpdateActiveControls()
         {
             if (KernelContext != null && KernelContext.IsActive)
             {
@@ -80,7 +80,7 @@ namespace KernelAutomata.Gui
             }
         }
 
-        private void UpdatePassiveControls()
+        public void UpdatePassiveControls()
         {
             if (KernelContext != null && KernelContext.IsActive)
             {

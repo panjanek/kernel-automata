@@ -59,6 +59,20 @@ namespace KernelAutomata.Models
         public float weight;
 
         public RingRecipe[] rings { get; set; }
+
+        public KernelRecipe Clone()
+        {
+            return new KernelRecipe() { weight = weight, rings = rings.Select(r => r.Clone()).ToArray() };
+        }
+
+        public void Overwrite(KernelRecipe recipe)
+        {
+            this.weight = recipe.weight;
+            for(int i=0; i<rings.Length; i++)
+            {
+                rings[i].Overwrite(recipe.rings[i]);
+            }
+        }
     }
 
     public class RingRecipe
@@ -74,6 +88,29 @@ namespace KernelAutomata.Models
         public float innerSlope = 1.0f;
 
         public float outerSlope = 1.0f;
+
+        public RingRecipe Clone()
+        {
+            return new RingRecipe()
+            {
+                maxR = maxR,
+                center = center,
+                innerSlope = innerSlope,
+                outerSlope = outerSlope,
+                weight = weight,
+                width = width,
+            };
+        }
+
+        public void Overwrite(RingRecipe recipe)
+        {
+            maxR = recipe.maxR;
+            center = recipe.center;
+            width = recipe.width;
+            weight = recipe.weight;
+            innerSlope = recipe.innerSlope;
+            outerSlope = recipe.outerSlope;
+        }
     }
 
     public class InitializationRecipe
