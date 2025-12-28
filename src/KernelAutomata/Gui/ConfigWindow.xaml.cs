@@ -214,7 +214,7 @@ namespace KernelAutomata.Gui
 
         private void UpdateSimulationWithRecipe()
         {
-            app.simulation.UpdateRecipe(app.recipe);
+            app.simulation.UpdateSimulationWithRecipe(app.recipe);
             if (autoRestart.IsChecked == true)
                 app.simulation.ResetFields();
             UpdatePassiveControls(app.recipe);
@@ -276,37 +276,37 @@ namespace KernelAutomata.Gui
                 {
                     var otherKernel = app.recipe.channels[1-channelIdx].kernels[kernelIdx];
                     var copyThis = thisKernel.Clone();
-                    thisKernel.Overwrite(otherKernel);
-                    otherKernel.Overwrite(copyThis);
+                    thisKernel.OverwriteWith(otherKernel);
+                    otherKernel.OverwriteWith(copyThis);
                 } 
                 else if (label.Equals("Swith vertical", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var otherKernel = app.recipe.channels[channelIdx].kernels[1-kernelIdx];
                     var copyThis = thisKernel.Clone();
-                    thisKernel.Overwrite(otherKernel);
-                    otherKernel.Overwrite(copyThis);
+                    thisKernel.OverwriteWith(otherKernel);
+                    otherKernel.OverwriteWith(copyThis);
                 }
                 else if (label.Equals("Swith diagonal", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var otherKernel = app.recipe.channels[1 - channelIdx].kernels[1 - kernelIdx];
                     var copyThis = thisKernel.Clone();
-                    thisKernel.Overwrite(otherKernel);
-                    otherKernel.Overwrite(copyThis);
+                    thisKernel.OverwriteWith(otherKernel);
+                    otherKernel.OverwriteWith(copyThis);
                 }
                 else if (label.Equals("Overwrite horizontal kernel", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var otherKernel = app.recipe.channels[1 - channelIdx].kernels[ kernelIdx];
-                    otherKernel.Overwrite(thisKernel);
+                    otherKernel.OverwriteWith(thisKernel);
                 }
                 else if (label.Equals("Overwrite vertical kernel", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var otherKernel = app.recipe.channels[channelIdx].kernels[1-kernelIdx];
-                    otherKernel.Overwrite(thisKernel);
+                    otherKernel.OverwriteWith(thisKernel);
                 }
                 else if (label.Equals("Overwrite diagonal", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var otherKernel = app.recipe.channels[1-channelIdx].kernels[1 - kernelIdx];
-                    otherKernel.Overwrite(thisKernel);
+                    otherKernel.OverwriteWith(thisKernel);
                 }
             }
 

@@ -41,7 +41,7 @@ namespace KernelAutomata.Models
             }
         }
 
-        public void UpdateRecipe(SimulationRecipe recipe)
+        public void UpdateSimulationWithRecipe(SimulationRecipe recipe)
         {
             if (recipe.size != fieldSize)
                 throw new Exception($"Cannot change size (from {fieldSize} to {recipe.size}). Must recreate simulation and GPU context");

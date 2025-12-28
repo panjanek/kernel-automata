@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,24 @@ namespace KernelAutomata.Models
         public float dt;
 
         public ChannelRecipe[] channels;
+
+        public SimulationRecipe Clone()
+        {
+            return new SimulationRecipe()
+            {
+                size = size,
+                dt = dt,
+                channels = channels.Select(c => c.Clone()).ToArray()
+            };
+        }
+
+        public void OverwriteWith(SimulationRecipe recipe)
+        {
+            size = recipe.size;
+            dt = recipe.dt;
+            for (int c = 0; c < channels.Length; c++)
+                channels[c].OverwriteWith(recipe.channels[c]);
+        }
     }
 
     public class ChannelRecipe
@@ -34,6 +53,34 @@ namespace KernelAutomata.Models
         public KernelRecipe[] kernels;
 
         public InitializationRecipe initialization;
+
+        public ChannelRecipe Clone()
+        {
+            return new ChannelRecipe()
+            {
+                mu = mu,
+                sigma = sigma,
+                mu2 = mu2,
+                sigma2 = sigma2,
+                weight2 = weight2,
+                decay = decay,
+                kernels = kernels.Select(k => k.Clone()).ToArray(),
+                initialization = initialization.Clone()
+            };
+        }
+
+        public void OverwriteWith(ChannelRecipe recipe)
+        {
+            mu = recipe.mu;
+            sigma = recipe.sigma;
+            mu2 = recipe.mu2;
+            sigma2 = recipe.sigma2;
+            weight2 = recipe.weight2;
+            decay = recipe.decay;
+            initialization.OverwriteWith(recipe.initialization);
+            for (int k = 0; k < kernels.Length; k++)
+                kernels[k].OverwriteWith(recipe.kernels[k]);
+        }
 
         public double GrowthFunction(double u)
         {
@@ -65,12 +112,12 @@ namespace KernelAutomata.Models
             return new KernelRecipe() { weight = weight, rings = rings.Select(r => r.Clone()).ToArray() };
         }
 
-        public void Overwrite(KernelRecipe recipe)
+        public void OverwriteWith(KernelRecipe recipe)
         {
             this.weight = recipe.weight;
             for(int i=0; i<rings.Length; i++)
             {
-                rings[i].Overwrite(recipe.rings[i]);
+                rings[i].OverwriteWith(recipe.rings[i]);
             }
         }
     }
@@ -102,7 +149,7 @@ namespace KernelAutomata.Models
             };
         }
 
-        public void Overwrite(RingRecipe recipe)
+        public void OverwriteWith(RingRecipe recipe)
         {
             maxR = recipe.maxR;
             center = recipe.center;
@@ -128,6 +175,31 @@ namespace KernelAutomata.Models
         public float mu;
 
         public float sigma;
+
+        public InitializationRecipe Clone()
+        {
+            return new InitializationRecipe()
+            {
+                centerX = centerX,
+                blobRadius = blobRadius,
+                mu = mu,
+                sigma = sigma,
+                centerY = centerY,
+                density = density,
+                noiseRadius = noiseRadius
+            };
+        }
+
+        public void OverwriteWith(InitializationRecipe recipe)
+        {
+            centerX = recipe.centerX;
+            centerY = recipe.centerY;
+            density = recipe.density;
+            noiseRadius = recipe.noiseRadius;
+            blobRadius = recipe.blobRadius;
+            mu = recipe.mu;
+            sigma = recipe.sigma;
+        }
 
         public void FillInitBufferWithRandomData(int size, float[] initBuffer)
         {
