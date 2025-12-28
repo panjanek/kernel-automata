@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Security.RightsManagement;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +21,9 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using AppContext = KernelAutomata.Models.AppContext;
 using Application = System.Windows.Application;
+using Channel = KernelAutomata.Models.Channel;
 using MessageBox = System.Windows.MessageBox;
 using Panel = System.Windows.Controls.Panel;
 using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
@@ -43,20 +47,23 @@ namespace KernelAutomata.Gpu
 
         private Simulation simulation;
 
+        private AppContext appContext;
+
         private int frameCounter;
 
         private int emptyTex;
 
         private float aspectRatio => (float)(Math.Max(simulation.gpuContext.glControl?.ClientSize.Height ?? 1, 1)) / (float)(Math.Max(simulation.gpuContext.glControl?.ClientSize.Width ?? 1, 1));
 
-        public OpenGlRenderer(Panel placeholder, Simulation simulation)
+        public OpenGlRenderer(Panel placeholder, AppContext appContext)
         {
             this.placeholder = placeholder;
-            this.simulation = simulation;
+            this.simulation = appContext.simulation;
+            this.appContext = appContext;
             simulation.gpuContext.glControl.Paint += GlControl_Paint;
             emptyTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
 
-            dragging = new DraggingHandler(simulation.gpuContext.glControl, (pos, left) => true, (prev, curr) =>
+            dragging = new DraggingHandler(simulation.gpuContext.glControl, (pos, left) => left, (prev, curr) =>
             {
                 float aspect = simulation.gpuContext.glControl.ClientSize.Width / simulation.gpuContext.glControl.ClientSize.Height;
                 var delta = prev - curr;
@@ -66,9 +73,84 @@ namespace KernelAutomata.Gpu
                 center.Y -= delta.Y / (simulation.fieldSize * zoom / screenToTexY);
             });
 
+            simulation.gpuContext.glControl.MouseDown += (s, e) => { if (e.Button == MouseButtons.Right) DisturbField(e.X, e.Y, appContext.configWindow.DrawingMode); };
+            simulation.gpuContext.glControl.MouseMove += (s, e) => { if (e.Button == MouseButtons.Right) DisturbField(e.X, e.Y, appContext.configWindow.DrawingMode); };
             simulation.gpuContext.glControl.MouseWheel += GlControl_MouseWheel;
             simulation.gpuContext.SetViewportAndInvalidate();
-        }    
+
+        }
+
+        private void DisturbField(float mouseX, float mouseY, int drawingMode)
+        {
+            if (drawingMode == 0)
+                foreach (var channel in simulation.channels)
+                    DisturbChannelField(mouseX, mouseY, channel, true);
+            else
+            {
+                var channelIdx = drawingMode - 1;
+                if (channelIdx >= simulation.channels.Length)
+                    channelIdx = simulation.channels.Length - 1;
+                DisturbChannelField(mouseX, mouseY, simulation.channels[channelIdx], false);
+            }
+        }
+
+        private void DisturbChannelField(float mouseX, float mouseY, Channel channel, bool erase)
+        {
+            lock (simulation)
+            {
+                var rnd = new Random(2);
+                var tex = channel.gpu.BackBufferTex;
+                float[] buffer = new float[simulation.fieldSize * simulation.fieldSize * 4];
+                GL.BindTexture(TextureTarget.Texture2D, tex);
+                GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Rgba, PixelType.Float, buffer);
+                GL.BindTexture(TextureTarget.Texture2D, 0);
+
+                Vector2 mouseUV = new Vector2(mouseX / simulation.gpuContext.glControl.ClientSize.Width, 1.0f - mouseY / simulation.gpuContext.glControl.ClientSize.Height);
+                Vector2 mouseTex = new Vector2((mouseUV.X - 0.5f) / (zoom * aspectRatio) + center.X, (mouseUV.Y - 0.5f) / zoom + center.Y);
+                int brushSize = (int)((simulation.fieldSize * 0.1) / zoom);
+                for (int i = 0; i < brushSize; i++)
+                {
+                    for (int j = 0; j < brushSize; j++)
+                    {
+                        if (Math.Sqrt((i - brushSize / 2) * (i - brushSize / 2) + (j - brushSize / 2) * (j - brushSize / 2)) < brushSize / 2)
+                        {
+                            int bufferX = (int)((mouseTex.X) * simulation.fieldSize);
+                            int bufferY = (int)((mouseTex.Y) * simulation.fieldSize);
+                            int paintX = bufferX + i - brushSize / 2;
+                            int paintY = bufferY + j - brushSize / 2;
+                            if (paintX < 0)
+                                paintX += simulation.fieldSize;
+                            if (paintX >= simulation.fieldSize)
+                                paintX -= simulation.fieldSize;
+                            if (paintY < 0)
+                                paintY += simulation.fieldSize;
+                            if (paintY >= simulation.fieldSize)
+                                paintY -= simulation.fieldSize;
+                            if (paintX >= 0 && paintY >= 0 && paintX < simulation.fieldSize && paintY < simulation.fieldSize)
+                            {
+                                int idx = (paintY * simulation.fieldSize + paintX) * 4 + 0;
+                                if (erase)
+                                    buffer[idx] = 0;
+                                else
+                                {
+                                    float value = buffer[idx];
+                                    value += (float)rnd.NextDouble() * 0.5f;
+                                    if (value > 1.0f)
+                                        value = 1.0f;
+                                    buffer[idx] = value;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                GL.BindTexture(TextureTarget.Texture2D, tex);
+                GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, simulation.fieldSize, simulation.fieldSize, PixelFormat.Rgba, PixelType.Float, buffer);
+                GL.BindTexture(TextureTarget.Texture2D, 0);
+            }
+
+            simulation.gpuContext.glControl.Invalidate();
+        }
 
         private void GlControl_MouseWheel(object? sender, MouseEventArgs e)
         {

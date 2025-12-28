@@ -38,6 +38,8 @@ namespace KernelAutomata.Gui
 
         private StartConditionsWindow startConditionsWindow;
 
+        public int DrawingMode => colorPicker.SelectedIndex;
+
         public ConfigWindow(AppContext app)
         {
             this.app = app;

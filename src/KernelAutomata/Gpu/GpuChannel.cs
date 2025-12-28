@@ -76,6 +76,8 @@ namespace KernelAutomata.Gpu
 
         public int FieldTex => fieldNextTex;
 
+        public int BackBufferTex => fieldTex;
+
         public void Destroy()
         {
             if (fieldTex != 0) GL.DeleteTexture(fieldTex);

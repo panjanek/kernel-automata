@@ -22,8 +22,6 @@ namespace KernelAutomata
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ConfigWindow configWindow;
-
         private AppContext app;
 
         private bool uiPending;
@@ -55,20 +53,8 @@ namespace KernelAutomata
             };
 
             var initRecipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
-            initRecipe.channels[0].kernels[0].rings[0].maxR = 64;
-            initRecipe.channels[0].kernels[0].rings[1].maxR = 64;
-
             app.StartNewSimulation(initRecipe);
 
-
-            //var recipe = RecipeFactory.LoadFromResource("orbs-ch2.json");
-
-            /*
-            var gpu = new GpuContext(recipe.size, placeholder);
-            simulation = new Simulation(recipe, gpu);
-            simulation.ResetFields();
-            renderer = new OpenGlRenderer(placeholder, simulation);
-            */
             KeyDown += MainWindow_KeyDown;
             System.Timers.Timer systemTimer = new System.Timers.Timer() { Interval = 10 };
             systemTimer.Elapsed += SystemTimer_Elapsed;
@@ -77,9 +63,9 @@ namespace KernelAutomata
             infoTimer.Tick += InfoTimer_Tick;
             infoTimer.Start();
 
-            configWindow = new ConfigWindow(app);
-            configWindow.Show();
-            configWindow.Activate();
+            app.configWindow = new ConfigWindow(app);
+            app.configWindow.Show();
+            app.configWindow.Activate();
             Closing += (s, e) => { };
         }
 

@@ -108,6 +108,23 @@
                            VerticalAlignment="Center"/>
                         </CheckBox>
                     </DockPanel>
+                    <ComboBox Name="colorPicker" Grid.Column="4" SelectedIndex="1">
+                        <ComboBoxItem>
+                            <Border Width="35" Height="16" Background="Black" HorizontalAlignment="Center">
+                                <TextBlock  Foreground="White" FontSize="10" Text="erase" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <Border Width="35" Height="16" Background="Magenta" HorizontalAlignment="Center">
+                                <TextBlock  Foreground="Black" FontSize="10" Text="draw" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <Border Width="35" Height="16" Background="Cyan" HorizontalAlignment="Center">
+                                <TextBlock  Foreground="Black" FontSize="10" Text="draw" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ComboBoxItem>
+                    </ComboBox>
                 </Grid>
 
                 <!-- Field size -->
