@@ -83,15 +83,7 @@ namespace KernelAutomata.Gui
             if (KernelContext != null && KernelContext.IsActive)
             {
                 foreach (var text in WpfUtil.FindVisualChildren<TextBlock>(this))
-                {
-                    var tag = WpfUtil.GetTagAsString(text);
-                    if (!string.IsNullOrWhiteSpace(tag))
-                    {
-                        var value = ReflectionUtil.GetObjectValue<float>(KernelContext.Recipe, tag);
-                        text.Text = value.ToString("0.000", CultureInfo.InvariantCulture);
-
-                    }
-                }
+                    WpfUtil.UpdateTextBlockForSlider(this, text, KernelContext.Recipe);
 
                 var kernel = KernelContext.Kernel;
                 var globalMaxR = KernelContext.Recipe.rings.Select(r => (int)Math.Ceiling(r.maxR)).Max();

@@ -59,10 +59,8 @@ namespace KernelAutomata.Gui
 
         private void UpdateActiveControls()
         {
-            var a = DataContext;
             if (recipe != null)
             {
-
                 updating = true;
                 foreach (var slider in WpfUtil.FindVisualChildren<Slider>(this))
                 {
@@ -83,13 +81,15 @@ namespace KernelAutomata.Gui
             {
                 foreach (var text in WpfUtil.FindVisualChildren<TextBlock>(this))
                 {
+                    WpfUtil.UpdateTextBlockForSlider(this, text, recipe);
+                    /*
                     var tag = WpfUtil.GetTagAsString(text);
                     if (!string.IsNullOrWhiteSpace(tag))
                     {
                         var value = ReflectionUtil.GetObjectValue<float>(recipe, tag);
                         text.Text = value.ToString("0.000", CultureInfo.InvariantCulture);
 
-                    }
+                    }*/
                 }
             }
         }

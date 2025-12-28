@@ -17,8 +17,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using KernelAutomata.Models;
 using KernelAutomata.Utils;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using AppContext = KernelAutomata.Models.AppContext;
 using Channel = KernelAutomata.Models.Channel;
 using Window = System.Windows.Window;
@@ -76,6 +78,39 @@ namespace KernelAutomata.Gui
             }
         }
 
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CommonOpenFileDialog { Title = "Open configuration json file", DefaultExtension = "json" };
+            dialog.Filters.Add(new CommonFileDialogFilter("JSON files", "*.json"));
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                var newRecipe = RecipeFactory.LoadFromFile(dialog.FileName);
+                app.StartNewSimulation(newRecipe);
+                DataContext = new SimulationDataContext(app);
+                UpdateActiveControls(newRecipe);
+                UpdatePassiveControls(newRecipe);
+                PopupMessage.Show(app.mainWindow , $"Config loaded from {dialog.FileName}");
+            }
+        }
+
+        private void SaveFile_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CommonSaveFileDialog { Title = "Save configuration json file", DefaultExtension = "json" };
+            dialog.Filters.Add(new CommonFileDialogFilter("JSON files", "*.json"));
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                RecipeFactory.SaveToFile(app.recipe, dialog.FileName);
+                PopupMessage.Show(app.mainWindow, $"Config saved to {dialog.FileName}");
+            }
+        }
+
+        private void Restart_Click(object sender, RoutedEventArgs e)
+        {
+            app.simulation.ResetFields();
+            UpdatePassiveControls(app.recipe);
+            PopupMessage.Show(app.mainWindow, $"Simulation restarted");
+        }
+
         private void UpdateActiveControls(SimulationRecipe recipe)
         {
             updating = true;
@@ -99,21 +134,10 @@ namespace KernelAutomata.Gui
         private void UpdatePassiveControls(SimulationRecipe recipe)
         {
             foreach (var text in WpfUtil.FindVisualChildren<TextBlock>(this))
-            {
                 if (!WpfUtil.CheckIfPathContains<KernelConfigurator>(text))
-                {
-                    var tag = WpfUtil.GetTagAsString(text);
-                    if (!string.IsNullOrWhiteSpace(tag))
-                    {
-                        var value = ReflectionUtil.GetObjectValue<float>(app.recipe, tag);
-                        text.Text = value.ToString("0.000", CultureInfo.InvariantCulture);
-
-                    }
-                }
-            }
+                    WpfUtil.UpdateTextBlockForSlider(this, text, app.recipe);
 
             ToggleVisibility();
-
             foreach (var graph in WpfUtil.FindVisualChildren<FunctionGraph>(this))
             {
                 if (!WpfUtil.CheckIfPathContains<KernelConfigurator>(graph))
@@ -130,9 +154,6 @@ namespace KernelAutomata.Gui
                     }
                 }
             }
-
-
-
         }
 
         private void ToggleVisibility()
@@ -173,12 +194,12 @@ namespace KernelAutomata.Gui
                 if (!string.IsNullOrWhiteSpace(tag))
                 {
                     ReflectionUtil.SetObjectValue<float>(app.recipe, tag, (float)e.NewValue);
-                    app.simulation.UpdateRecipe(app.recipe);
-                    app.simulation.ResetFields();
-                    UpdatePassiveControls(app.recipe);
+                    UpdateSimulationWithRecipe();
                 }
             }
         }
+
+        private void Configurator_DataChanged(object sender, RoutedEventArgs e) => UpdateSimulationWithRecipe();
 
         private void infoText_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -187,10 +208,11 @@ namespace KernelAutomata.Gui
                 WpfUtil.FindVisualChildren<Slider>(this).Where(s => WpfUtil.GetTagAsString(s) == tag).FirstOrDefault()?.Focus();
         }
 
-        private void Configurator_DataChanged(object sender, RoutedEventArgs e)
+        private void UpdateSimulationWithRecipe()
         {
             app.simulation.UpdateRecipe(app.recipe);
-            app.simulation.ResetFields();
+            if (autoRestart.IsChecked == true)
+                app.simulation.ResetFields();
             UpdatePassiveControls(app.recipe);
         }
     }
