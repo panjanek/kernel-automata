@@ -167,8 +167,8 @@ namespace KernelAutomata.Gui
                     var column = (int)element.GetValue(Grid.ColumnProperty);
                     if (app.recipe.channels.Length == 1)
                     {
-                        Width = 260 + 30;
-                        Height = 590 + 30;
+                        Width = 250 + 30;
+                        Height = 590 + 45;
                         if (column >= 3 || row >= 14)
                         {
                             element.Visibility = Visibility.Collapsed;
@@ -178,7 +178,7 @@ namespace KernelAutomata.Gui
                     else if (app.recipe.channels.Length == 2)
                     {
                         Width = 420 + 30;
-                        Height = 840 + 30;
+                        Height = 840 + 45;
                         element.Visibility = Visibility.Visible;
                         
                     }
