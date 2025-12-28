@@ -100,6 +100,24 @@ namespace KernelAutomata.Models
             {
                 var rnd = (float)rng.NextDouble();
                 initBuffer[4 * i + 0] = rnd * density;
+                if (mu>0 && sigma > 0)
+                {
+                    double u1 = 1.0 - rnd;
+                    double u2 = 1.0 - rng.NextDouble();
+
+                    // Box–Muller transform
+                    double standardNormal =
+                        Math.Sqrt(-2.0 * Math.Log(u1)) *
+                        Math.Cos(2.0 * Math.PI * u2);
+
+                    // Scale and shift
+                    double value = mu + sigma * standardNormal;
+
+                    // Clamp to [0,1] for pixel use
+                    var v = Math.Min(1.0, Math.Max(0.0, value));
+
+                    initBuffer[4 * i + 0] = (float)v;
+                }
                
 
 

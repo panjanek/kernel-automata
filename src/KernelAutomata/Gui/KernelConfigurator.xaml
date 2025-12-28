@@ -26,8 +26,8 @@
         <local:RasterImage Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="image" Width="170" Height="170" Margin="5,5,0,0" MouseLeftButtonDown="KernelGraph_MouseLeftButtonDown" ToolTip="Kernel matrix visualization"/>
 
         <Button MinWidth="0" MinHeight="0" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5,10,5,5" Width="22" Padding="0" Height="22" FontSize="10" FontStyle="Oblique" Click="EditButton_Click">
-            <TextBlock Text="✎"
-               FontSize="13"
+            <TextBlock Text="&#xEC88;" FontFamily="Segoe MDL2 Assets"
+               FontSize="10"
                Margin="0"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"/>
