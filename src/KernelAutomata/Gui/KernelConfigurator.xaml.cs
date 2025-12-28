@@ -36,6 +36,8 @@ namespace KernelAutomata.Gui
             remove { RemoveHandler(DataCommittedEvent, value); }
         }
 
+        public string KernelName { get; set; }
+
         private KernelDataContext KernelContext => DataContext is KernelDataContext ? (KernelDataContext)DataContext : null;
 
         private bool updating = false;
@@ -98,7 +100,7 @@ namespace KernelAutomata.Gui
                     return intersection[ix];
                 });
 
-                image.Draw(kernel.kernelBuffer, kernel.fieldSize, globalMaxR);
+                image.DrawKernel(kernel.kernelBuffer, kernel.fieldSize, globalMaxR);
             }
         }
 
@@ -137,6 +139,7 @@ namespace KernelAutomata.Gui
                 UpdatePassiveControls();
                 RaiseEvent(new RoutedEventArgs(DataCommittedEvent));
             });
+            ringsWindow.SetTitle(KernelName);
             ringsWindow.Show();
         }
 

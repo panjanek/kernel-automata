@@ -36,6 +36,12 @@ namespace KernelAutomata.Gui
             closeButton.Click += (s, e) => Close();
         }
 
+        public void SetTitle(string title)
+        {
+            Title = title;
+            titleBox.Text = title;
+        }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
 
         private void RingConfigurator_DataCommitted(object sender, RoutedEventArgs e) => dataChanged();

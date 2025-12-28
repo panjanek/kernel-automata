@@ -21,7 +21,7 @@ namespace KernelAutomata.Gui
             
         }
 
-        public void Draw(float[] buffer, int fieldSize, int maxR)
+        public void DrawKernel(float[] buffer, int fieldSize, int maxR)
         {
             var a = Width;
             var bb = ActualWidth;
@@ -61,8 +61,13 @@ namespace KernelAutomata.Gui
                 }
             }
 
+            DrawRaw(imageSize, pixels);
+        }
+
+        public void DrawRaw(int imageSize, byte[] pixels)
+        {
             var bitmap = new WriteableBitmap(imageSize, imageSize, 96, 96, PixelFormats.Bgra32, null);
-            bitmap.WritePixels(new Int32Rect(0, 0, imageSize, imageSize), pixels, imageSize*4, 0);
+            bitmap.WritePixels(new Int32Rect(0, 0, imageSize, imageSize), pixels, imageSize * 4, 0);
             Source = bitmap;
         }
 

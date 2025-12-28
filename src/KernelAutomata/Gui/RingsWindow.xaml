@@ -34,7 +34,8 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Title -->
-                <TextBlock Text="Kernel Configuration"
+                <TextBlock Name="titleBox"
+                           Text="Kernel Configuration"
                            VerticalAlignment="Center"
                            Margin="10,0,0,0"
                            Foreground="White"
