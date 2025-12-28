@@ -147,8 +147,8 @@ namespace KernelAutomata.Gui
                     if (app.recipe.channels.Length == 1)
                     {
                         Width = 260 + 30;
-                        Height = 590;
-                        if (column >= 3 || row >= 12)
+                        Height = 590 + 30;
+                        if (column >= 3 || row >= 14)
                         {
                             element.Visibility = Visibility.Collapsed;
                             
@@ -157,7 +157,7 @@ namespace KernelAutomata.Gui
                     else if (app.recipe.channels.Length == 2)
                     {
                         Width = 420 + 30;
-                        Height = 840;
+                        Height = 840 + 30;
                         element.Visibility = Visibility.Visible;
                         
                     }

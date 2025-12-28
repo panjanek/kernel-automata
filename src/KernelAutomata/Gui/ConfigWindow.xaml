@@ -76,16 +76,27 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/> <!-- 19 -->
                 </Grid.RowDefinitions>
 
+                <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="1"></Button>
+                    <Button Grid.Column="1" Content="2"></Button>
+                    <Button Grid.Column="2" Content="3"></Button>
+                    <Button Grid.Column="3" Content="4"></Button>
+                </Grid>
+
                 <!-- Field size -->
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Field size" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="0,5,0,0" Foreground="White"/>
-                <ComboBox Name="fieldSize" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" SelectionChanged="global_SelectionChanged">
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Field size" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="0,5,0,0" Foreground="White"/>
+                <ComboBox Name="fieldSize" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" SelectionChanged="global_SelectionChanged">
                     <ComboBoxItem>128x128</ComboBoxItem>
                     <ComboBoxItem>256x256</ComboBoxItem>
                     <ComboBoxItem>512x512</ComboBoxItem>
@@ -95,77 +106,75 @@
                 </ComboBox>
 
                 <!-- Number of channels -->
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Field size" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="0,5,0,0" Foreground="White"/>
-                <ComboBox Name="channelsCount" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" SelectionChanged="global_SelectionChanged">
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Field size" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="0,5,0,0" Foreground="White"/>
+                <ComboBox Name="channelsCount" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" SelectionChanged="global_SelectionChanged">
                     <ComboBoxItem IsSelected="True">1</ComboBoxItem>
                     <ComboBoxItem>2</ComboBoxItem>
                 </ComboBox>
 
                 <!-- DT -->
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="step dt" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Foreground="White"/>
-                <Slider Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1" Minimum="0.001" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="dt" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="2" Grid.Column="2" Tag="dt"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="step dt" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Foreground="White"/>
+                <Slider Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="1" Minimum="0.001" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="dt" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="4" Grid.Column="2" Tag="dt"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
                 <!-- channel headers-->
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Channels" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White"/>
-                <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="Magenta" VerticalAlignment="Center" Margin="5,5,0,0" Padding="2" Background="Magenta" HorizontalAlignment="Stretch" TextAlignment="Center"/>
-                <TextBlock Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2" Text="Cyan" VerticalAlignment="Center" Margin="5,5,0,0" Padding="2" Background="Cyan" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Channels" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White"/>
+                <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Text="Magenta" VerticalAlignment="Center" Margin="5,5,0,0" Padding="2" Background="Magenta" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+                <TextBlock Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Text="Cyan" VerticalAlignment="Center" Margin="5,5,0,0" Padding="2" Background="Cyan" HorizontalAlignment="Stretch" TextAlignment="Center"/>
 
                 <!-- spike 1 -->
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="growth µ" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White"/>
-                <Slider Grid.Row="4" Grid.Column="1" Minimum="0" Maximum="1" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.0.mu" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="4" Grid.Column="2" Tag="channels.0.mu"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
-                <Slider Grid.Row="4" Grid.Column="3" Minimum="0" Maximum="1" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.1.mu" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="4" Grid.Column="4" Tag="channels.1.mu"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="growth µ" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White"/>
+                <Slider Grid.Row="6" Grid.Column="1" Minimum="0" Maximum="1" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.0.mu" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="6" Grid.Column="2" Tag="channels.0.mu"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <Slider Grid.Row="6" Grid.Column="3" Minimum="0" Maximum="1" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.1.mu" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="6" Grid.Column="4" Tag="channels.1.mu"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="growth σ" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White"/>
-                <Slider Grid.Row="5" Grid.Column="1" Minimum="0" Maximum="0.3" SmallChange="0.0001" LargeChange="0.01" ValueChanged="Slider_ValueChanged" Tag="channels.0.sigma" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="5" Grid.Column="2" Tag="channels.0.sigma"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
-                <Slider Grid.Row="5" Grid.Column="3" Minimum="0" Maximum="0.3" SmallChange="0.0001" LargeChange="0.01" ValueChanged="Slider_ValueChanged" Tag="channels.1.sigma" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="5" Grid.Column="4" Tag="channels.1.sigma"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <TextBlock Grid.Row="7" Grid.Column="0" Text="growth σ" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White"/>
+                <Slider Grid.Row="7" Grid.Column="1" Minimum="0" Maximum="0.3" SmallChange="0.0001" LargeChange="0.01" ValueChanged="Slider_ValueChanged" Tag="channels.0.sigma" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="7" Grid.Column="2" Tag="channels.0.sigma"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <Slider Grid.Row="7" Grid.Column="3" Minimum="0" Maximum="0.3" SmallChange="0.0001" LargeChange="0.01" ValueChanged="Slider_ValueChanged" Tag="channels.1.sigma" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="7" Grid.Column="4" Tag="channels.1.sigma"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
                 <!-- spike 2 -->
-                <TextBlock Grid.Row="6" Grid.Column="0" Text="2nd growth µ" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White"/>
-                <Slider Grid.Row="6" Grid.Column="1" Minimum="0" Maximum="1" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.0.mu2" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="6" Grid.Column="2" Tag="channels.0.mu2" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
-                <Slider Grid.Row="6" Grid.Column="3" Minimum="0" Maximum="1" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.1.mu2" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="6" Grid.Column="4" Tag="channels.1.mu2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <TextBlock Grid.Row="8" Grid.Column="0" Text="2nd growth µ" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White"/>
+                <Slider Grid.Row="8" Grid.Column="1" Minimum="0" Maximum="1" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.0.mu2" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="8" Grid.Column="2" Tag="channels.0.mu2" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <Slider Grid.Row="8" Grid.Column="3" Minimum="0" Maximum="1" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.1.mu2" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="8" Grid.Column="4" Tag="channels.1.mu2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-                <TextBlock Grid.Row="7" Grid.Column="0" Text="2nd growth σ" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White"/>
-                <Slider Grid.Row="7" Grid.Column="1" Minimum="0" Maximum="0.3" SmallChange="0.0001" LargeChange="0.01" ValueChanged="Slider_ValueChanged" Tag="channels.0.sigma2" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="7" Grid.Column="2" Tag="channels.0.sigma2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
-                <Slider Grid.Row="7" Grid.Column="3" Minimum="0" Maximum="0.3" SmallChange="0.0001" LargeChange="0.01" ValueChanged="Slider_ValueChanged" Tag="channels.1.sigma2" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="7" Grid.Column="4" Tag="channels.1.sigma2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <TextBlock Grid.Row="9" Grid.Column="0" Text="2nd growth σ" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White"/>
+                <Slider Grid.Row="9" Grid.Column="1" Minimum="0" Maximum="0.3" SmallChange="0.0001" LargeChange="0.01" ValueChanged="Slider_ValueChanged" Tag="channels.0.sigma2" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="9" Grid.Column="2" Tag="channels.0.sigma2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <Slider Grid.Row="9" Grid.Column="3" Minimum="0" Maximum="0.3" SmallChange="0.0001" LargeChange="0.01" ValueChanged="Slider_ValueChanged" Tag="channels.1.sigma2" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="9" Grid.Column="4" Tag="channels.1.sigma2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-                <TextBlock Grid.Row="8" Grid.Column="0" Text="2nd growth weight" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White" TextWrapping="Wrap"/>
-                <Slider Grid.Row="8" Grid.Column="1" Minimum="0" Maximum="1.0" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.0.weight2" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="8" Grid.Column="2" Tag="channels.0.weight2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
-                <Slider Grid.Row="8" Grid.Column="3" Minimum="0" Maximum="0.2" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.1.weight2" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="8" Grid.Column="4" Tag="channels.1.weight2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <TextBlock Grid.Row="10" Grid.Column="0" Text="2nd growth weight" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="White" TextWrapping="Wrap"/>
+                <Slider Grid.Row="10" Grid.Column="1" Minimum="0" Maximum="1.0" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.0.weight2" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="10" Grid.Column="2" Tag="channels.0.weight2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <Slider Grid.Row="10" Grid.Column="3" Minimum="0" Maximum="0.2" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.1.weight2" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="10" Grid.Column="4" Tag="channels.1.weight2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
                 <!-- growth visualisation -->
-                <TextBlock Grid.Row="9" Grid.Column="0" Text="growth function" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Foreground="White"/>
-                <local:FunctionGraph Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Tag="channels.0" Height="50" Margin="5,5,0,0" />
-                <local:FunctionGraph Grid.Row="9" Grid.Column="3" Grid.ColumnSpan="2" Tag="channels.1" Height="50" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="11" Grid.Column="0" Text="growth function" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Foreground="White"/>
+                <local:FunctionGraph Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="2" Tag="channels.0" Height="50" Margin="5,5,0,0" />
+                <local:FunctionGraph Grid.Row="11" Grid.Column="3" Grid.ColumnSpan="2" Tag="channels.1" Height="50" Margin="5,5,0,0"/>
 
                 <!-- channel decay -->
-                <TextBlock Grid.Row="10" Grid.Column="0" Text="channel decay" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Foreground="White"/>
-                <Slider Grid.Row="10" Grid.Column="1" Minimum="-1" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.0.decay" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="10" Grid.Column="2" Tag="channels.0.decay" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
-                <Slider Grid.Row="10" Grid.Column="3" Minimum="-1" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.1.decay" Margin="5,5,0,0"/>
-                <TextBlock Grid.Row="10" Grid.Column="4" Tag="channels.1.decay" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <TextBlock Grid.Row="12" Grid.Column="0" Text="channel decay" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Foreground="White"/>
+                <Slider Grid.Row="12" Grid.Column="1" Minimum="-1" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.0.decay" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="12" Grid.Column="2" Tag="channels.0.decay" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <Slider Grid.Row="12" Grid.Column="3" Minimum="-1" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="channels.1.decay" Margin="5,5,0,0"/>
+                <TextBlock Grid.Row="12" Grid.Column="4" Tag="channels.1.decay" FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
                 
                 <!-- kernel of this channel -->
-                <TextBlock Grid.Row="11" Grid.Column="0" Grid.RowSpan="1" Text="Kernel of this channel" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Foreground="White"/>
-                <local:KernelConfigurator Grid.Row="11" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[0].Kernels[0]}" KernelDataCommitted="Configurator_DataChanged"/>
-                <local:KernelConfigurator Grid.Row="11" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[0].Kernels[1]}" KernelDataCommitted="Configurator_DataChanged"/>
+                <TextBlock Grid.Row="13" Grid.Column="0" Grid.RowSpan="1" Text="Kernel of this channel" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Foreground="White"/>
+                <local:KernelConfigurator Grid.Row="13" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[0].Kernels[0]}" KernelDataCommitted="Configurator_DataChanged"/>
+                <local:KernelConfigurator Grid.Row="13" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[0].Kernels[1]}" KernelDataCommitted="Configurator_DataChanged"/>
 
                 <!-- kernel of opposing channel -->
-                <TextBlock Grid.Row="12" Grid.Column="0" Grid.RowSpan="1" Text="Kernel for opposite channel" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Foreground="White"/>
-                <local:KernelConfigurator Grid.Row="12" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[1].Kernels[0]}" KernelDataCommitted="Configurator_DataChanged"/>
-                <local:KernelConfigurator Grid.Row="12" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[1].Kernels[1]}" KernelDataCommitted="Configurator_DataChanged"/>
-
-
+                <TextBlock Grid.Row="14" Grid.Column="0" Grid.RowSpan="1" Text="Kernel for opposite channel" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" Foreground="White"/>
+                <local:KernelConfigurator Grid.Row="14" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[1].Kernels[0]}" KernelDataCommitted="Configurator_DataChanged"/>
+                <local:KernelConfigurator Grid.Row="14" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[1].Kernels[1]}" KernelDataCommitted="Configurator_DataChanged"/>
             </Grid>
         </DockPanel>
     </Border>
