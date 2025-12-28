@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KernelAutomata.Models;
@@ -100,7 +101,15 @@ namespace KernelAutomata.Gui
         {
             var tag = WpfUtil.GetTagAsString(sender);
             if (!string.IsNullOrWhiteSpace(tag))
-                WpfUtil.FindVisualChildren<Slider>(this).Where(s => WpfUtil.GetTagAsString(s) == tag).FirstOrDefault()?.Focus();
+            {
+                var c = WpfUtil.FindVisualChildren<Slider>(this).Where(s => WpfUtil.GetTagAsString(s) == tag).Count();
+                var slider = WpfUtil.FindVisualChildren<Slider>(this).Where(s => WpfUtil.GetTagAsString(s) == tag).FirstOrDefault();
+                slider?.Focus();
+                if (slider!=null)
+                    Keyboard.Focus(slider);
+            }
+
+            e.Handled = true;
         }
     }
 }

@@ -123,6 +123,7 @@ namespace KernelAutomata.Gui
             var tag = WpfUtil.GetTagAsString(sender);
             if (!string.IsNullOrWhiteSpace(tag))
                 WpfUtil.FindVisualChildren<Slider>(this).Where(s => WpfUtil.GetTagAsString(s) == tag).FirstOrDefault()?.Focus();
+            e.Handled = true;
         }
 
         private void EditButton_Click(object sender, RoutedEventArgs e) => OpenKernelConfigurationDialog();
@@ -141,6 +142,7 @@ namespace KernelAutomata.Gui
             });
             ringsWindow.SetTitle(KernelName);
             ringsWindow.Show();
+            ringsWindow.Activate();
         }
 
         public void CloseRingsWindow()

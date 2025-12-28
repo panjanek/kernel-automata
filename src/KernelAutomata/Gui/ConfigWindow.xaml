@@ -91,6 +91,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <!-- https://learn.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font -->
                     <Button Grid.Column="0" ToolTip="Save file" Click="SaveFile_Click">

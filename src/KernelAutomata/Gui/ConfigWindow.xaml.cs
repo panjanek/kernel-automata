@@ -230,6 +230,7 @@ namespace KernelAutomata.Gui
             var tag = WpfUtil.GetTagAsString(sender);
             if (!string.IsNullOrWhiteSpace(tag))
                 WpfUtil.FindVisualChildren<Slider>(this).Where(s => WpfUtil.GetTagAsString(s) == tag).FirstOrDefault()?.Focus();
+            e.Handled = true;
         }
 
         private void UpdateSimulationWithRecipe()
