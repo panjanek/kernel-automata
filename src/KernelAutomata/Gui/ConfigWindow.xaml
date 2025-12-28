@@ -112,7 +112,7 @@
 
                 <!-- Field size -->
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Size ⓘ" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="10,5,5,0" Foreground="White" TextWrapping="Wrap" ToolTip="Size of the pixel space"/>
-                <ComboBox Name="fieldSize" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="global_SelectionChanged" Margin="0,5,5,0">
+                <ComboBox Name="fieldSize" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="global_SelectionChanged" Margin="0,5,10,0">
                     <ComboBoxItem>128x128</ComboBoxItem>
                     <ComboBoxItem>256x256</ComboBoxItem>
                     <ComboBoxItem>512x512</ComboBoxItem>
@@ -123,7 +123,7 @@
 
                 <!-- Number of channels -->
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Channels ⓘ" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="10,5,5,0" Foreground="White" TextWrapping="Wrap" ToolTip="Number of channels (colors)"/>
-                <ComboBox Name="channelsCount" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" SelectionChanged="global_SelectionChanged" Margin="0,5,5,0">
+                <ComboBox Name="channelsCount" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" SelectionChanged="global_SelectionChanged" Margin="0,5,10,0">
                     <ComboBoxItem IsSelected="True">1</ComboBoxItem>
                     <ComboBoxItem>2</ComboBoxItem>
                 </ComboBox>
@@ -131,7 +131,7 @@
                 <!-- DT -->
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="step dt ⓘ" VerticalAlignment="Center" Margin="10,0,8,0" TextWrapping="Wrap" Foreground="White" ToolTip="Integration step"/>
                 <Slider Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1" Minimum="0.001" Maximum="1" SmallChange="0.001" ValueChanged="Slider_ValueChanged" Tag="dt" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="3" Grid.Column="2" Tag="dt"  FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
+                <TextBlock Grid.Row="3" Grid.Column="2" Tag="dt"  FontFamily="Courier New" Margin="0,5,10,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
                 <!-- channels configuration -->
                 <Grid Margin="10,0,0,0" Name="contentGrid" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
@@ -165,8 +165,22 @@
                     <!-- channel headers-->
                     <TextBlock Grid.Row="5" Grid.Column="0" Text="Channels" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="White"/>
                     <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Text="Magenta" VerticalAlignment="Center" Margin="0,5,0,0" Padding="5" Background="Magenta" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+                    <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Height="18" Width="18" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,5,5" Tag="channels.0" Click="StartingConditions_Click">
+                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                           FontSize="10" ToolTip="Configure staring condition"
+                           Text="&#xEC88;"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                    </Button>
                     <TextBlock Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Text="Cyan" VerticalAlignment="Center" Margin="5,5,0,0" Padding="5" Background="Cyan" HorizontalAlignment="Stretch" TextAlignment="Center"/>
-
+                    <Button Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Height="18" Width="18" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,5,5" Tag="channels.1" Click="StartingConditions_Click">
+                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                           FontSize="10" ToolTip="Configure staring condition"
+                           Text="&#xEC88;"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                    </Button>
+                    
                     <!-- spike 1 -->
                     <TextBlock Grid.Row="6" Grid.Column="0" Text="growth µ ⓘ" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="White" ToolTip="µ parameter of Gaussian bell curve used as a growth function"/>
                     <Slider Grid.Row="6" Grid.Column="1" Minimum="0" Maximum="1" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.0.mu" Margin="0,5,0,0"/>

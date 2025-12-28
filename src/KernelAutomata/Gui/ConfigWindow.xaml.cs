@@ -167,7 +167,7 @@ namespace KernelAutomata.Gui
                     var column = (int)element.GetValue(Grid.ColumnProperty);
                     if (app.recipe.channels.Length == 1)
                     {
-                        Width = 250 + 30;
+                        Width = 250 + 35;
                         Height = 590 + 45;
                         if (column >= 3 || row >= 14)
                         {
@@ -214,6 +214,13 @@ namespace KernelAutomata.Gui
             if (autoRestart.IsChecked == true)
                 app.simulation.ResetFields();
             UpdatePassiveControls(app.recipe);
+        }
+
+        private void StartingConditions_Click(object sender, RoutedEventArgs e)
+        {
+            var tag = WpfUtil.GetTagAsString(sender);
+            var channel = ReflectionUtil.GetObjectValue<ChannelRecipe>(app.recipe, tag);
+            var aaa = channel;
         }
     }
 }
