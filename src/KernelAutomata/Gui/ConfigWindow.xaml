@@ -91,7 +91,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="0.7*"/>
                     </Grid.ColumnDefinitions>
                     <!-- https://learn.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font -->
                     <Button Grid.Column="0" ToolTip="Save file" Click="SaveFile_Click">
@@ -141,6 +142,34 @@
                             </Border>
                         </ComboBoxItem>
                     </ComboBox>
+                    <ToggleButton Name="recordButton" Grid.Column="5" ToolTip="Record frames as PNG files to given folder" Click="Record_Click">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <!-- Default: red circle -->
+                                        <Ellipse Width="12"
+                             Height="12"
+                             Fill="Red"/>
+                                    </Setter.Value>
+                                </Setter>
+
+                                <Style.Triggers>
+                                    <!-- When recording -->
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <!-- Stop: black square -->
+                                                <Rectangle Width="12"
+                                       Height="12"
+                                       Fill="Black"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
                 </Grid>
 
                 <!-- Field size -->

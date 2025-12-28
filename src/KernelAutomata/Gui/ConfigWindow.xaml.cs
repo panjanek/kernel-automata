@@ -41,6 +41,10 @@ namespace KernelAutomata.Gui
 
         public int DrawingMode => colorPicker.SelectedIndex;
 
+        public string RecordDir => recordButton.IsChecked == true ? recordDir : null;
+
+        public string recordDir;
+
         public ConfigWindow(AppContext app)
         {
             this.app = app;
@@ -346,6 +350,22 @@ namespace KernelAutomata.Gui
 
             //update all
             UpdateSimulationWithRecipe();
+        }
+
+        private void Record_Click(object sender, RoutedEventArgs e)
+        {
+            if (recordButton.IsChecked == true)
+            {
+                var dialog = new CommonOpenFileDialog { IsFolderPicker = true, Title = "Select folder to save frames as PNG files" };
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                    recordDir = dialog.FileName;
+                else
+                    recordButton.IsChecked = false;
+            }
+            else
+            {
+                recordDir = null;
+            }
         }
     }
 }
