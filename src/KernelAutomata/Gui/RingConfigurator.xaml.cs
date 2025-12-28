@@ -45,7 +45,6 @@ namespace KernelAutomata.Gui
         public RingConfigurator()
         {
             InitializeComponent();
-            var a = DataContext;
             Loaded += (s, e) => { UpdateActiveControls(); UpdatePassiveControls(); };
             DataContextChanged += (s, e) =>
             {

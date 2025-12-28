@@ -15,6 +15,7 @@ namespace KernelAutomata.Gui
     {
         public void Draw(int steps, double startX, double endX, Func<double, double> func)
         {
+            var t = Width;
             var width = ActualWidth;
             var height = ActualHeight;
             Children.Clear();

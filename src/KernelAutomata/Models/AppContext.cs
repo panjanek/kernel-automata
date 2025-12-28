@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using KernelAutomata.Gpu;
@@ -9,6 +10,8 @@ namespace KernelAutomata.Models
 {
     public class AppContext
     {
+        public const int MaxChannelsCount = 2;
+        
         public OpenGlRenderer renderer;
 
         public Simulation simulation;

@@ -18,6 +18,7 @@ using KernelAutomata.Models;
 using KernelAutomata.Utils;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using AppContext = KernelAutomata.Models.AppContext;
+using Channel = KernelAutomata.Models.Channel;
 using Window = System.Windows.Window;
 
 namespace KernelAutomata.Gui
@@ -31,10 +32,10 @@ namespace KernelAutomata.Gui
 
         private bool updating;
 
-        private KernelConfigWindow kernelWindow;
         public ConfigWindow(AppContext app)
         {
             this.app = app;
+            DataContext = new SimulationDataContext(app);
             InitializeComponent();
             customTitleBar.MouseLeftButtonDown += (s, e) => { if (e.ButtonState == MouseButtonState.Pressed) DragMove(); };
             minimizeButton.Click += (s,e) => WindowState = WindowState.Minimized;
@@ -63,8 +64,10 @@ namespace KernelAutomata.Gui
                             recipe = RecipeFactory.LoadFromResource("caterpillar1-ch2.json");
                     }
 
+                    WpfUtil.FindVisualChildren<KernelConfigurator>(this).ToList().ForEach(k => k.CloseRingsWindow());
                     recipe.size = newSize;
                     app.StartNewSimulation(recipe);
+                    DataContext = new SimulationDataContext(app);
                     UpdateActiveControls(recipe);
                     UpdatePassiveControls(recipe);
                 }
@@ -78,11 +81,14 @@ namespace KernelAutomata.Gui
             WpfUtil.SetComboStringSelection(channelsCount, recipe.channels.Length.ToString());
             foreach (var slider in WpfUtil.FindVisualChildren<Slider>(this))
             {
-                WpfUtil.AddTooltipToSlider(slider);
-                var tag = WpfUtil.GetTagAsString(slider);
-                if (!string.IsNullOrWhiteSpace(tag))
+                if (!WpfUtil.CheckIfPathContains<KernelConfigurator>(slider))
                 {
-                    slider.Value = ReflectionUtil.GetObjectValue<float>(recipe, tag); 
+                    WpfUtil.AddTooltipToSlider(slider);
+                    var tag = WpfUtil.GetTagAsString(slider);
+                    if (!string.IsNullOrWhiteSpace(tag))
+                    {
+                        slider.Value = ReflectionUtil.GetObjectValue<float>(recipe, tag);
+                    }
                 }
             }
             updating = false;
@@ -90,75 +96,17 @@ namespace KernelAutomata.Gui
 
         private void UpdatePassiveControls(SimulationRecipe recipe)
         {
-            foreach (var graph in WpfUtil.FindVisualChildren<FunctionGraph>(this))
-            {
-                var tag = WpfUtil.GetTagAsString(graph);
-                if (!string.IsNullOrWhiteSpace(tag))
-                {
-                    var tagSplit = tag.Split('.');
-                    if (tagSplit.Length == 2)
-                    {
-                        var channel = ReflectionUtil.GetObjectValue<ChannelRecipe>(recipe, tag);
-                        if (channel != null)
-                            graph.Draw(200, 0, 1, x => channel.GrowthFunction(x));
-                        else
-                            graph.Children.Clear();
-                    }
-                    else if (tagSplit.Length == 4)
-                    {
-                        var kernelRec = ReflectionUtil.GetObjectValue<KernelRecipe>(recipe, tag);
-                        if (kernelRec != null)
-                        {
-                            int channelIdx = int.Parse(tagSplit[1]);
-                            int kernelIdx = int.Parse(tagSplit[3]);
-                            var kernel = app.simulation.channels[channelIdx].kernels[kernelIdx];
-                            var globalMaxR = app.recipe.channels.SelectMany(c => kernel.rings.Where(r => r.weight != 0).Select(r => (int)Math.Ceiling(r.maxR))).Max();
-                            var intersection = new double[globalMaxR];
-                            for (int x = 0; x < intersection.Length; x++)
-                                intersection[x] = kernel.kernelBuffer[x * 4] * 1000;
-                            graph.Draw(globalMaxR, 0, globalMaxR, x =>
-                            {
-                                int ix = (int)x;
-                                if (ix < 0) ix = 0;
-                                if (ix >= intersection.Length) ix = intersection.Length - 1;
-                                return intersection[ix];
-                            });
-
-                        }
-                    }
-
-                }
-            }
-
-            foreach (var image in WpfUtil.FindVisualChildren<KernelImage>(this))
-            {
-                var tag = WpfUtil.GetTagAsString(image);
-                if (!string.IsNullOrWhiteSpace(tag))
-                {
-                    var tagSplit = tag.Split('.');
-                    if (tagSplit.Length == 4)
-                    {
-                        var kernelRec = ReflectionUtil.GetObjectValue<KernelRecipe>(recipe, tag);
-                        if (kernelRec != null)
-                        {
-                            int channelIdx = int.Parse(tagSplit[1]);
-                            int kernelIdx = int.Parse(tagSplit[3]);
-                            var kernel = app.simulation.channels[channelIdx].kernels[kernelIdx];
-                            var globalMaxR = app.recipe.channels.SelectMany(c => kernel.rings.Where(r => r.weight != 0).Select(r => (int)Math.Ceiling(r.maxR))).Max();
-                            image.Draw(kernel.kernelBuffer, kernel.fieldSize, globalMaxR);
-                        }
-                    }
-                }
-            }
-
             foreach (var text in WpfUtil.FindVisualChildren<TextBlock>(this))
             {
-                var tag = WpfUtil.GetTagAsString(text);
-                if (!string.IsNullOrWhiteSpace(tag))
+                if (!WpfUtil.CheckIfPathContains<KernelConfigurator>(text))
                 {
-                    var value = ReflectionUtil.GetObjectValue<float>(app.recipe, tag);
-                    text.Text = value.ToString("0.000", CultureInfo.InvariantCulture);
+                    var tag = WpfUtil.GetTagAsString(text);
+                    if (!string.IsNullOrWhiteSpace(tag))
+                    {
+                        var value = ReflectionUtil.GetObjectValue<float>(app.recipe, tag);
+                        text.Text = value.ToString("0.000", CultureInfo.InvariantCulture);
 
+                    }
                 }
             }
         }
@@ -185,31 +133,11 @@ namespace KernelAutomata.Gui
                 WpfUtil.FindVisualChildren<Slider>(this).Where(s => WpfUtil.GetTagAsString(s) == tag).FirstOrDefault()?.Focus();
         }
 
-        private void OpenKernelConfig_Click(object sender, RoutedEventArgs e)
+        private void Configurator_DataChanged(object sender, RoutedEventArgs e)
         {
-            OpenKernelConfigurationDialog(WpfUtil.GetTagAsString(sender));
-        }
-
-        private void KernelGraph_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            OpenKernelConfigurationDialog(WpfUtil.GetTagAsString(sender));
-        }
-
-        private void OpenKernelConfigurationDialog(string tag)
-        {
-            if (!string.IsNullOrWhiteSpace(tag))
-            {
-                if (kernelWindow != null)
-                    kernelWindow.Close();
-                var kernelRecipe = ReflectionUtil.GetObjectValue<KernelRecipe>(app.recipe, tag);
-                kernelWindow = new KernelConfigWindow(kernelRecipe, () =>
-                {
-                    app.simulation.UpdateRecipe(app.recipe);
-                    app.simulation.ResetFields();
-                    UpdatePassiveControls(app.recipe);
-                });
-                kernelWindow.Show();
-            }
+            app.simulation.UpdateRecipe(app.recipe);
+            app.simulation.ResetFields();
+            UpdatePassiveControls(app.recipe);
         }
     }
 }

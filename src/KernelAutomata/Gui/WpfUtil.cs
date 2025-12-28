@@ -96,5 +96,17 @@ namespace KernelAutomata.Gui
                 slider.PreviewMouseLeftButtonUp += (_, _) => toolTip.IsOpen = false;
             }
         }
+
+        public static bool CheckIfPathContains<T>(FrameworkElement element)
+        {
+            List<FrameworkElement> path = new List<FrameworkElement>();
+            while (element.Parent is FrameworkElement && element.Parent!=null)
+            {
+                path.Add(element);
+                element = (FrameworkElement)element.Parent;
+            }
+
+            return path.Any(p=>p is T);
+        }
     }
 }

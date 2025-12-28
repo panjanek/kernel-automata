@@ -20,13 +20,13 @@ namespace KernelAutomata.Gui
     /// <summary>
     /// Interaction logic for KernelConfig.xaml
     /// </summary>
-    public partial class KernelConfigWindow : Window
+    public partial class RingsWindow : Window
     {
         private KernelRecipe recipe;
 
         private Action dataChanged;
 
-        public KernelConfigWindow(KernelRecipe recipe, Action dataChanged)
+        public RingsWindow(KernelRecipe recipe, Action dataChanged)
         {
             this.recipe = recipe;
             this.dataChanged = dataChanged;
