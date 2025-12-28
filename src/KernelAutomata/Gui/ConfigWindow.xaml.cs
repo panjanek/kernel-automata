@@ -49,8 +49,28 @@ namespace KernelAutomata.Gui
             customTitleBar.MouseLeftButtonDown += (s, e) => { if (e.ButtonState == MouseButtonState.Pressed) DragMove(); };
             minimizeButton.Click += (s,e) => WindowState = WindowState.Minimized;
             Closing += (s, e) => { e.Cancel = true; WindowState = WindowState.Minimized; };
-            ContentRendered += (s, e) => { UpdateActiveControls(app.recipe); UpdatePassiveControls(app.recipe); };
+            ContentRendered += (s, e) => { UpdateActiveControls(); UpdatePassiveControls(); };
             Loaded += (s, e) => { };
+            KeyDown += ConfigWindow_KeyDown;
+        }
+
+        private void ConfigWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                if (e.Key == Key.Z)
+                {
+                    app.Undo();
+                    UpdateAllControls();
+                    e.Handled = true;
+                }
+                else if (e.Key == Key.Y)
+                {
+                    app.Redo();
+                    UpdateAllControls();
+                    e.Handled = true;
+                }
+            }
         }
 
         private void global_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -76,8 +96,8 @@ namespace KernelAutomata.Gui
                     recipe.size = newSize;
                     app.StartNewSimulation(recipe);
                     DataContext = new SimulationDataContext(app);
-                    UpdateActiveControls(recipe);
-                    UpdatePassiveControls(recipe);
+                    UpdateActiveControls();
+                    UpdatePassiveControls();
                 }
             }
         }
@@ -91,8 +111,8 @@ namespace KernelAutomata.Gui
                 var newRecipe = RecipeFactory.LoadFromFile(dialog.FileName);
                 app.StartNewSimulation(newRecipe);
                 DataContext = new SimulationDataContext(app);
-                UpdateActiveControls(newRecipe);
-                UpdatePassiveControls(newRecipe);
+                UpdateActiveControls();
+                UpdatePassiveControls();
                 PopupMessage.Show(app.mainWindow , $"Config loaded from {dialog.FileName}");
             }
         }
@@ -111,15 +131,15 @@ namespace KernelAutomata.Gui
         private void Restart_Click(object sender, RoutedEventArgs e)
         {
             app.simulation.ResetFields();
-            UpdatePassiveControls(app.recipe);
+            UpdatePassiveControls();
             PopupMessage.Show(app.mainWindow, $"Simulation restarted");
         }
 
-        private void UpdateActiveControls(SimulationRecipe recipe)
+        private void UpdateActiveControls()
         {
             updating = true;
-            WpfUtil.SetComboStringSelection(fieldSize, $"{recipe.size}x{recipe.size}");
-            WpfUtil.SetComboStringSelection(channelsCount, recipe.channels.Length.ToString());
+            WpfUtil.SetComboStringSelection(fieldSize, $"{app.recipe.size}x{app.recipe.size}");
+            WpfUtil.SetComboStringSelection(channelsCount, app.recipe.channels.Length.ToString());
             foreach (var slider in WpfUtil.FindVisualChildren<Slider>(this))
             {
                 if (!WpfUtil.CheckIfPathContains<KernelConfigurator>(slider))
@@ -128,14 +148,14 @@ namespace KernelAutomata.Gui
                     var tag = WpfUtil.GetTagAsString(slider);
                     if (!string.IsNullOrWhiteSpace(tag))
                     {
-                        slider.Value = ReflectionUtil.GetObjectValue<float>(recipe, tag);
+                        slider.Value = ReflectionUtil.GetObjectValue<float>(app.recipe, tag);
                     }
                 }
             }
             updating = false;
         }
 
-        private void UpdatePassiveControls(SimulationRecipe recipe)
+        private void UpdatePassiveControls()
         {
             foreach (var text in WpfUtil.FindVisualChildren<TextBlock>(this))
                 if (!WpfUtil.CheckIfPathContains<KernelConfigurator>(text))
@@ -150,7 +170,7 @@ namespace KernelAutomata.Gui
                     var tagSplit = tag.Split('.');
                     if (tagSplit.Length == 2)
                     {
-                        var channel = ReflectionUtil.GetObjectValue<ChannelRecipe>(recipe, tag);
+                        var channel = ReflectionUtil.GetObjectValue<ChannelRecipe>(app.recipe, tag);
                         if (channel != null)
                             graph.Draw(200, 0, 1, x => channel.GrowthFunction(x));
                         else
@@ -214,10 +234,23 @@ namespace KernelAutomata.Gui
 
         private void UpdateSimulationWithRecipe()
         {
-            app.simulation.UpdateSimulationWithRecipe(app.recipe);
+            app.UpdateSimulationWithRecipe();
+            UpdateAllControls();
+        }
+
+        public void UpdateAllControls()
+        {
             if (autoRestart.IsChecked == true)
                 app.simulation.ResetFields();
-            UpdatePassiveControls(app.recipe);
+
+            UpdatePassiveControls();
+            UpdateActiveControls();
+
+            foreach (var kernelConfig in WpfUtil.FindVisualChildren<KernelConfigurator>(this))
+            {
+                kernelConfig.UpdateActiveControls();
+                kernelConfig.UpdatePassiveControls();
+            }
         }
 
         private void StartingConditions_Click(object sender, RoutedEventArgs e)
@@ -312,11 +345,6 @@ namespace KernelAutomata.Gui
 
             //update all
             UpdateSimulationWithRecipe();
-            foreach (var kernelConfig in WpfUtil.FindVisualChildren<KernelConfigurator>(this))
-            {
-                kernelConfig.UpdateActiveControls();
-                kernelConfig.UpdatePassiveControls();
-            }
         }
     }
 }

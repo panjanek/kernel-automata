@@ -37,15 +37,6 @@ namespace KernelAutomata
 
         private void parent_Loaded(object sender, RoutedEventArgs e)
         {
-            //var recipe = RecipeFactory.TwoChannelsOrbs();
-            //var recipe = RecipeFactory.OneChannelOrbs();
-            //var recipe = RecipeFactory.TwoChannelsCaterpillar();
-
-            //RecipeFactory.SaveToFile(recipe, "c://tmp//orbs-ch2.json");
-
-            //var recipe = RecipeFactory.LoadFromResource("caterpillar1-ch2.json");
-
-
             app = new Models.AppContext()
             {
                 mainWindow = this,
@@ -104,6 +95,22 @@ namespace KernelAutomata
                 case Key.Space:
                     app.renderer.Paused = !app.renderer.Paused;
                     break;
+            }
+
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                if (e.Key == Key.Z)
+                {
+                    app.Undo();
+                    app.configWindow.UpdateAllControls();
+                    e.Handled = true;
+                }
+                else if (e.Key == Key.Y)
+                {
+                    app.Redo();
+                    app.configWindow.UpdateAllControls();
+                    e.Handled = true;
+                }
             }
         }
 
