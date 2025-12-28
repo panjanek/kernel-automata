@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="0.5*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
@@ -22,27 +22,27 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="weight" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="weight ⓘ" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White" ToolTip="Weight of this ring (how much it contributes to the entire kernel)"/>
         <Slider Grid.Row="1" Grid.Column="1" Minimum="-2" Maximum="2" SmallChange="0.001" LargeChange="0.01" ValueChanged="Slider_ValueChanged" Tag="weight" VerticalAlignment="Center" Margin="0,5,0,0"/>
         <TextBlock Grid.Row="1" Grid.Column="2" Tag="weight"  FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="center" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="center ⓘ" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White" ToolTip="Distance of the center, in pixels, where the ring has its maximum value"/>
         <Slider Grid.Row="2" Grid.Column="1" Minimum="0.001" Maximum="128" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="center" VerticalAlignment="Center" Margin="0,5,0,0"/>
         <TextBlock Grid.Row="2" Grid.Column="2" Tag="center"  FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="width" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="width ⓘ" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White" ToolTip="Width of the ring as a standard deviation of bell curve"/>
         <Slider Grid.Row="3" Grid.Column="1" Minimum="1" Maximum="100" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="width" VerticalAlignment="Center" Margin="0,5,0,0"/>
         <TextBlock Grid.Row="3" Grid.Column="2" Tag="width"   FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="maxR" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="maxR ⓘ" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White" ToolTip="Maximal distance from the center for this ring to be calculated. It makes sense to set this value to around 2x center"/>
         <Slider Grid.Row="4" Grid.Column="1" Minimum="16" Maximum="128" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="maxR" VerticalAlignment="Center" Margin="0,5,0,0"/>
         <TextBlock Grid.Row="4" Grid.Column="2" Tag="maxR"  FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="inner slope" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="inner slope ⓘ" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White" ToolTip="Slope of the inner edge of this ring. For 1.0 bell curve is not modified, for different values it is raised to the power value of this parameter"/>
         <Slider Grid.Row="5" Grid.Column="1" Minimum="0.1" Maximum="30" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="innerSlope" VerticalAlignment="Center" Margin="0,5,0,0"/>
         <TextBlock Grid.Row="5" Grid.Column="2" Tag="innerSlope"  FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
-        <TextBlock Grid.Row="6" Grid.Column="0" Text="outer slope" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="outer slope ⓘ" VerticalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap" Foreground="White"  ToolTip="Slope of the outer edge of this ring. For 1.0 bell curve is not modified, for different values it is raised to the power value of this parameter"/>
         <Slider Grid.Row="6" Grid.Column="1" Minimum="0.1" Maximum="30" SmallChange="0.1" LargeChange="1" ValueChanged="Slider_ValueChanged" Tag="outerSlope" VerticalAlignment="Center" Margin="0,5,0,0"/>
         <TextBlock Grid.Row="6" Grid.Column="2" Tag="outerSlope"  FontFamily="Courier New" Margin="0,5,5,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
     </Grid>

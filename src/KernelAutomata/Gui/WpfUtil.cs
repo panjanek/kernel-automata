@@ -11,6 +11,7 @@ using System.Windows.Media;
 using KernelAutomata.Utils;
 using OpenTK.Graphics.OpenGL;
 using Binding = System.Windows.Data.Binding;
+using Brushes = System.Windows.Media.Brushes;
 using ComboBox = System.Windows.Controls.ComboBox;
 using ToolTip = System.Windows.Controls.ToolTip;
 
@@ -143,6 +144,8 @@ namespace KernelAutomata.Gui
 
                 var value = ReflectionUtil.GetObjectValue<float>(recipe, tag);
                 text.Text = value.ToString(format, CultureInfo.InvariantCulture);
+                text.Background = Brushes.Black;
+                text.Foreground = Brushes.White;
             }
         }
     }

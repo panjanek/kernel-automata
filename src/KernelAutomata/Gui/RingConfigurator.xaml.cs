@@ -78,20 +78,8 @@ namespace KernelAutomata.Gui
         private void UpdatePassiveControls()
         {
             if (recipe != null)
-            {
                 foreach (var text in WpfUtil.FindVisualChildren<TextBlock>(this))
-                {
                     WpfUtil.UpdateTextBlockForSlider(this, text, recipe);
-                    /*
-                    var tag = WpfUtil.GetTagAsString(text);
-                    if (!string.IsNullOrWhiteSpace(tag))
-                    {
-                        var value = ReflectionUtil.GetObjectValue<float>(recipe, tag);
-                        text.Text = value.ToString("0.000", CultureInfo.InvariantCulture);
-
-                    }*/
-                }
-            }
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
