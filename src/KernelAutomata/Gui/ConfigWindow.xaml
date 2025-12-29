@@ -19,12 +19,28 @@
     <Window.Resources>
         <ContextMenu x:Key="kernelContextMenu">
             <MenuItem Header="Invert" Click="KernelContextMenu_Click"/>
-            <MenuItem Header="Swith horizontal" Click="KernelContextMenu_Click"/>
-            <MenuItem Header="Swith vertical" Click="KernelContextMenu_Click"/>
-            <MenuItem Header="Swith diagonal" Click="KernelContextMenu_Click"/>
-            <MenuItem Header="Overwrite horizontal kernel" Click="KernelContextMenu_Click"/>
-            <MenuItem Header="Overwrite vertical kernel" Click="KernelContextMenu_Click"/>
-            <MenuItem Header="Overwrite diagonal" Click="KernelContextMenu_Click"/>
+            <MenuItem Header="Switch with">
+                <MenuItem Header="← Left" Tag="-1,0" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="→ Right" Tag="1,0" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="↑ Up" Tag="0,-1" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="↓ Down" Tag="0,1" Click="KernelContextMenu_Click"/>
+
+                <MenuItem Header="↖ Diagonal" Tag="-1,-1" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="↗ Diagonal" Tag="1,-1" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="↘ Diagonal" Tag="1,1" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="↙ Diagonal" Tag="-1,1" Click="KernelContextMenu_Click"/>
+            </MenuItem>
+            <MenuItem Header="Overwrite">
+                <MenuItem Header="← Left" Tag="-1,0" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="→ Right" Tag="1,0" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="↑ Up" Tag="0,-1" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="↓ Down" Tag="0,1" Click="KernelContextMenu_Click"/>
+
+                <MenuItem Header="↖ Diagonal" Tag="-1,-1" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="↗ Diagonal" Tag="1,-1" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="↘ Diagonal" Tag="1,1" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="↙ Diagonal" Tag="-1,1" Click="KernelContextMenu_Click"/>
+            </MenuItem>            
         </ContextMenu>
     </Window.Resources>
 
@@ -81,7 +97,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
       
-                <!-- top buttoins -->
+                <!-- top buttons -->
                 <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -198,7 +214,8 @@
                 <TextBlock Grid.Row="3" Grid.Column="2" Tag="dt"  FontFamily="Courier New" Margin="0,5,10,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
                 <!-- channels configuration -->
-                <Grid Margin="10,0,0,0" Name="contentGrid" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
+                <ScrollViewer Name="scroll" MaxHeight="885" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"  CanContentScroll="False">
+                    <Grid Margin="10,0,0,0" Name="contentGrid"> <!--.Row="4" Grid.Column="0" Grid.ColumnSpan="3"> -->
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90"/>
@@ -331,6 +348,7 @@
                     <local:KernelConfigurator Tag="channels.1.kernels.2" PreviewMouseRightButtonDown="KernelConfigurator_ContextMenu" KernelName="Channel 2, 2nd Contrary" Grid.Row="15" Grid.Column="3" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[1].Kernels[2]}" KernelDataCommitted="Configurator_DataChanged"/>
                     <local:KernelConfigurator Tag="channels.2.kernels.2" PreviewMouseRightButtonDown="KernelConfigurator_ContextMenu" KernelName="Channel 3, 2nd Contrary" Grid.Row="15" Grid.Column="5" Grid.ColumnSpan="2" Margin="0,5,0,0" DataContext="{Binding Channels[2].Kernels[2]}" KernelDataCommitted="Configurator_DataChanged"/>
                 </Grid>
+                    </ScrollViewer>
             </Grid>
         </DockPanel>
     </Border>
