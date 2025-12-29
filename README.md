@@ -12,7 +12,7 @@ Inspired by:
 * One, two or three species (1, 4 or 9 convolution kernels)
 * Configurable kernel rings (up to 5)
 * Configurable growth function (one or two bell-curve spikes)
-* <strong>Everything</strong> configurable in UI
+* <strong>Everything</strong> configurable in GUI
 * Save/Load configuration as JSON
 
 ## GUI
