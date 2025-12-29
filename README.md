@@ -15,5 +15,8 @@ Ispired by:
 * Configurable growth function
 
 ## Results
-* Orbs
-* Caterpillar ?
+
+| <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/e174186b1fdfb0dcfb6b381cf197920b19dc2ddc/captures/orb.gif" /><br/>rb</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/e174186b1fdfb0dcfb6b381cf197920b19dc2ddc/captures/double-orb.gif" /><br/>double orb</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/e174186b1fdfb0dcfb6b381cf197920b19dc2ddc/captures/cells.gif" /><br/>mitosis</p> |
+|---|---|---|
+| <p align="center"><img src="https://example.com/image4.png" /><br/>Text 4</p> | <p align="center"><img src="https://example.com/image5.png" /><br/>Text 5</p> | <p align="center"><img src="https://example.com/image6.png" /><br/>Text 6</p> |
+| <p align="center"><img src="https://example.com/image7.png" /><br/>Text 7</p> | <p align="center"><img src="https://example.com/image8.png" /><br/>Text 8</p> | <p align="center"><img src="https://example.com/image9.png" /><br/>Text 9</p> |
