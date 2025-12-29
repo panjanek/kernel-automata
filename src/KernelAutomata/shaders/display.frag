@@ -29,8 +29,8 @@ void main()
     float f2 = texture(uStateGreen, pos).r;
     float f3 = texture(uStateBlue, pos).r;
     
-    float r = amplify((f1+f3)/2, 2);
-    float g = amplify((f2+f3)/2, 2);
+    float r = amplify((f1+f3)/2, 3);
+    float g = amplify((f2+f3)/2, 3);
     float b = amplify((f1+f2)/2, 3);
     
     fragColor = vec4(r, g, b ,1);

@@ -157,6 +157,11 @@
                                 <TextBlock  Foreground="Black" FontSize="10" Text="draw" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </ComboBoxItem>
+                        <ComboBoxItem>
+                            <Border Width="35" Height="16" Background="Yellow" HorizontalAlignment="Center">
+                                <TextBlock  Foreground="Black" FontSize="10" Text="draw" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ComboBoxItem>
                     </ComboBox>
                     <ToggleButton Name="recordButton" Grid.Column="5" ToolTip="Record frames as PNG files to given folder" Click="Record_Click">
                         <ToggleButton.Style>
@@ -310,9 +315,9 @@
                     <TextBlock Grid.Row="10" Grid.Column="0" Text="2nd growth weight ⓘ" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="White" TextWrapping="Wrap" ToolTip="Optional weight of for second Gaussian bell curve added to growth function. If 1.0 - both curves contribute equally"/>
                     <Slider Grid.Row="10" Grid.Column="1" Minimum="0" Maximum="1.0" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.0.weight2" Margin="0,5,0,0"/>
                     <TextBlock Grid.Row="10" Grid.Column="2" Tag="channels.0.weight2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
-                    <Slider Grid.Row="10" Grid.Column="3" Minimum="0" Maximum="0.2" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.1.weight2" Margin="5,5,0,0"/>
+                    <Slider Grid.Row="10" Grid.Column="3" Minimum="0" Maximum="1.0" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.1.weight2" Margin="5,5,0,0"/>
                     <TextBlock Grid.Row="10" Grid.Column="4" Tag="channels.1.weight2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
-                    <Slider Grid.Row="10" Grid.Column="5" Minimum="0" Maximum="0.2" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.2.weight2" Margin="5,5,0,0"/>
+                    <Slider Grid.Row="10" Grid.Column="5" Minimum="0" Maximum="1.0" SmallChange="0.001" LargeChange="0.1" ValueChanged="Slider_ValueChanged" Tag="channels.2.weight2" Margin="5,5,0,0"/>
                     <TextBlock Grid.Row="10" Grid.Column="6" Tag="channels.2.weight2"  FontFamily="Courier New" Margin="0,5,0,0" VerticalAlignment="Center" FontSize="11" MouseDown="infoText_MouseDown" Foreground="White" Background="DarkGray" TextAlignment="Center" Padding="1"/>
 
                     <!-- growth visualisation -->

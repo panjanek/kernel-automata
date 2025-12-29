@@ -67,9 +67,9 @@ namespace KernelAutomata.Gui
             foreach (var text in WpfUtil.FindVisualChildren<TextBlock>(this))
                     WpfUtil.UpdateTextBlockForSlider(this, text, recipe);
             recipe.initialization.FillInitBufferWithRandomData(ImageSize, initBuffer);
-            int r = channelIndex == 0 ? 1 : 0;
-            int g = channelIndex == 1 ? 1 : 0;
-            int b = 1;
+            int r = (channelIndex == 0 || channelIndex == 2) ? 1 : 0;
+            int g = (channelIndex == 1 || channelIndex == 2) ? 1 : 0;
+            int b = (channelIndex == 0 || channelIndex == 1) ? 1 : 0;
             for (int i=0; i<initBuffer.Length/4; i++)
             {
 

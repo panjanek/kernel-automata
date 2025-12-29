@@ -1,0 +1,468 @@
+{
+  "size": 512,
+  "dt": 0.0654026,
+  "channels": [
+    {
+      "mu": 0.072605535,
+      "sigma": 0.020656861,
+      "mu2": 0,
+      "sigma2": 0,
+      "weight2": 0,
+      "decay": 0,
+      "kernels": [
+        {
+          "rings": [
+            {
+              "maxR": 45.27235,
+              "center": 11.983306,
+              "width": 8.7921,
+              "weight": 0.84823287,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 64,
+              "center": 23.176628,
+              "width": 18.6842,
+              "weight": -0.92723495,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 16,
+              "center": 0.001,
+              "width": 1,
+              "weight": -0.00015800416,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "rings": [
+            {
+              "maxR": 32,
+              "center": 6,
+              "width": 3,
+              "weight": 0.72557175,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 32,
+              "center": 20,
+              "width": 5,
+              "weight": -0.5997921,
+              "innerSlope": 2.3054054,
+              "outerSlope": 2.4918919
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 0.5
+        },
+        {
+          "rings": [
+            {
+              "maxR": 32,
+              "center": 6.201669,
+              "width": 2,
+              "weight": -0.94948024,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 35.55925,
+              "center": 14.37095,
+              "width": 5.322245,
+              "weight": -0.3243243,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 0.6766667
+        }
+      ],
+      "initialization": {
+        "centerX": 0.3,
+        "centerY": 0.3,
+        "density": 0.5,
+        "noiseRadius": 0.5,
+        "blobRadius": 0.05,
+        "mu": 0,
+        "sigma": 0
+      }
+    },
+    {
+      "mu": 0.11576915,
+      "sigma": 0.01578462,
+      "mu2": 0,
+      "sigma2": 0.0086538475,
+      "weight2": 0,
+      "decay": 0,
+      "kernels": [
+        {
+          "rings": [
+            {
+              "maxR": 62.037422,
+              "center": 53.496494,
+              "width": 7.557173,
+              "weight": -0.049896047,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 64,
+              "center": 12,
+              "width": 3.2476091,
+              "weight": -0.051975053,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 64,
+              "center": 36,
+              "width": 12.322246,
+              "weight": 0.35,
+              "innerSlope": 3.4243243,
+              "outerSlope": 3.2378378
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "rings": [
+            {
+              "maxR": 32,
+              "center": 4,
+              "width": 7.557173,
+              "weight": 0.52557176,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 64,
+              "center": 12,
+              "width": 3.2476091,
+              "weight": 0.051975053,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 64,
+              "center": 36,
+              "width": 6.147609,
+              "weight": -0.32505193,
+              "innerSlope": 2.118919,
+              "outerSlope": 2.3054054
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "rings": [
+            {
+              "maxR": 32,
+              "center": 6.2016687,
+              "width": 5.087318,
+              "weight": -0.12681912,
+              "innerSlope": 2.118919,
+              "outerSlope": 3.0513513
+            },
+            {
+              "maxR": 35.55925,
+              "center": 23.94257,
+              "width": 7.1746364,
+              "weight": 1.2972972,
+              "innerSlope": 2.6783783,
+              "outerSlope": 3.0513513
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 0.6766667
+        }
+      ],
+      "initialization": {
+        "centerX": 0.6,
+        "centerY": 0.5,
+        "density": 0.5,
+        "noiseRadius": 0.7,
+        "blobRadius": 0.1,
+        "mu": 0,
+        "sigma": 0
+      }
+    },
+    {
+      "mu": 0.026846156,
+      "sigma": 0.012630765,
+      "mu2": 0,
+      "sigma2": 0,
+      "weight2": 0,
+      "decay": 0,
+      "kernels": [
+        {
+          "rings": [
+            {
+              "maxR": 32,
+              "center": 3.810017,
+              "width": 4,
+              "weight": -0.45114344,
+              "innerSlope": 4.3567567,
+              "outerSlope": 4.5432434
+            },
+            {
+              "maxR": 32,
+              "center": 24,
+              "width": 7,
+              "weight": 1.1832849,
+              "innerSlope": 3.6108108,
+              "outerSlope": 3.4243243
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "rings": [
+            {
+              "maxR": 39.68399,
+              "center": 21.563272,
+              "width": 3.469854,
+              "weight": 1.2972972,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 64,
+              "center": 5.6133556,
+              "width": 3.2476091,
+              "weight": -0.8253638,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 64,
+              "center": 36,
+              "width": 8,
+              "weight": 0.35,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "rings": [
+            {
+              "maxR": 32,
+              "center": 4.605008,
+              "width": 2,
+              "weight": -0.089819126,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 35.55925,
+              "center": 14.37095,
+              "width": 5.322245,
+              "weight": 0.3243243,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 0.6766667
+        }
+      ],
+      "initialization": {
+        "centerX": 0.4,
+        "centerY": 0.4,
+        "density": 0.5,
+        "noiseRadius": 1.2,
+        "blobRadius": 0.2,
+        "mu": 0,
+        "sigma": 0
+      }
+    }
+  ]
+}
