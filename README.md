@@ -9,11 +9,11 @@ Inspired by:
 
 ## Features
 * Convolutions and growth implemented with GPU compute shaders. Optimized algorithm using FFT (Cooley)
-* One or two species
+* One, two or three species (1, 4 or 9 convolution kernels)
 * Configurable kernel rings (up to 5)
 * Configurable growth function (one or two bell-curve spikes)
 * <strong>Everything</strong> configurable in UI
-* Save/Load configurations from JSON
+* Save/Load configuration as JSON
 
 ## GUI
 
