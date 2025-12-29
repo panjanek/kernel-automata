@@ -1,18 +1,19 @@
 # Kernel Automata
-Exploring convolution automata artificial live with GPU shaders.
-Extending Conway's "Game of Life" to continous domain.
-Ispired by:
+Exploring artificial life emerging from <a href="https://medium.com/@davidstanojevic43/smoothlife-a-simple-mathematical-overview-478876a6d1ab" target="_blank">continous cellular automata</a>, extension of <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank">Conway's "Game of Life</a>. <br/>
+
+Inspired by:
 * https://www.youtube.com/watch?v=6kiBYjvyojQ
 * https://www.youtube.com/watch?v=8wDSQxmAyTw
 * https://github.com/Chakazul/Lenia
 * https://github.com/duckythescientist/SmoothLife
 
 ## Features
-* High performance OpenGL compute shaders
-* computing convolutions with FFT (Cooley) method
+* Convolutions and growth implemented with GPU compute shaders. Optimized algorithm using FFT (Cooley)
 * One or two species
-* Configurable kernel rings
-* Configurable growth function
+* Configurable kernel rings (up to 5)
+* Configurable growth function (one or two bell-curve spikes)
+* Everything configurable in UI
+* Save/Load configurations from JSON
 
 ## GUI
 
