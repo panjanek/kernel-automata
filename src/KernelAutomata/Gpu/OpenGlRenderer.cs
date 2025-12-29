@@ -191,8 +191,9 @@ namespace KernelAutomata.Gpu
                 GL.Clear(ClearBufferMask.ColorBufferBit);
 
                 var channel1Tex = simulation.channels[0].gpu.FieldTex;
-                var channel2Tex = simulation.channels.Length == 2 ? simulation.channels[1].gpu.FieldTex : emptyTex;
-                simulation.gpuContext.displayProgram.Run(channel1Tex, channel2Tex, center, zoom, aspectRatio);
+                var channel2Tex = simulation.channels.Length >= 2 ? simulation.channels[1].gpu.FieldTex : emptyTex;
+                var channel3Tex = simulation.channels.Length == 3 ? simulation.channels[2].gpu.FieldTex : emptyTex;
+                simulation.gpuContext.displayProgram.Run(channel1Tex, channel2Tex, channel3Tex, center, zoom, aspectRatio);
                 simulation.gpuContext.glControl.SwapBuffers();
                 frameCounter++;
             }

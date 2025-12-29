@@ -52,7 +52,7 @@ namespace KernelAutomata.Gpu
             if (aspectLocation == -1) throw new Exception("Uniform 'uAspect' not found. Shader optimized it out?");
         }
 
-        public void Run(int textureRed, int textureGreen, Vector2 center, float zoom, float aspect)
+        public void Run(int textureRed, int textureGreen, int textureBlue, Vector2 center, float zoom, float aspect)
         {
             GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.Blend);
@@ -68,6 +68,14 @@ namespace KernelAutomata.Gpu
             {
                 GL.ActiveTexture(TextureUnit.Texture1);
                 GL.BindTexture(TextureTarget.Texture2D, textureGreen);
+                GL.Uniform1(stateGreenLocation, 1);
+            }
+
+            //third channel "blue"
+            if (textureBlue != -1)
+            {
+                GL.ActiveTexture(TextureUnit.Texture2);
+                GL.BindTexture(TextureTarget.Texture2D, textureBlue);
                 GL.Uniform1(stateGreenLocation, 1);
             }
 

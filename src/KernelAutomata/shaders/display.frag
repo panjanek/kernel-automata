@@ -3,6 +3,7 @@
 in vec2 uv;
 uniform sampler2D uStateRed;
 uniform sampler2D uStateGreen;
+uniform sampler2D uStateBlue;
 uniform vec2 uZoomCenter;       // [0,1] texture space
 uniform float uZoom;            // >1.0 = zoom in
 uniform float uAspect;
@@ -23,9 +24,10 @@ void main()
 
     float f1 = texture(uStateRed, pos).r;
     float f2 = texture(uStateGreen, pos).r;
+    float f3 = texture(uStateBlue, pos).r;
     
-    float r = amplify(f1, 2);
-    float g = amplify(f2, 2);
+    float r = amplify((f1+f3)/2, 2);
+    float g = amplify((f2+f3)/2, 2);
     float b = amplify((f1+f2)/2, 3);
     
     fragColor = vec4(r, g, b ,1);
