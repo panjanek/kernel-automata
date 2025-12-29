@@ -203,6 +203,7 @@ namespace KernelAutomata.Gpu
         private void Capture()
         {
             //combine PNGs into video: ffmpeg -f image2 -framerate 60 -i rec1/frame_%05d.png -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -r 60 -vcodec libx264 -pix_fmt yuv420p out.mp4 -y
+            //ffmpeg -framerate 60 -i rec1/frame_%05d.png out.gif
             var recDir = app.configWindow.recordDir?.ToString();
             if (!recFrameNr.HasValue && !string.IsNullOrWhiteSpace(recDir))
             {

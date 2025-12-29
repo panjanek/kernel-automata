@@ -96,8 +96,9 @@ namespace KernelAutomata
         {
             switch (e.Key)
             {
-                case Key.Space:
+                case Key.Space: case Key.P:
                     app.renderer.Paused = !app.renderer.Paused;
+                    e.Handled = true;
                     break;
             }
 

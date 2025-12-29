@@ -75,6 +75,17 @@ namespace KernelAutomata.Gui
                     e.Handled = true;
                 }
             }
+            else
+            {
+                switch (e.Key)
+                {
+                    case Key.Space:
+                    case Key.P:
+                        app.renderer.Paused = !app.renderer.Paused;
+                        e.Handled = true;
+                    break;
+                }
+            }
         }
 
         private void global_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -366,6 +377,8 @@ namespace KernelAutomata.Gui
             {
                 recordDir = null;
             }
+
+            e.Handled = true;
         }
     }
 }
