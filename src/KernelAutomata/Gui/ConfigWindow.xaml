@@ -179,6 +179,7 @@
                     <ComboBoxItem>256x256</ComboBoxItem>
                     <ComboBoxItem>512x512</ComboBoxItem>
                     <ComboBoxItem IsSelected="True">1024x1024</ComboBoxItem>
+                    <ComboBoxItem>2048x2048</ComboBoxItem>
                     <ComboBoxItem>4096x4096</ComboBoxItem>
                     <ComboBoxItem>8192x8192</ComboBoxItem>
                 </ComboBox>
