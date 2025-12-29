@@ -17,7 +17,7 @@ Inspired by:
 
 ## GUI
 
-| <p align="center"><img height="1019" height="1019" src="https://github.com/panjanek/kernel-automata/blob/22ac1c684802494763a9403ab90b93c88014ab0f/captures/fullsize.png" /><br/>field</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/22ac1c684802494763a9403ab90b93c88014ab0f/captures/screen.png"/><br/>controls</p> |
+| <p align="center"><img height="1019" height="1019" src="https://github.com/panjanek/kernel-automata/blob/22ac1c684802494763a9403ab90b93c88014ab0f/captures/fullsize.png" /><br/>field</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/22ac1c684802494763a9403ab90b93c88014ab0f/captures/screen.png" height="904"/><br/>controls</p> |
 |---|---|
 
 ## Observed patterns
