@@ -47,7 +47,7 @@ namespace KernelAutomata
                 placeholder = this.placeholder
             };
 
-            var initRecipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
+            var initRecipe = RecipeFactory.LoadFromResource("2channels.json");
             app.StartNewSimulation(initRecipe);
 
             app.configWindow = new ConfigWindow(app);

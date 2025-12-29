@@ -102,9 +102,10 @@ namespace KernelAutomata.Gui
                     if (recipe.channels.Length != newChannelsCount)
                     {
                         if (newChannelsCount == 1)
-                            recipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
+                            recipe = RecipeFactory.LoadFromResource("1channel.json");
                         else
-                            recipe = RecipeFactory.LoadFromResource("caterpillar1-ch2.json");
+                            recipe = RecipeFactory.LoadFromResource("2channels.json");
+                        newSize = recipe.size;
                     }
 
                     WpfUtil.FindVisualChildren<KernelConfigurator>(this).ToList().ForEach(k => k.CloseRingsWindow());
