@@ -19,6 +19,8 @@ namespace KernelAutomata.Gpu
 
         private int stateGreenLocation;
 
+        private int stateBlueLocation;
+
         private int offsetLocation;
 
         private int sizeLocation;
@@ -40,6 +42,9 @@ namespace KernelAutomata.Gpu
             if (stateRedLocation == -1) throw new Exception("Uniform 'uStateGreen' not found. Shader optimized it out?");
             stateGreenLocation = GL.GetUniformLocation(program, "uStateGreen");
             if (stateGreenLocation == -1) throw new Exception("Uniform 'uStateGreen' not found. Shader optimized it out?");
+            stateBlueLocation = GL.GetUniformLocation(program, "uStateBlue");
+            if (stateBlueLocation == -1) throw new Exception("Uniform 'uStateBlue' not found. Shader optimized it out?");
+
             offsetLocation = GL.GetUniformLocation(program, "offset");
             if (offsetLocation == -1) throw new Exception("Uniform 'offset' not found. Shader optimized it out?");
             sizeLocation = GL.GetUniformLocation(program, "size");
@@ -76,7 +81,7 @@ namespace KernelAutomata.Gpu
             {
                 GL.ActiveTexture(TextureUnit.Texture2);
                 GL.BindTexture(TextureTarget.Texture2D, textureBlue);
-                GL.Uniform1(stateGreenLocation, 1);
+                GL.Uniform1(stateBlueLocation, 2);
             }
 
             GL.Uniform1(zoomLocation, zoom);

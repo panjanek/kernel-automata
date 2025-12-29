@@ -1,12 +1,15 @@
 ﻿#version 330 core
 
 in vec2 uv;
+
 uniform sampler2D uStateRed;
 uniform sampler2D uStateGreen;
 uniform sampler2D uStateBlue;
+
 uniform vec2 uZoomCenter;       // [0,1] texture space
 uniform float uZoom;            // >1.0 = zoom in
 uniform float uAspect;
+
 out vec4 fragColor;
 
 float amplify(float x, int pow)

@@ -23,7 +23,7 @@ namespace KernelAutomata.Models
 
         public Simulation(SimulationRecipe recipe, GpuContext gpu)
         {
-            if (recipe.channels.Length == 0 || recipe.channels.Length > 2)
+            if (recipe.channels.Length == 0 || recipe.channels.Length > 3)
                 throw new Exception($"Invalid channels count {recipe.channels.Length}");
 
             if (!GpuContext.ValidSizes.Contains(recipe.size))

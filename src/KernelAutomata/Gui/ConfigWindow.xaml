@@ -177,8 +177,8 @@
                 <ComboBox Name="fieldSize" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="global_SelectionChanged" Margin="0,5,10,0">
                     <ComboBoxItem>128x128</ComboBoxItem>
                     <ComboBoxItem>256x256</ComboBoxItem>
-                    <ComboBoxItem>512x512</ComboBoxItem>
-                    <ComboBoxItem IsSelected="True">1024x1024</ComboBoxItem>
+                    <ComboBoxItem IsSelected="True">512x512</ComboBoxItem>
+                    <ComboBoxItem>1024x1024</ComboBoxItem>
                     <ComboBoxItem>2048x2048</ComboBoxItem>
                     <ComboBoxItem>4096x4096</ComboBoxItem>
                     <ComboBoxItem>8192x8192</ComboBoxItem>
@@ -187,8 +187,9 @@
                 <!-- Number of channels -->
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Channels ⓘ" Grid.ColumnSpan="1" VerticalAlignment="Center" Margin="10,5,5,0" Foreground="White" TextWrapping="Wrap" ToolTip="Number of channels (colors)"/>
                 <ComboBox Name="channelsCount" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" SelectionChanged="global_SelectionChanged" Margin="0,5,10,0">
-                    <ComboBoxItem IsSelected="True">1</ComboBoxItem>
-                    <ComboBoxItem>2</ComboBoxItem>
+                    <ComboBoxItem>1</ComboBoxItem>
+                    <ComboBoxItem IsSelected="True">2</ComboBoxItem>
+                    <ComboBoxItem>3</ComboBoxItem>
                 </ComboBox>
 
                 <!-- DT -->

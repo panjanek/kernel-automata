@@ -103,8 +103,10 @@ namespace KernelAutomata.Gui
                     {
                         if (newChannelsCount == 1)
                             recipe = RecipeFactory.LoadFromResource("1channel.json");
-                        else
+                        else if (newChannelsCount == 2)
                             recipe = RecipeFactory.LoadFromResource("2channels.json");
+                        else if (newChannelsCount == 3)
+                            recipe = RecipeFactory.LoadFromResource("3channels.json");
                         newSize = recipe.size;
                     }
 
