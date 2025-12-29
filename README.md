@@ -14,6 +14,11 @@ Ispired by:
 * Configurable kernel rings
 * Configurable growth function
 
+## GUI
+
+| <p align="center"><img height="1019" height="1019" src="https://github.com/panjanek/kernel-automata/blob/22ac1c684802494763a9403ab90b93c88014ab0f/captures/fullsize.png" /><br/>field</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/22ac1c684802494763a9403ab90b93c88014ab0f/captures/screen.png"/><br/>controls</p> |
+|---|---|
+
 ## Observed patterns
 
 | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/e174186b1fdfb0dcfb6b381cf197920b19dc2ddc/captures/orb.gif" /><br/>orbs</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/e174186b1fdfb0dcfb6b381cf197920b19dc2ddc/captures/double-orb.gif" /><br/>double orb</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/e174186b1fdfb0dcfb6b381cf197920b19dc2ddc/captures/cells.gif" /><br/>mitosis</p> |
