@@ -44,6 +44,7 @@ namespace KernelAutomata.Gui
             customTitleBar.MouseLeftButtonDown += (s, e) => { if (e.ButtonState == MouseButtonState.Pressed) DragMove(); };
             ContentRendered += (s, e) => { UpdateActiveControls(); UpdatePassiveControls(); };
             closeButton.Click += (s, e) => Close();
+            Loaded += (s, e) => { WpfUtil.AddShortcutsToAllSliders(this, (s, e) => Slider_ValueChanged(s, e)); };
         }
 
         private void UpdateActiveControls()

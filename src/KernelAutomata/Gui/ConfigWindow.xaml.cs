@@ -54,7 +54,7 @@ namespace KernelAutomata.Gui
             minimizeButton.Click += (s,e) => WindowState = WindowState.Minimized;
             Closing += (s, e) => { e.Cancel = true; WindowState = WindowState.Minimized; };
             ContentRendered += (s, e) => { UpdateActiveControls(); UpdatePassiveControls(); };
-            Loaded += (s, e) => { };
+            Loaded += (s, e) => { WpfUtil.AddShortcutsToAllSlidersExluding<KernelConfigurator>(this, (s,e)=>Slider_ValueChanged(s,e)); };
             KeyDown += ConfigWindow_KeyDown;
         }
 
@@ -162,7 +162,6 @@ namespace KernelAutomata.Gui
             {
                 if (!WpfUtil.CheckIfPathContains<KernelConfigurator>(slider))
                 {
-                    WpfUtil.AddTooltipToSlider(slider);
                     var tag = WpfUtil.GetTagAsString(slider);
                     if (!string.IsNullOrWhiteSpace(tag))
                     {

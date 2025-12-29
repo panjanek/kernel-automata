@@ -58,6 +58,7 @@ namespace KernelAutomata.Gui
 
             Loaded += (s, e) =>
             {
+                WpfUtil.AddShortcutsToAllSliders(this, (s, e) => Slider_ValueChanged(s, e));
                 UpdatePassiveControls();
             };
         }
@@ -69,7 +70,6 @@ namespace KernelAutomata.Gui
                 updating = true;
                 foreach (var slider in WpfUtil.FindVisualChildren<Slider>(this))
                 {
-                    WpfUtil.AddTooltipToSlider(slider);
                     var tag = WpfUtil.GetTagAsString(slider);
                     if (!string.IsNullOrWhiteSpace(tag))
                     {

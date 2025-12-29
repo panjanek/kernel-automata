@@ -19,6 +19,37 @@ namespace KernelAutomata.Gui
 {
     public static class WpfUtil
     {
+        public static void AddShortcutsToAllSliders(FrameworkElement parent, Action<object, RoutedPropertyChangedEventArgs<double>> changed)
+        {
+            foreach (var slider in WpfUtil.FindVisualChildren<Slider>(parent))
+                AddShortcutsToSlider(slider, changed);
+        }
+
+        public static void AddShortcutsToAllSlidersExluding<TExclude>(FrameworkElement parent, Action<object, RoutedPropertyChangedEventArgs<double>> changed)
+        {
+            foreach (var slider in WpfUtil.FindVisualChildren<Slider>(parent))
+                if (!WpfUtil.CheckIfPathContains<TExclude>(slider))
+                    AddShortcutsToSlider(slider, changed);
+        }
+
+        public static void AddShortcutsToSlider(Slider slider, Action<object, RoutedPropertyChangedEventArgs<double>> changed)
+        {
+            slider.KeyDown += (s, e) =>
+            {
+                if (e.Key == System.Windows.Input.Key.D0)
+                {
+                    var oldValue = slider.Value;
+                    if (slider.Minimum <= 0 && slider.Maximum >= 0)
+                        slider.Value = 0;
+                    else
+                        slider.Value = slider.Minimum;
+
+                    var ev = new RoutedPropertyChangedEventArgs<double>(oldValue, slider.Value);
+                    changed(s, ev);
+                }
+            };
+        }
+
         public static string GetComboSelectionAsString(ComboBox combo)
         {
             if (combo.SelectedItem is ComboBoxItem)

@@ -204,7 +204,7 @@ namespace KernelAutomata.Gpu
         private void Capture()
         {
             //combine PNGs into video: ffmpeg -f image2 -framerate 60 -i rec1/frame_%05d.png -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -r 60 -vcodec libx264 -pix_fmt yuv420p out.mp4 -y
-            //ffmpeg -framerate 60 -i rec1/frame_%05d.png out.gif
+            //ffmpeg -framerate 60 -ss2 -i rec1/frame_%05d.png -vf "select='not(mod(n,2))',setpts=N/FRAME_RATE/TB" -t 5 3ch-tissue.gif
             var recDir = app.configWindow.recordDir?.ToString();
             if (!recFrameNr.HasValue && !string.IsNullOrWhiteSpace(recDir))
             {

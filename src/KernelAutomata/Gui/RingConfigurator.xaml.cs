@@ -46,7 +46,7 @@ namespace KernelAutomata.Gui
         public RingConfigurator()
         {
             InitializeComponent();
-            Loaded += (s, e) => { UpdateActiveControls(); UpdatePassiveControls(); };
+            Loaded += (s, e) => { UpdateActiveControls(); UpdatePassiveControls(); WpfUtil.AddShortcutsToAllSliders(this, (s, e) => Slider_ValueChanged(s, e)); };
             DataContextChanged += (s, e) =>
             {
                 if (DataContext is RingRecipe)
@@ -65,7 +65,6 @@ namespace KernelAutomata.Gui
                 updating = true;
                 foreach (var slider in WpfUtil.FindVisualChildren<Slider>(this))
                 {
-                    WpfUtil.AddTooltipToSlider(slider);
                     var tag = WpfUtil.GetTagAsString(slider);
                     if (!string.IsNullOrWhiteSpace(tag))
                     {

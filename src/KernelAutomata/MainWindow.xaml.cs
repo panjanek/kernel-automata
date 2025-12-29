@@ -40,23 +40,6 @@ namespace KernelAutomata
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
         }
 
-        private void Create3(string src2)
-        {
-            var tmp = RecipeFactory.LoadFromFile(src2);
-            var c = tmp.channels[0].Clone();
-            var nc = tmp.channels.ToList();
-            nc.Add(c);
-            tmp.channels = nc.ToArray();
-            foreach (var channel in tmp.channels)
-            {
-                var nk = channel.kernels.ToList();
-                nk.Add(channel.kernels[1].Clone());
-                channel.kernels = nk.ToArray();
-            }
-
-            RecipeFactory.SaveToFile(tmp, src2.Replace(".json", "-test3ch.json"));
-        }
-
         private void parent_Loaded(object sender, RoutedEventArgs e)
         {
             app = new Models.AppContext()
@@ -66,9 +49,12 @@ namespace KernelAutomata
             };
 
             var initRecipe = RecipeFactory.LoadFromResource("2channels.json");
+
+            //var initRecipe = RecipeFactory.ExpandTo(RecipeFactory.LoadFromResource("2channels.json"), 3);
+            initRecipe.size = 512;
+
             app.StartNewSimulation(initRecipe);
 
-            //Create3(@"C:\Projects\git-panjanek\kernel-automata\patterns\hoppers2.json");
 
             app.configWindow = new ConfigWindow(app);
             app.configWindow.Show();
