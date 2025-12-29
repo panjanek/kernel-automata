@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
+using KernelAutomata.Utils;
 using OpenTK.Graphics.OpenGL;
+using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 
-namespace KernelAutomata.Utils
+namespace KernelAutomata.Gpu
 {
     public static class TextureUtil
     {
@@ -100,15 +104,36 @@ namespace KernelAutomata.Utils
         {
             float[] data = new float[width * height * 4];
             GL.BindTexture(TextureTarget.Texture2D, tex);
-            GL.GetTexImage(TextureTarget.Texture2D, level: 0,PixelFormat.Rgba, PixelType.Float, data);
+            GL.GetTexImage(TextureTarget.Texture2D, level: 0, PixelFormat.Rgba, PixelType.Float, data);
             GL.BindTexture(TextureTarget.Texture2D, 0);
 
             //normalize for inspection
-            for (int i = 0; i < data.Length; i++) data[i] = data[i] / (width * height);
-            var min = data.Min();
-            var max = data.Max();
-            MathUtil.MeanStd(data, out var mean, out var std); //0.0236145761   0.102233931
+            //for (int i = 0; i < data.Length; i++) data[i] = data[i] / (width * height);
+            //var min = data.Min();
+            //var max = data.Max();
+            //MathUtil.MeanStd(data, out var mean, out var std); //0.0236145761   0.102233931
             return data;
+        }
+
+        public static void SaveBufferToFile(byte[] pixels, int width, int height, string fileName)
+        {
+            for (int i = 0; i < pixels.Length; i += 4)
+            {
+                pixels[i + 3] = 255;   // force A = 255 for BGRA
+            }
+
+            using (Bitmap bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            {
+                var data = bmp.LockBits(
+                    new Rectangle(0, 0, width, height),
+                    ImageLockMode.WriteOnly,
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb
+                );
+
+                System.Runtime.InteropServices.Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
+                bmp.UnlockBits(data);
+                bmp.Save(fileName, ImageFormat.Png);
+            }
         }
     }
 }

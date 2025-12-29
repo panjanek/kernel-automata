@@ -29,6 +29,10 @@ namespace KernelAutomata
         private DateTime lastCheckTime;
 
         private long lastCheckFrameCount;
+
+        private int recNr;
+
+        private bool prevRecState;
         public MainWindow()
         {
             InitializeComponent();
@@ -46,20 +50,21 @@ namespace KernelAutomata
             var initRecipe = RecipeFactory.LoadFromResource("orbs-ch1.json");
             app.StartNewSimulation(initRecipe);
 
-            KeyDown += MainWindow_KeyDown;
-            System.Timers.Timer systemTimer = new System.Timers.Timer() { Interval = 10 };
-            systemTimer.Elapsed += SystemTimer_Elapsed;
-            systemTimer.Start();
-            DispatcherTimer infoTimer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1.0) };
-            infoTimer.Tick += InfoTimer_Tick;
-            infoTimer.Start();
-
             app.configWindow = new ConfigWindow(app);
             app.configWindow.Show();
             app.configWindow.Activate();
             Closing += (s, e) => { };
-        }
 
+            KeyDown += MainWindow_KeyDown;
+
+            System.Timers.Timer systemTimer = new System.Timers.Timer() { Interval = 10 };
+            systemTimer.Elapsed += SystemTimer_Elapsed;
+            systemTimer.Start();
+
+            DispatcherTimer infoTimer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1.0) };
+            infoTimer.Tick += InfoTimer_Tick;
+            infoTimer.Start();
+        }
 
 
         private void SystemTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
@@ -86,7 +91,6 @@ namespace KernelAutomata
                 }), DispatcherPriority.Render);
             }
         }
-
 
         private void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
@@ -124,6 +128,11 @@ namespace KernelAutomata
                 double fps = frames / timespan.TotalSeconds;
                 Title = $"KernelAutomata. " +
                         $"fps:{fps.ToString("0.0")} ";
+
+                if (string.IsNullOrWhiteSpace(app.configWindow.recordDir))
+                {
+                    Title += $"[recoring to {app.configWindow.RecordDir}]";
+                }
 
                 lastCheckFrameCount = app.renderer.FrameCounter;
                 lastCheckTime = now;

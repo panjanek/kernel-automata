@@ -68,15 +68,18 @@ namespace KernelAutomata.Models
             for(int c=0; c<channels.Length; c++)
             {
                 var channel = channels[c];
-                channel.Convolve();
-                if (channels.Length == 1)
+                lock (this)
                 {
-                    channel.Grow(channels[0].gpu.ConvTex[0], channels[0].kernels[0].kernelWeight, -1, 0);
-                }
-                else if (channels.Length == 2)
-                {
-                    var differentChannel = channels[1 - c];
-                    channel.Grow(channel.gpu.ConvTex[0], channel.kernels[0].kernelWeight, differentChannel.gpu.ConvTex[1], differentChannel.kernels[1].kernelWeight);
+                    channel.Convolve();
+                    if (channels.Length == 1)
+                    {
+                        channel.Grow(channels[0].gpu.ConvTex[0], channels[0].kernels[0].kernelWeight, -1, 0);
+                    }
+                    else if (channels.Length == 2)
+                    {
+                        var differentChannel = channels[1 - c];
+                        channel.Grow(channel.gpu.ConvTex[0], channel.kernels[0].kernelWeight, differentChannel.gpu.ConvTex[1], differentChannel.kernels[1].kernelWeight);
+                    }
                 }
             }
         }

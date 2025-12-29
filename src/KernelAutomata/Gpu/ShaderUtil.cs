@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 
-namespace KernelAutomata.Utils
+namespace KernelAutomata.Gpu
 {
     public static class ShaderUtil
     {

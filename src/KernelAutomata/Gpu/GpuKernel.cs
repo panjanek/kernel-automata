@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KernelAutomata.Models;
-using KernelAutomata.Utils;
 using OpenTK.Graphics.OpenGL;
 
 namespace KernelAutomata.Gpu

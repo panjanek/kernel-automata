@@ -13,7 +13,6 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Media;
 using KernelAutomata.Models;
-using KernelAutomata.Utils;
 using OpenTK.Core;
 using OpenTK.GLControl;
 using OpenTK.Graphics.OpenGL;
@@ -47,11 +46,15 @@ namespace KernelAutomata.Gpu
 
         private Simulation simulation;
 
-        private AppContext appContext;
+        private AppContext app;
 
         private int frameCounter;
 
         private int emptyTex;
+
+        public byte[] captureBuffer;
+
+        private int? recFrameNr;
 
         private float aspectRatio => (float)(Math.Max(simulation.gpuContext.glControl?.ClientSize.Height ?? 1, 1)) / (float)(Math.Max(simulation.gpuContext.glControl?.ClientSize.Width ?? 1, 1));
 
@@ -59,7 +62,7 @@ namespace KernelAutomata.Gpu
         {
             this.placeholder = placeholder;
             this.simulation = appContext.simulation;
-            this.appContext = appContext;
+            this.app = appContext;
             simulation.gpuContext.glControl.Paint += GlControl_Paint;
             emptyTex = TextureUtil.CreateComplexTexture(simulation.fieldSize);
 
@@ -77,7 +80,13 @@ namespace KernelAutomata.Gpu
             simulation.gpuContext.glControl.MouseMove += (s, e) => { if (e.Button == MouseButtons.Right) DisturbField(e.X, e.Y, appContext.configWindow.DrawingMode); };
             simulation.gpuContext.glControl.MouseWheel += GlControl_MouseWheel;
             simulation.gpuContext.SetViewportAndInvalidate();
-
+            simulation.gpuContext.glControl.SizeChanged += (s, e) =>
+            {
+                if (simulation.gpuContext.glControl.Width >= 0 && simulation.gpuContext.glControl.Height >= 0)
+                {
+                    captureBuffer = new byte[simulation.gpuContext.glControl.Width * simulation.gpuContext.glControl.Height * 4];
+                }
+            };
         }
 
         private void DisturbField(float mouseX, float mouseY, int drawingMode)
@@ -186,6 +195,39 @@ namespace KernelAutomata.Gpu
                 simulation.gpuContext.displayProgram.Run(channel1Tex, channel2Tex, center, zoom, aspectRatio);
                 simulation.gpuContext.glControl.SwapBuffers();
                 frameCounter++;
+            }
+
+            Capture();
+        }
+
+        private void Capture()
+        {
+            //combine PNGs into video: ffmpeg -f image2 -framerate 60 -i rec1/frame_%05d.png -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -r 60 -vcodec libx264 -pix_fmt yuv420p out.mp4 -y
+            var recDir = app.configWindow.recordDir?.ToString();
+            if (!recFrameNr.HasValue && !string.IsNullOrWhiteSpace(recDir))
+            {
+                recFrameNr = 0;
+            }
+
+            if (recFrameNr.HasValue && string.IsNullOrWhiteSpace(recDir))
+                recFrameNr = null;
+
+            if (recFrameNr.HasValue && !string.IsNullOrWhiteSpace(recDir))
+            {
+                string recFilename = $"{recDir}\\frame_{recFrameNr.Value.ToString("00000")}.png";
+                simulation.gpuContext.glControl.MakeCurrent();
+                int width = simulation.gpuContext.glControl.Width;
+                int height = simulation.gpuContext.glControl.Height;
+                GL.ReadPixels(
+                    0, 0,
+                    width, height,
+                    OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+                    PixelType.UnsignedByte,
+                    captureBuffer
+                );
+
+                TextureUtil.SaveBufferToFile(captureBuffer, width, height, recFilename);
+                recFrameNr = recFrameNr.Value + 1;
             }
         }
 

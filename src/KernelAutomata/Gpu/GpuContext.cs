@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -114,6 +115,23 @@ namespace KernelAutomata.Gpu
                 glControl.MakeCurrent();
 
             SetViewportAndInvalidate();
+        }
+        public void SaveScreenFrameToFile(string fileName)
+        {
+            glControl.MakeCurrent();
+            int width = glControl.Width;
+            int height = glControl.Height;
+            byte[] pixels = new byte[width * height * 4];
+
+            GL.ReadPixels(
+                0, 0,
+                width, height,
+                OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+                PixelType.UnsignedByte,
+                pixels
+            );
+
+            TextureUtil.SaveBufferToFile(pixels, width, height, fileName);
         }
     }
 }
