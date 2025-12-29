@@ -1,0 +1,224 @@
+{
+  "size": 512,
+  "dt": 0.1,
+  "channels": [
+    {
+      "mu": 0.095954195,
+      "sigma": 0.034266055,
+      "mu2": 0,
+      "sigma2": 0,
+      "weight2": 0,
+      "decay": 0,
+      "kernels": [
+        {
+          "rings": [
+            {
+              "maxR": 32,
+              "center": 7,
+              "width": 2,
+              "weight": 1,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 0.6766667
+        },
+        {
+          "rings": [
+            {
+              "maxR": 32,
+              "center": 4,
+              "width": 2,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 64,
+              "center": 12,
+              "width": 3.2476091,
+              "weight": -1,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 64,
+              "center": 36,
+              "width": 8,
+              "weight": 0.35,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": -0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "initialization": {
+        "centerX": 0.3,
+        "centerY": 0.3,
+        "density": 0.5,
+        "noiseRadius": 0.5,
+        "blobRadius": 0.05,
+        "mu": 0,
+        "sigma": 0
+      }
+    },
+    {
+      "mu": 0.10099998,
+      "sigma": 0.026538461,
+      "mu2": 0,
+      "sigma2": 0,
+      "weight2": 0,
+      "decay": 0,
+      "kernels": [
+        {
+          "rings": [
+            {
+              "maxR": 32,
+              "center": 7,
+              "width": 2,
+              "weight": 1,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 0.86437047
+        },
+        {
+          "rings": [
+            {
+              "maxR": 32,
+              "center": 10,
+              "width": 4,
+              "weight": 1,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 32,
+              "center": 24,
+              "width": 4.5301456,
+              "weight": -0.36,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "initialization": {
+        "centerX": 0.6,
+        "centerY": 0.5,
+        "density": 0.5,
+        "noiseRadius": 0.7,
+        "blobRadius": 0.1,
+        "mu": 0,
+        "sigma": 0
+      }
+    }
+  ]
+}
