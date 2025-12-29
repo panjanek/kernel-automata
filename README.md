@@ -12,7 +12,7 @@ Inspired by:
 * One or two species
 * Configurable kernel rings (up to 5)
 * Configurable growth function (one or two bell-curve spikes)
-* Everything configurable in UI
+* <strong>Everything</strong> configurable in UI
 * Save/Load configurations from JSON
 
 ## GUI
