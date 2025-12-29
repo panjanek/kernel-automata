@@ -35,7 +35,7 @@ namespace KernelAutomata.Gui
             }
 
             IsActive = true;
-            Kernels = new KernelDataContext[2];
+            Kernels = new KernelDataContext[AppContext.MaxChannelsCount];
             for (int kernelIdx = 0; kernelIdx < Kernels.Length; kernelIdx++)
             {
                 Kernels[kernelIdx] = (kernelIdx < channelRecipe.kernels.Length) ? new KernelDataContext(channelRecipe.kernels[kernelIdx], channel.kernels[kernelIdx]) : new KernelDataContext(null, null);

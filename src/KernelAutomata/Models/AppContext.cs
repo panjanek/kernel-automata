@@ -11,7 +11,7 @@ namespace KernelAutomata.Models
 {
     public class AppContext
     {
-        public const int MaxChannelsCount = 2;
+        public const int MaxChannelsCount = 3;
         
         public OpenGlRenderer renderer;
 

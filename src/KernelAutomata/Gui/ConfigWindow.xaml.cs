@@ -209,20 +209,21 @@ namespace KernelAutomata.Gui
                     var column = (int)element.GetValue(Grid.ColumnProperty);
                     if (app.recipe.channels.Length == 1)
                     {
-                        Width = 250 + 35;
-                        Height = 590 + 45;
-                        if (column >= 3 || row >= 14)
-                        {
-                            element.Visibility = Visibility.Collapsed;
-                            
-                        }
+                        Width = 285;
+                        Height = 635;
+                        element.Visibility = (column >= 3 || row >= 14) ? Visibility.Collapsed : Visibility.Visible; 
                     }
                     else if (app.recipe.channels.Length == 2)
                     {
-                        Width = 420 + 30;
-                        Height = 840 + 45;
+                        Width = 285 + 165;
+                        Height = 635 + 250;
+                        element.Visibility = (column >= 5 || row >= 15) ? Visibility.Collapsed : Visibility.Visible;
+                    }
+                    else if (app.recipe.channels.Length == 3)
+                    {
+                        Width = 285 + 165 * 2;
+                        Height = 635 + 250*2;
                         element.Visibility = Visibility.Visible;
-                        
                     }
                 }
             }
