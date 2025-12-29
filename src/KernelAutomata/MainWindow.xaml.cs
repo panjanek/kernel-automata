@@ -130,9 +130,14 @@ namespace KernelAutomata
                 Title = $"KernelAutomata. " +
                         $"fps:{fps.ToString("0.0")} ";
 
-                if (string.IsNullOrWhiteSpace(app.configWindow.recordDir))
+                if (!string.IsNullOrWhiteSpace(app.configWindow.recordDir))
                 {
-                    Title += $"[recoring to {app.configWindow.RecordDir}]";
+                    Title += $"[recording to {app.configWindow.RecordDir}] ";
+                }
+
+                if (app.renderer.Paused)
+                {
+                    Title += $"[pause] ";
                 }
 
                 lastCheckFrameCount = app.renderer.FrameCounter;
