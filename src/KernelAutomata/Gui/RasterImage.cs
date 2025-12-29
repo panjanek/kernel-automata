@@ -49,10 +49,15 @@ namespace KernelAutomata.Gui
                     double val = buffer[4*(y * fieldSize + x)];
                     int r = 0;
                     int b = 0;
+                    double colorScale = Math.Max(-minVal, maxVal);
+
+                    double color01 = Math.Abs(val / colorScale);
+                    int colorValue = (int)Math.Round(255*AmplifyColor(color01, 2));
+
                     if (val < 0)
-                        b = (int)Math.Round(-val * 255.0 / (-minVal));
+                        b = colorValue;
                     else
-                        r = (int)Math.Round(val * 255 / maxVal);
+                        r = colorValue;
 
                     SetPixel(pixels, imageSize, maxR + x, maxR + y, r, b);
                     SetPixel(pixels, imageSize, maxR - x, maxR + y, r, b);
@@ -69,6 +74,15 @@ namespace KernelAutomata.Gui
             var bitmap = new WriteableBitmap(imageSize, imageSize, 96, 96, PixelFormats.Bgra32, null);
             bitmap.WritePixels(new Int32Rect(0, 0, imageSize, imageSize), pixels, imageSize * 4, 0);
             Source = bitmap;
+        }
+
+        private double AmplifyColor(double c, int pow)
+        {
+            double a = 1;
+            for (int i = 0; i < pow; i++)
+                a = a * (1 - c);
+
+            return 1 - a;
         }
 
         private void SetPixel(byte[] pixels, int size, int x, int y, int r, int b)
