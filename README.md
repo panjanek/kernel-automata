@@ -14,10 +14,10 @@ Ispired by:
 * Configurable kernel rings
 * Configurable growth function
 
-## Results
+## Observed patterns
 
 | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/e174186b1fdfb0dcfb6b381cf197920b19dc2ddc/captures/orb.gif" /><br/>orbs</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/e174186b1fdfb0dcfb6b381cf197920b19dc2ddc/captures/double-orb.gif" /><br/>double orb</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/e174186b1fdfb0dcfb6b381cf197920b19dc2ddc/captures/cells.gif" /><br/>mitosis</p> |
 |---|---|---|
 | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/2ea4a051998bc050501404e586366620ee2dd7c3/captures/hoppers2.gif" /><br/>hoppers</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/2ea4a051998bc050501404e586366620ee2dd7c3/captures/orb-tail.gif" width="224" height="201" /><br/>snakes</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/2ea4a051998bc050501404e586366620ee2dd7c3/captures/swirl-hoppers.gif" /><br/>swirls</p> |
 | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/043639bd75033ef8e599d1ce348334fbab1c2bf9/captures/tapes.gif" /><br/>tapeworms</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/043639bd75033ef8e599d1ce348334fbab1c2bf9/captures/big-cell.gif" /><br/>cell</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/043639bd75033ef8e599d1ce348334fbab1c2bf9/captures/throbe.gif" /><br/>throbes</p> |
-| <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/06f29e250804bb87aff9a0cc7f308d7d8ac9a8b9/captures/displace.gif" /><br/>displace</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/06f29e250804bb87aff9a0cc7f308d7d8ac9a8b9/captures/lattice.gif" /><br/>growth</p> | <p align="center"><img src="" /><br/>ccc</p> |
+| <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/06f29e250804bb87aff9a0cc7f308d7d8ac9a8b9/captures/displace.gif" /><br/>displace</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/06f29e250804bb87aff9a0cc7f308d7d8ac9a8b9/captures/lattice.gif" /><br/>growth</p> | <p align="center"><img src="https://github.com/panjanek/kernel-automata/blob/143ca6ec22c50b5e34db2e8c0dfa8cca58487646/captures/net.gif" /><br/>net</p> |
