@@ -19,8 +19,10 @@ namespace KernelAutomata.Gpu
             int fieldInTex,
             int myConvTex,
             int competeConvTex,
+            int competeConv2Tex,
             float myWeight,
             float competeWeight,
+            float compete2Weight,
             int fieldOutTex,
             int size,
             float mu,
@@ -42,6 +44,7 @@ namespace KernelAutomata.Gpu
             GL.Uniform1(GL.GetUniformLocation(program, "uSize"), size);
             GL.Uniform1(GL.GetUniformLocation(program, "uWeight1"), myWeight);
             GL.Uniform1(GL.GetUniformLocation(program, "uWeight2"), competeWeight);
+            GL.Uniform1(GL.GetUniformLocation(program, "uWeight3"), compete2Weight);
             GL.Uniform1(GL.GetUniformLocation(program, "uDecay"), decay);
 
             GL.BindImageTexture(0, fieldInTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
@@ -49,8 +52,10 @@ namespace KernelAutomata.Gpu
             GL.BindImageTexture(1, myConvTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
             if (competeConvTex != -1)
                 GL.BindImageTexture(2, competeConvTex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
+            if (competeConv2Tex != -1)
+                GL.BindImageTexture(3, competeConv2Tex, 0, false, 0, TextureAccess.ReadOnly, SizedInternalFormat.Rgba32f);
 
-            GL.BindImageTexture(3, fieldOutTex, 0, false, 0, TextureAccess.WriteOnly, SizedInternalFormat.Rgba32f);
+            GL.BindImageTexture(4, fieldOutTex, 0, false, 0, TextureAccess.WriteOnly, SizedInternalFormat.Rgba32f);
 
             GL.DispatchCompute(
                 (size + 15) / 16,

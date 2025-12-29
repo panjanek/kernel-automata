@@ -5,7 +5,8 @@ layout (local_size_x = 16, local_size_y = 16) in;
 layout (rgba32f, binding = 0) readonly  uniform image2D fieldIn;
 layout (rgba32f, binding = 1) readonly  uniform image2D conv1;
 layout (rgba32f, binding = 2) readonly  uniform image2D conv2;
-layout (rgba32f, binding = 3) writeonly uniform image2D fieldOut;
+layout (rgba32f, binding = 3) readonly  uniform image2D conv3;
+layout (rgba32f, binding = 4) writeonly uniform image2D fieldOut;
 
 uniform float uMu;
 uniform float uSigma;
@@ -16,6 +17,7 @@ uniform float uDt;
 uniform int   uSize;
 uniform float uWeight1;
 uniform float uWeight2;
+uniform float uWeight3;
 uniform float uDecay;
 
 float gaussianGrowth(float u, float mu, float sigma)
@@ -31,15 +33,23 @@ void main()
         return;
 
     float current = imageLoad(fieldIn, p).r;
+    float size2 = uSize * uSize;
 
     float c1 = imageLoad(conv1, p).r;
-    c1 /= float(uSize * uSize);
+    c1 /= size2;
     float growth = c1 * uWeight1;
     if (uWeight2 != 0)
     {
         float c2 = imageLoad(conv2, p).r;
-        c2 /= float(uSize * uSize);
+        c2 /= size2;
         growth += c2 * uWeight2;
+    }
+
+    if (uWeight3 != 0)
+    {
+        float c3 = imageLoad(conv3, p).r;
+        c3 /= size2;
+        growth += c3 * uWeight3;
     }
 
     float g = gaussianGrowth(growth, uMu, uSigma);
