@@ -44,7 +44,11 @@
             <MenuItem Header="Transform">
                 <MenuItem Header="Expand" Click="KernelContextMenu_Click"/>
                 <MenuItem Header="Shrink" Click="KernelContextMenu_Click"/>
-                <MenuItem Header="Normalize" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="0" Header="Normalize To 0" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="1" Header="Normalize To 1" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="-1" Header="Normalize To -1" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="*1.2" Header="Normalize Up" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="*0.2" Header="Normalize Down" Click="KernelContextMenu_Click"/>
             </MenuItem>
             <MenuItem Header="Set to preset">
                 <MenuItem Tag="kernels.one-small-ring.json" Header="One small ring" Click="KernelContextMenu_Click"/>

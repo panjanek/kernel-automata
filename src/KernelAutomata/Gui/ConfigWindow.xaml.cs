@@ -389,7 +389,13 @@ namespace KernelAutomata.Gui
                     else if (subLabel.StartsWith("Shrink", StringComparison.InvariantCultureIgnoreCase))
                         thisKernel.ChangeCenters(-1.0f);
                     else if (subLabel.StartsWith("Normalize", StringComparison.InvariantCultureIgnoreCase))
-                        thisKernel.NormalizeTo(0.0f);
+                    {
+                        float value = float.Parse(subItemTag.Trim('*'));
+                        if (subItemTag.StartsWith("*"))
+                            thisKernel.NormalizeBy(value, app.simulation.fieldSize);
+                        else
+                            thisKernel.NormalizeTo(value, app.simulation.fieldSize);
+                    }
                 }
                 else if (parentLabel.StartsWith("Set", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -399,6 +405,7 @@ namespace KernelAutomata.Gui
             }
 
             //update all
+            WpfUtil.FindVisualChildren<KernelConfigurator>(this).ToList().ForEach(k => k.Refresh());
             UpdateSimulationWithRecipe();
         }
 

@@ -42,6 +42,11 @@ namespace KernelAutomata.Gui
             titleBox.Text = title;
         }
 
+        public void Refresh()
+        {
+            WpfUtil.FindVisualChildren<RingConfigurator>(this).ToList().ForEach(x => x.Refresh());
+        }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
 
         private void RingConfigurator_DataCommitted(object sender, RoutedEventArgs e) => dataChanged();

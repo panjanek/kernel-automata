@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KernelAutomata.Utils;
 
 namespace KernelAutomata.Models
 {
@@ -55,6 +56,42 @@ namespace KernelAutomata.Models
                 center = 0;
             if (delta > 0)
                 maxR += delta;
+        }
+
+        public void FillBuffer(float[] ringBuffer, int fieldSize)
+        {
+            Array.Fill<float>(ringBuffer, 0);
+            if (weight == 0)
+                return;
+
+            int N = fieldSize;
+            float sum = 0f;
+            for (int y = 0; y < N; y++)
+            {
+                int dy = y <= N / 2 ? y : y - N;
+
+                for (int x = 0; x < N; x++)
+                {
+                    int dx = x <= N / 2 ? x : x - N;
+                    float r = MathF.Sqrt(dx * dx + dy * dy);
+                    if (r > maxR)
+                    {
+                        ringBuffer[(x * fieldSize + y) * 4] = 0f;
+                        continue;
+                    }
+
+                    float v = MathUtil.GaussianBell(r, center, width, innerSlope, outerSlope);
+                    ringBuffer[(x * fieldSize + y) * 4] = v;
+                    sum += v;
+                }
+            }
+
+            // Normalize so sum(kernel) = 1
+            if (sum > 0f)
+            {
+                for (int i = 0; i < ringBuffer.Length; i++)
+                    ringBuffer[i] /= sum;
+            }
         }
     }
 }

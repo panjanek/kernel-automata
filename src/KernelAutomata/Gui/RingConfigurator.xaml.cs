@@ -58,6 +58,12 @@ namespace KernelAutomata.Gui
             };
         }
 
+        public void Refresh()
+        {
+            UpdateActiveControls();
+            UpdatePassiveControls();
+        }
+
         private void UpdateActiveControls()
         {
             if (recipe != null)

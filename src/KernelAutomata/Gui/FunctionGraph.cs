@@ -14,7 +14,7 @@ namespace KernelAutomata.Gui
 {
     public class FunctionGraph : Canvas
     {
-        public void Draw(int steps, double startX, double endX, Func<double, double> func, bool showIntegrals = false)
+        public void Draw(int steps, double startX, double endX, Func<double, double> func, float negativeSum = 0, float positiveSum = 0)
         {
             try
             {
@@ -25,16 +25,10 @@ namespace KernelAutomata.Gui
                 ClipToBounds = true;
                 double minY = 1000000000;
                 double maxY = -1000000000;
-                double positiveSum = 0;
-                double negativeSum = 0;
                 for (int i = 0; i < steps; i++)
                 {
                     var x = startX + i * (endX - startX) / steps;
                     var y = func(x);
-                    if (y < 0)
-                        negativeSum += y;
-                    if (y > 0)
-                        positiveSum += y;
 
                     if (minY > y)
                         minY = y;
@@ -74,7 +68,7 @@ namespace KernelAutomata.Gui
                 axis.Y2 = axisY;
                 Children.Add(axis);
 
-                if (showIntegrals)
+                if (negativeSum!=0 && positiveSum != 0)
                 {
                     maxY = positiveSum * 1.1;
                     minY = negativeSum * 1.1;
@@ -84,7 +78,7 @@ namespace KernelAutomata.Gui
                     var total = positiveSum + negativeSum;
                     AddRect(width - 2 * thick, axisY, positiveSum * scaleY, Brushes.Red);
                     AddRect(width - 2 * thick, axisY, negativeSum * scaleY, Brushes.LightBlue);
-                    AddRect(width - 1 * thick, axisY, total * scaleY, (total > 0) ? Brushes.DarkRed : Brushes.DarkBlue);
+                    AddRect(width - 1 * thick, axisY, total * scaleY, (total > 0) ? Brushes.Red : Brushes.LightBlue, Brushes.White);
                 }
             }
             catch (Exception ex)
@@ -93,7 +87,7 @@ namespace KernelAutomata.Gui
             }
         }
 
-        private void AddRect(double leftX, double axisY,  double value, Brush color)
+        private void AddRect(double leftX, double axisY,  double value, Brush color, Brush? stroke = null)
         {
             var width = ActualWidth;
             var height = ActualHeight;
@@ -102,7 +96,9 @@ namespace KernelAutomata.Gui
             {
                 Width = width / 20,
                 Height = Math.Abs(value),
-                Fill = color
+                Fill = color,
+                StrokeThickness = 2,
+                Stroke = stroke ?? color
             };
             
             SetLeft(rect, leftX);

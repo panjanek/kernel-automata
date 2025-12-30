@@ -63,6 +63,14 @@ namespace KernelAutomata.Gui
             };
         }
 
+        public void Refresh()
+        {
+            UpdateActiveControls();
+            UpdatePassiveControls();
+            if (ringsWindow != null)
+                ringsWindow.Refresh();
+        }
+
         public void UpdateActiveControls()
         {
             if (KernelContext != null && KernelContext.IsActive)
@@ -92,13 +100,15 @@ namespace KernelAutomata.Gui
                 var intersection = new double[globalMaxR];
                 for (int x = 0; x < intersection.Length; x++)
                     intersection[x] = kernel.kernelBuffer[x * 4] * 1000;
+                var positiveSum = kernel.kernelBuffer.Where(v => v > 0).Sum();
+                var negativeSum = kernel.kernelBuffer.Where(v => v < 0).Sum();
                 graph.Draw(globalMaxR, 0, globalMaxR, x =>
                 {
                     int ix = (int)x;
                     if (ix < 0) ix = 0;
                     if (ix >= intersection.Length) ix = intersection.Length - 1;
                     return intersection[ix];
-                }, true);
+                }, negativeSum, positiveSum);
 
                 image.DrawKernel(kernel.kernelBuffer, kernel.fieldSize, globalMaxR);
             }
