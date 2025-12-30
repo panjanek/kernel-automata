@@ -12,6 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\NotoEmoji-Regular.ttf" />
+    <None Remove="Fonts\NotoSansSymbols-Regular.ttf" />
     <None Remove="recipes\2channels.json" />
     <None Remove="recipes\presets\3ch-tissue.json" />
     <None Remove="recipes\presets\borg.json" />
@@ -33,6 +35,8 @@
 
   <ItemGroup>
     <Resource Include="app.ico" />
+    <Resource Include="Fonts\NotoEmoji-Regular.ttf" />
+    <Resource Include="Fonts\NotoSansSymbols-Regular.ttf" />
     <EmbeddedResource Include="recipes\3channels.json" />
     <EmbeddedResource Include="recipes\2channels.json" />
     <EmbeddedResource Include="recipes\1channel.json" />

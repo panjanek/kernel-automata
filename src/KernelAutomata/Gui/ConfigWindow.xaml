@@ -121,8 +121,8 @@
                 <!-- top buttons -->
                 <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="22"/>
+                        <RowDefinition Height="22"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -133,33 +133,32 @@
                         <ColumnDefinition Width="0.7*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <!-- https://learn.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font -->
                     <Button Grid.Column="0" ToolTip="Save file" Click="SaveFile_Click">
-                        <TextBlock FontFamily="Segoe MDL2 Assets"
-                           FontSize="14"
-                           Text="&#xE105;"
+                        <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols"
+                           FontSize="12"
+                           Text="⎙"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                     </Button>
                     <Button Grid.Column="1" ToolTip="Open file" Click="OpenFile_Click">
-                        <TextBlock FontFamily="Segoe MDL2 Assets"
-                           FontSize="14"
-                           Text="&#xE8E5;"
+                        <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols"
+                           FontSize="12"
+                           Text="⎘"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                     </Button>
                     <Button Grid.Column="2" ToolTip="Restart" Click="Restart_Click">
-                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                        <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols"
                            FontSize="14"
-                           Text="&#xE895;"
+                           Text="↻"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                     </Button>
                     <DockPanel Background="LightGray"  Grid.Column="3">
                         <CheckBox x:Name="autoRestart" IsChecked="True" ToolTip="Automatically restart simulation after any parameter change" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock FontFamily="Segoe MDL2 Assets" 
+                            <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols" 
                            FontSize="14"
-                           Text="&#xEC57;"
+                           Text="▷"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                         </CheckBox>
@@ -215,23 +214,23 @@
                         </ToggleButton.Style>
                     </ToggleButton>
                     <Button Name="fullscreenButton" Grid.Row="0" Grid.Column="6" ToolTip="Fullscreen">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" 
+                        <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols" 
                            FontSize="14"
-                           Text="&#xE740;"
+                           Text="⛶"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                     </Button>
                     <Button Name="undoButton" Grid.Row="1" Grid.Column="0" ToolTip="Undo" Tag="undo" Click="UndoRedo_Click">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" 
+                        <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols" 
                            FontSize="14"
-                           Text="&#xE7A7;"
+                           Text="↶"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                     </Button>
                     <Button Name="redoButton" Grid.Row="1" Grid.Column="1" ToolTip="Redo" Tag="redo" Click="UndoRedo_Click">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" 
+                        <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols" 
                            FontSize="14"
-                           Text="&#xE7A6;"
+                           Text="↷"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                     </Button>
@@ -239,9 +238,9 @@
                     <Button Name="incChannelsButton" Grid.Row="1" Grid.Column="3" Content="+1 ch" Tag="+1" Click="ChangeChannelsCount_Click" ToolTip="Decreases number of channels by removing channel, not changing existing configuration"/>
                     <Button Grid.Row="1" Grid.Column="4" Content="Preset" Name="presetButton" ToolTip="Loads preconfigured preset from list"/>
                     <Button Grid.Row="1" Grid.Column="5" ToolTip="Save single screen capture as PNG" Click="SaveScreenn_Click">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" 
+                        <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols" 
                            FontSize="14"
-                           Text="&#xE722;"
+                           Text="◉"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                     </Button>
@@ -310,25 +309,25 @@
                     <TextBlock Grid.Row="5" Grid.Column="0" Text="Channels" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="White"/>
                     <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Text="Magenta" VerticalAlignment="Center" Margin="0,5,0,0" Padding="5" Background="Magenta" HorizontalAlignment="Stretch" TextAlignment="Center"/>
                     <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Height="18" Width="18" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,5,5" Tag="channels.0" Click="StartingConditions_Click">
-                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                            <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols"
                            FontSize="10" ToolTip="Configure staring condition"
-                           Text="&#xEC88;"
+                           Text="⚙"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                     </Button>
                     <TextBlock Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Text="Cyan" VerticalAlignment="Center" Margin="5,5,0,0" Padding="5" Background="Cyan" HorizontalAlignment="Stretch" TextAlignment="Center"/>
                     <Button Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Height="18" Width="18" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,5,5" Tag="channels.1" Click="StartingConditions_Click">
-                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                            <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols"
                            FontSize="10" ToolTip="Configure staring condition"
-                           Text="&#xEC88;"
+                           Text="⚙"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                     </Button>
                     <TextBlock Grid.Row="5" Grid.Column="5" Grid.ColumnSpan="2" Text="Yellow" VerticalAlignment="Center" Margin="5,5,0,0" Padding="5" Background="Yellow" HorizontalAlignment="Stretch" TextAlignment="Center"/>
                     <Button Grid.Row="5" Grid.Column="5" Grid.ColumnSpan="2" Height="18" Width="18" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,5,5,5" Tag="channels.2" Click="StartingConditions_Click">
-                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                            <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols"
                            FontSize="10" ToolTip="Configure staring condition"
-                           Text="&#xEC88;"
+                           Text="⚙"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
                     </Button>
