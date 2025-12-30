@@ -48,7 +48,7 @@
                 <MenuItem Tag="1" Header="Normalize To 1" Click="KernelContextMenu_Click"/>
                 <MenuItem Tag="-1" Header="Normalize To -1" Click="KernelContextMenu_Click"/>
                 <MenuItem Tag="*1.2" Header="Normalize Up" Click="KernelContextMenu_Click"/>
-                <MenuItem Tag="*0.2" Header="Normalize Down" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="*0.8" Header="Normalize Down" Click="KernelContextMenu_Click"/>
             </MenuItem>
             <MenuItem Header="Set to preset">
                 <MenuItem Tag="kernels.one-small-ring.json" Header="One small ring" Click="KernelContextMenu_Click"/>

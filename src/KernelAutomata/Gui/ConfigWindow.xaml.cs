@@ -271,11 +271,13 @@ namespace KernelAutomata.Gui
             UpdatePassiveControls();
             UpdateActiveControls();
 
+            WpfUtil.FindVisualChildren<KernelConfigurator>(this).ToList().ForEach(k => k.Refresh());
+            /*
             foreach (var kernelConfig in WpfUtil.FindVisualChildren<KernelConfigurator>(this))
             {
                 kernelConfig.UpdateActiveControls();
                 kernelConfig.UpdatePassiveControls();
-            }
+            }*/
         }
 
         private void StartingConditions_Click(object sender, RoutedEventArgs e)
@@ -405,7 +407,6 @@ namespace KernelAutomata.Gui
             }
 
             //update all
-            WpfUtil.FindVisualChildren<KernelConfigurator>(this).ToList().ForEach(k => k.Refresh());
             UpdateSimulationWithRecipe();
         }
 
