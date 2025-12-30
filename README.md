@@ -13,6 +13,7 @@ Inspired by:
 * Configurable kernel rings (up to 5)
 * Configurable growth function (one or two bell-curve spikes)
 * <strong>Everything</strong> configurable in GUI
+* Pan & Zoom
 * Save/Load configuration as JSON
 
 ## GUI
