@@ -28,5 +28,42 @@
             <Setter Property="Background" Value="#FFFFFF"/>
             <Setter Property="Foreground" Value="#000000"/>
         </Style>
+
+        <Style TargetType="ToolTip">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Background" Value="#FF2B2B2B"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FF707070"/>
+            <Setter Property="BorderThickness" Value="1"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToolTip">
+                        <Popup
+                        IsOpen="{TemplateBinding IsOpen}"
+                        Placement="{TemplateBinding Placement}"
+                        PlacementTarget="{TemplateBinding PlacementTarget}"
+                        AllowsTransparency="False"
+                        PopupAnimation="None"
+                        StaysOpen="True">
+
+                            <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+
+                                <!-- Foreground flows via inherited TextElement style -->
+                                <ContentPresenter
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"/>
+
+                            </Border>
+                        </Popup>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

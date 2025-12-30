@@ -13,9 +13,9 @@
         WindowState="Normal"
         ShowInTaskbar="False"
         WindowStyle="None"
-        AllowsTransparency="True"
+        AllowsTransparency="False"
         Topmost="True"
-        Opacity="0.95">
+        Opacity="1">
     <Border Background="#CC2B2B2B"
            CornerRadius="6"
            BorderBrush="#444"

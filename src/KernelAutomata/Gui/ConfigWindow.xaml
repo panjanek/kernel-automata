@@ -13,8 +13,8 @@
         WindowState="Normal"
         ShowInTaskbar="True"
         WindowStyle="None"
-        AllowsTransparency="True"
-        Opacity="0.85">
+        AllowsTransparency="False"
+        Opacity="1">
 
     <Window.Resources>
         <ContextMenu x:Key="kernelContextMenu">
