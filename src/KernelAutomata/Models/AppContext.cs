@@ -44,6 +44,12 @@ namespace KernelAutomata.Models
             UndoList.Add(recipe.Clone());
         }
 
+        public void RestartSimulation()
+        {
+            simulation.UpdateSimulationWithRecipe(recipe);
+            simulation.ResetFields();
+        }
+
         public void UpdateSimulationWithRecipe()
         {
             UndoList.Add(recipe.Clone());

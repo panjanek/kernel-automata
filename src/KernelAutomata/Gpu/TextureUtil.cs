@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 using KernelAutomata.Utils;
 using OpenTK.Graphics.OpenGL;
+using static System.Net.Mime.MediaTypeNames;
 using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 
 namespace KernelAutomata.Gpu
@@ -26,6 +27,12 @@ namespace KernelAutomata.Gpu
             GL.TexParameter(TextureTarget.Texture2D,
                 TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
 
+            ClearTexture(tex);
+            return tex;
+        }
+
+        public static void ClearTexture(int tex)
+        {
             // Clear to all zeros
             float[] clearColor = new float[] { 0f, 0f, 0f, 0f };
             GL.ClearTexImage(
@@ -36,8 +43,8 @@ namespace KernelAutomata.Gpu
                 clearColor);
 
             GL.BindTexture(TextureTarget.Texture2D, 0);
-            return tex;
         }
+
         public static int CreateStateTexture(int width, int height)
         {
             int tex = GL.GenTexture();

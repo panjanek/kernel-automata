@@ -83,7 +83,11 @@ namespace KernelAutomata.Gui
                     case Key.P:
                         app.renderer.Paused = !app.renderer.Paused;
                         e.Handled = true;
-                    break;
+                        break;
+                    case Key.R:
+                        app.RestartSimulation();
+                        e.Handled = true;
+                        break;
                 }
             }
         }
@@ -148,8 +152,7 @@ namespace KernelAutomata.Gui
 
         private void Restart_Click(object sender, RoutedEventArgs e)
         {
-            app.simulation.ResetFields();
-            UpdatePassiveControls();
+            app.RestartSimulation();
             PopupMessage.Show(app.mainWindow, $"Simulation restarted");
         }
 
@@ -263,7 +266,7 @@ namespace KernelAutomata.Gui
         public void UpdateAllControls()
         {
             if (autoRestart.IsChecked == true)
-                app.simulation.ResetFields();
+                app.RestartSimulation();
 
             UpdatePassiveControls();
             UpdateActiveControls();

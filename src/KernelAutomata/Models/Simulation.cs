@@ -59,17 +59,21 @@ namespace KernelAutomata.Models
 
         public void ResetFields()
         {
-            foreach (var channel in channels)
-                channel.ResetField();
+            lock (this)
+            {
+                foreach (var channel in channels)
+                    channel.ResetField();
+            }
         }
 
         public void Step()
         {
-            for(int c=0; c<channels.Length; c++)
+            lock (this)
             {
-                var channel = channels[c];
-                lock (this)
+                for (int c = 0; c < channels.Length; c++)
                 {
+                    var channel = channels[c];
+
                     channel.Convolve();
                     if (channels.Length == 1)
                     {
@@ -88,6 +92,7 @@ namespace KernelAutomata.Models
                                      differentChannel1.gpu.ConvTex[1], differentChannel1.kernels[1].kernelWeight,
                                      differentChannel2.gpu.ConvTex[2], differentChannel2.kernels[2].kernelWeight);
                     }
+
                 }
             }
         }

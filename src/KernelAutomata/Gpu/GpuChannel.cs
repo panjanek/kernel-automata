@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using KernelAutomata.Models;
 using OpenTK.Graphics.OpenGL;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace KernelAutomata.Gpu
 {
@@ -49,6 +50,17 @@ namespace KernelAutomata.Gpu
 
             GL.BindTexture(TextureTarget.Texture2D, fieldTex);
             GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, fieldSize, fieldSize, PixelFormat.Rgba, PixelType.Float, fieldData);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
+            TextureUtil.ClearTexture(fieldNextTex);
+            foreach(var conv in convTextures)
+            {
+                TextureUtil.ClearTexture(conv.sourceTex);
+                TextureUtil.ClearTexture(conv.fftTmpTex);
+                TextureUtil.ClearTexture(conv.convTex);
+                TextureUtil.ClearTexture(conv.tmpTex);
+            }
+
         }
 
         public void Convolve(params int[] kernelsFftTex)

@@ -106,6 +106,10 @@ namespace KernelAutomata
                     app.renderer.Paused = !app.renderer.Paused;
                     e.Handled = true;
                     break;
+                case Key.R:
+                    app.RestartSimulation();
+                    e.Handled = true;
+                    break;
             }
 
             if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)

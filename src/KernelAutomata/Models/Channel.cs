@@ -66,7 +66,7 @@ namespace KernelAutomata.Models
                 kernels[k].UpdateRecipe(recipe.kernels[k]);
             }
 
-            initializationRecipe = recipe.initialization;
+            initializationRecipe = recipe.initialization.Clone();
         }
 
         public void Convolve()
@@ -83,11 +83,6 @@ namespace KernelAutomata.Models
         {
             initializationRecipe.FillInitBufferWithRandomData(simulation.fieldSize, initBuffer);
             gpu.UploadData(initBuffer);
-        }
-
-        public void UploadData(float[] fieldData)
-        {
-            gpu.UploadData(fieldData);
         }
 
         public void Destroy()
