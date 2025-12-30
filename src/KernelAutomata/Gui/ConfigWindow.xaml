@@ -41,8 +41,11 @@
                 <MenuItem Header="↘ Diagonal" Tag="1,1" Click="KernelContextMenu_Click"/>
                 <MenuItem Header="↙ Diagonal" Tag="-1,1" Click="KernelContextMenu_Click"/>
             </MenuItem>
-            <MenuItem Header="Expand" Click="KernelContextMenu_Click"/>
-            <MenuItem Header="Shrink" Click="KernelContextMenu_Click"/>
+            <MenuItem Header="Transform">
+                <MenuItem Header="Expand" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="Shrink" Click="KernelContextMenu_Click"/>
+                <MenuItem Header="Normalize" Click="KernelContextMenu_Click"/>
+            </MenuItem>
             <MenuItem Header="Set to preset">
                 <MenuItem Tag="kernels.one-small-ring.json" Header="One small ring" Click="KernelContextMenu_Click"/>
                 <MenuItem Tag="kernels.one-medium-ring.json" Header="One medium ring" Click="KernelContextMenu_Click"/>
@@ -50,6 +53,10 @@
                 <MenuItem Tag="kernels.two-standard-rings.json" Header="Two standard rings" Click="KernelContextMenu_Click"/>
                 <MenuItem Tag="kernels.two-narrow-rings.json" Header="Two narrow rings" Click="KernelContextMenu_Click"/>
                 <MenuItem Tag="kernels.two-wide-rings.json" Header="Two wide rings" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="kernels.three-standard-rings.json" Header="Three standard rings" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="kernels.three-large-rings.json" Header="Three large rings" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="kernels.four-rings.json" Header="Four rings" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="kernels.five-rings.json" Header="Five rings" Click="KernelContextMenu_Click"/>
             </MenuItem>
         </ContextMenu>
     </Window.Resources>

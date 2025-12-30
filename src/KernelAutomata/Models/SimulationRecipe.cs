@@ -132,6 +132,11 @@ namespace KernelAutomata.Models
             foreach (var ring in rings)
                 ring.ChangeCenter(delta);
         }
+
+        public void NormalizeTo(float value)
+        {
+
+        }
     }
 
     public class RingRecipe

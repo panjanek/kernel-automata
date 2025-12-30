@@ -98,7 +98,7 @@ namespace KernelAutomata.Gui
                     if (ix < 0) ix = 0;
                     if (ix >= intersection.Length) ix = intersection.Length - 1;
                     return intersection[ix];
-                });
+                }, true);
 
                 image.DrawKernel(kernel.kernelBuffer, kernel.fieldSize, globalMaxR);
             }
