@@ -40,7 +40,17 @@
                 <MenuItem Header="↗ Diagonal" Tag="1,-1" Click="KernelContextMenu_Click"/>
                 <MenuItem Header="↘ Diagonal" Tag="1,1" Click="KernelContextMenu_Click"/>
                 <MenuItem Header="↙ Diagonal" Tag="-1,1" Click="KernelContextMenu_Click"/>
-            </MenuItem>            
+            </MenuItem>
+            <MenuItem Header="Expand" Click="KernelContextMenu_Click"/>
+            <MenuItem Header="Shrink" Click="KernelContextMenu_Click"/>
+            <MenuItem Header="Set to preset">
+                <MenuItem Tag="kernels.one-small-ring.json" Header="One small ring" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="kernels.one-medium-ring.json" Header="One medium ring" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="kernels.one-large-ring.json" Header="One large ring" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="kernels.two-standard-rings.json" Header="Two standard rings" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="kernels.two-narrow-rings.json" Header="Two narrow rings" Click="KernelContextMenu_Click"/>
+                <MenuItem Tag="kernels.two-wide-rings.json" Header="Two wide rings" Click="KernelContextMenu_Click"/>
+            </MenuItem>
         </ContextMenu>
     </Window.Resources>
 

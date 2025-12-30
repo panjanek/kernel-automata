@@ -120,6 +120,18 @@ namespace KernelAutomata.Models
                 rings[i].OverwriteWith(recipe.rings[i]);
             }
         }
+
+        public void Invert()
+        {
+            foreach (var ring in rings)
+                ring.Invert();
+        }
+
+        public void ChangeCenters(float delta)
+        {
+            foreach (var ring in rings)
+                ring.ChangeCenter(delta);
+        }
     }
 
     public class RingRecipe
@@ -157,6 +169,20 @@ namespace KernelAutomata.Models
             weight = recipe.weight;
             innerSlope = recipe.innerSlope;
             outerSlope = recipe.outerSlope;
+        }
+
+        public void Invert()
+        {
+            weight = -weight;
+        }
+
+        public void ChangeCenter(float delta)
+        {
+            center += delta;
+            if (center < 0)
+                center = 0;
+            if (delta > 0)
+                maxR += delta;
         }
     }
 

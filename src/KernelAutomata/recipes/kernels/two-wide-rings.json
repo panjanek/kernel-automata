@@ -1,0 +1,45 @@
+{
+  "rings": [
+    {
+      "maxR": 64.03451,
+      "center": 10,
+      "width": 6.987318,
+      "weight": 1,
+      "innerSlope": 1,
+      "outerSlope": 1
+    },
+    {
+      "maxR": 63.8316,
+      "center": 24,
+      "width": 18.29688,
+      "weight": -1.4577131,
+      "innerSlope": 1,
+      "outerSlope": 1
+    },
+    {
+      "maxR": 0,
+      "center": 0,
+      "width": 0,
+      "weight": 0,
+      "innerSlope": 1,
+      "outerSlope": 1
+    },
+    {
+      "maxR": 0,
+      "center": 0,
+      "width": 0,
+      "weight": 0,
+      "innerSlope": 1,
+      "outerSlope": 1
+    },
+    {
+      "maxR": 0,
+      "center": 0,
+      "width": 0,
+      "weight": 0,
+      "innerSlope": 1,
+      "outerSlope": 1
+    }
+  ],
+  "weight": 1
+}

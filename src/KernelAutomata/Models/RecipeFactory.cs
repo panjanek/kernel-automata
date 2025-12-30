@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Markup;
 using System.Xml.Linq;
+using OpenTK.Graphics.OpenGL;
 
 namespace KernelAutomata.Models
 {
@@ -29,13 +30,24 @@ namespace KernelAutomata.Models
 
         public static SimulationRecipe LoadFromResource(string name)
         {
+            var str = LoadStringFromResource(name);
+            return JsonSerializer.Deserialize<SimulationRecipe>(str, serializerOptions);
+        }
+
+        public static KernelRecipe LoadKernelPreset(string name)
+        {
+            var str = LoadStringFromResource(name);
+            return JsonSerializer.Deserialize<KernelRecipe>(str, serializerOptions);
+        }
+
+        private static string LoadStringFromResource(string name)
+        {
             var assembly = Assembly.GetExecutingAssembly();
-            var a = assembly.GetManifestResourceNames();
             var resourceName = $"KernelAutomata.recipes.{name}";
             using Stream stream = assembly.GetManifestResourceStream(resourceName) ?? throw new InvalidOperationException($"Resource not found: {resourceName}");
             using StreamReader reader = new StreamReader(stream);
             var str = reader.ReadToEnd();
-            return JsonSerializer.Deserialize<SimulationRecipe>(str, serializerOptions);
+            return str;
         }
 
         public static SimulationRecipe ExpandTo(SimulationRecipe recipe1, int targetCount)

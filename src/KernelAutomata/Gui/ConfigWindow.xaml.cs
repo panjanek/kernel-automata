@@ -304,7 +304,10 @@ namespace KernelAutomata.Gui
             menu.Tag = tag;
             for(int i=1; i<menu.Items.Count; i++)
             {
-                ((MenuItem)(menu.Items[i])).IsEnabled = app.recipe.channels.Length > 1;
+                var menuItem = ((MenuItem)(menu.Items[i]));
+                var label = menuItem.Header.ToString();
+                var hasSubmenu = menuItem.Items.Count > 0;
+                menuItem.IsEnabled = app.recipe.channels.Length > 1 || !hasSubmenu || label.StartsWith("Set", StringComparison.InvariantCultureIgnoreCase);
             }
 
             menu.PlacementTarget = (UIElement)sender;
@@ -333,20 +336,32 @@ namespace KernelAutomata.Gui
         private void KernelContextMenu_Click(object sender, RoutedEventArgs e)
         {
             var item = ((MenuItem)sender);
+            if (!item.IsEnabled == true)
+                return;
+
             var label = item.Header.ToString();
-            if (label.StartsWith("Invert", StringComparison.InvariantCultureIgnoreCase))
+            bool isToplevel = item.Parent is ContextMenu;
+            if (isToplevel)
             {
                 var menuTag = WpfUtil.GetTagAsString(item.Parent);
                 var menuTagSplit = menuTag.Split(".");
                 var channelIdx = int.Parse(menuTagSplit[1]);
                 var kernelIdx = int.Parse(menuTagSplit[3]);
                 var thisKernel = app.recipe.channels[channelIdx].kernels[kernelIdx];
-                foreach (var ring in thisKernel.rings)
+                if (label.StartsWith("Invert", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    ring.weight = -ring.weight;
+                    thisKernel.Invert();
+                }
+                else if (label.StartsWith("Expand", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    thisKernel.ChangeCenters(1.0f);
+                }
+                else if (label.StartsWith("Shrink", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    thisKernel.ChangeCenters(-1.0f);
                 }
             } 
-            else if (item.IsEnabled)
+            else 
             {
                 var menuTag = WpfUtil.GetTagAsString(((MenuItem)item.Parent).Parent);
                 var menuTagSplit = menuTag.Split(".");
@@ -355,20 +370,28 @@ namespace KernelAutomata.Gui
                 var thisKernel = app.recipe.channels[channelIdx].kernels[kernelIdx];
 
                 label = ((MenuItem)item.Parent).Header.ToString();
-                var dirTag = WpfUtil.GetTagAsString(sender);
-                var dirTagSplit = dirTag.Split(',');
-                int channelDir = int.Parse(dirTagSplit[0]);
-                int kernelDir = int.Parse(dirTagSplit[1]);
-                var otherKernel = GetOtherKernel(channelIdx, kernelIdx, channelDir, kernelDir);
-                if (label.StartsWith("Switch", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    var copyThis = thisKernel.Clone();
-                    thisKernel.OverwriteWith(otherKernel);
-                    otherKernel.OverwriteWith(copyThis);
+                var subItemTag = WpfUtil.GetTagAsString(sender);
+                if (label.StartsWith("Switch", StringComparison.InvariantCultureIgnoreCase) || (label.StartsWith("Overwrite", StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                    var dirTagSplit = subItemTag.Split(',');
+                    int channelDir = int.Parse(dirTagSplit[0]);
+                    int kernelDir = int.Parse(dirTagSplit[1]);
+                    var otherKernel = GetOtherKernel(channelIdx, kernelIdx, channelDir, kernelDir);
+                    if (label.StartsWith("Switch", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        var copyThis = thisKernel.Clone();
+                        thisKernel.OverwriteWith(otherKernel);
+                        otherKernel.OverwriteWith(copyThis);
+                    }
+                    else if (label.StartsWith("Overwrite", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        otherKernel.OverwriteWith(thisKernel);
+                    }
                 }
-                else if (label.StartsWith("Overwrite", StringComparison.InvariantCultureIgnoreCase))
+                else if (label.StartsWith("Set", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    otherKernel.OverwriteWith(thisKernel);
+                    var kernelPreset = RecipeFactory.LoadKernelPreset(subItemTag);
+                    thisKernel.OverwriteWith(kernelPreset);
                 }
             }
 
