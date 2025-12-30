@@ -68,7 +68,7 @@ namespace KernelAutomata.Gui
                 axis.Y2 = axisY;
                 Children.Add(axis);
 
-                if (negativeSum!=0 && positiveSum != 0)
+                //if (negativeSum!=0 && positiveSum != 0)
                 {
                     maxY = positiveSum * 1.1;
                     minY = negativeSum * 1.1;
@@ -76,9 +76,9 @@ namespace KernelAutomata.Gui
                     scaleY = dy > 0.01 ? height / dy : height / 0.01;
                     double thick = width / 20;
                     var total = positiveSum + negativeSum;
-                    AddRect(width - 2 * thick, axisY, positiveSum * scaleY, Brushes.Red);
-                    AddRect(width - 2 * thick, axisY, negativeSum * scaleY, Brushes.LightBlue);
-                    AddRect(width - 1 * thick, axisY, total * scaleY, (total > 0) ? Brushes.Red : Brushes.LightBlue, Brushes.White);
+                    AddRect(width - 2 * thick-2, axisY, positiveSum * scaleY, Brushes.Red);
+                    AddRect(width - 2 * thick-2, axisY, negativeSum * scaleY, Brushes.Blue);
+                    AddRect(width - 1 * thick, axisY, total * scaleY, (total > 0) ? Brushes.Red : Brushes.Blue);
                 }
             }
             catch (Exception ex)

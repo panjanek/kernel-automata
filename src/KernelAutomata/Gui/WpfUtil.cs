@@ -7,12 +7,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using KernelAutomata.Utils;
 using OpenTK.Graphics.OpenGL;
+using Application = System.Windows.Application;
 using Binding = System.Windows.Data.Binding;
 using Brushes = System.Windows.Media.Brushes;
+using Button = System.Windows.Controls.Button;
 using ComboBox = System.Windows.Controls.ComboBox;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using Orientation = System.Windows.Controls.Orientation;
+using TextBox = System.Windows.Controls.TextBox;
 using ToolTip = System.Windows.Controls.ToolTip;
 
 namespace KernelAutomata.Gui
@@ -178,6 +184,52 @@ namespace KernelAutomata.Gui
                 text.Background = Brushes.Black;
                 text.Foreground = Brushes.White;
             }
+        }
+
+        public static void ShowAboutDialog()
+        {
+            // Window
+            Window dialog = new Window()
+            {
+                Width = 400,
+                Height = 200,
+                Title = "KernelAutomata by panjanek",
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                ResizeMode = ResizeMode.NoResize,
+                WindowStyle = WindowStyle.ToolWindow,
+                Owner = Application.Current.MainWindow
+            };
+
+            // Layout
+            StackPanel panel = new StackPanel() { Margin = new Thickness(10) };
+            TextBlock txt = new TextBlock() { Margin = new Thickness(0, 0, 0, 10), TextWrapping = TextWrapping.Wrap };
+            txt.Inlines.Add(new Run("KernelAutomata by panjanek\n\n"));
+            txt.Inlines.Add(new Run("Exploring artificial life emerging from continous cellular automata, extension of Conway's \"Game of Life.\n\n"));
+            txt.Inlines.Add(new Run("Read more: "));
+            var link = new Hyperlink(new Run("https://github.com/panjanek/kernel-automata"))  { NavigateUri = new Uri("https://github.com/panjanek/kernel-automata") };
+            link.RequestNavigate += (s, e) => { Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });  };
+            txt.Inlines.Add(link);
+            txt.Inlines.Add(new Run("\n\nThings to try: loading different presets, rightclick context menu on kernel configuration, fullscreen..."));
+            StackPanel buttonPanel = new StackPanel()
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Margin = new Thickness(0, 10, 0, 0)
+            };
+
+            Button ok = new Button() { Content = "OK", Width = 70, Margin = new Thickness(5, 0, 0, 0) };
+            ok.Click += (s, e) => { dialog.DialogResult = true; dialog.Close(); };
+
+            buttonPanel.Children.Add(ok);
+
+            // Compose UI
+            panel.Children.Add(txt);
+            panel.Children.Add(buttonPanel);
+
+            dialog.Content = panel;
+
+            // Show input dialog
+            dialog.ShowDialog();
         }
     }
 }

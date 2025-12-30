@@ -45,6 +45,8 @@ namespace KernelAutomata.Gui
 
         public string recordDir;
 
+        private ContextMenu peesetMenu;
+
         public ConfigWindow(AppContext app)
         {
             this.app = app;
@@ -56,7 +58,32 @@ namespace KernelAutomata.Gui
             ContentRendered += (s, e) => { UpdateActiveControls(); UpdatePassiveControls(); };
             Loaded += (s, e) => { WpfUtil.AddShortcutsToAllSlidersExluding<KernelConfigurator>(this, (s,e)=>Slider_ValueChanged(s,e)); };
             KeyDown += ConfigWindow_KeyDown;
+            fullscreenButton.Click += (s, e) => { app.mainWindow.ToggleFullscreen(); };
+
+            var presetMenu = new ContextMenu();
+            foreach(var presetName in RecipeFactory.ListPresetsFromResources())
+            {
+                var split = presetName.Split('.');
+                MenuItem item = new MenuItem() { Tag = presetName, Header = split[split.Length - 2] };
+                presetMenu.Items.Add(item);
+                item.Click += (s, e) =>
+                {
+                    var tag = WpfUtil.GetTagAsString(s);
+                    var newRecipe = RecipeFactory.LoadFromResource(tag);
+                    StartNewSimulation(newRecipe);
+                };
+            }
+
+            presetButton.Click += (s, e) =>
+            {
+                presetMenu.PlacementTarget = (UIElement)s;
+                presetMenu.Placement = PlacementMode.MousePoint;
+                presetMenu.IsOpen = true;
+            };
+
+            aboutButton.Click += (s, e) => WpfUtil.ShowAboutDialog();
         }
+
 
         private void ConfigWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
@@ -88,6 +115,10 @@ namespace KernelAutomata.Gui
                         app.RestartSimulation();
                         e.Handled = true;
                         break;
+                    case Key.F:
+                        app.mainWindow.ToggleFullscreen();
+                        e.Handled = true;
+                        break;
                 }
             }
         }
@@ -114,14 +145,19 @@ namespace KernelAutomata.Gui
                         newSize = recipe.size;
                     }
 
-                    WpfUtil.FindVisualChildren<KernelConfigurator>(this).ToList().ForEach(k => k.CloseRingsWindow());
                     recipe.size = newSize;
-                    app.StartNewSimulation(recipe);
-                    DataContext = new SimulationDataContext(app);
-                    UpdateActiveControls();
-                    UpdatePassiveControls();
+                    StartNewSimulation(recipe);
                 }
             }
+        }
+
+        private void StartNewSimulation(SimulationRecipe newRecipe)
+        {
+            WpfUtil.FindVisualChildren<KernelConfigurator>(this).ToList().ForEach(k => k.CloseRingsWindow());
+            app.StartNewSimulation(newRecipe);
+            DataContext = new SimulationDataContext(app);
+            UpdateActiveControls();
+            UpdatePassiveControls();
         }
 
         private void OpenFile_Click(object sender, RoutedEventArgs e)
@@ -198,6 +234,11 @@ namespace KernelAutomata.Gui
                     }
                 }
             }
+
+            incChannelsButton.IsEnabled = app.recipe.channels.Length < 3;
+            decChannelsButton.IsEnabled = app.recipe.channels.Length > 1;
+            redoButton.IsEnabled = app.RedoList.Count > 0;
+            undoButton.IsEnabled = app.UndoList.Count > 1;
         }
 
         private void ToggleVisibility()
@@ -212,21 +253,21 @@ namespace KernelAutomata.Gui
                     if (app.recipe.channels.Length == 1)
                     {
                         Width = 285;
-                        Height = 635;
+                        Height = 635+25;
                         element.Visibility = (column >= 3 || row >= 14) ? Visibility.Collapsed : Visibility.Visible;
                         scroll.MaxHeight = 885;
                     }
                     else if (app.recipe.channels.Length == 2)
                     {
                         Width = 285 + 165;
-                        Height = 635 + 250;
+                        Height = 635 + 250+25;
                         element.Visibility = (column >= 5 || row >= 15) ? Visibility.Collapsed : Visibility.Visible;
                         scroll.MaxHeight = 885;
                     }
                     else if (app.recipe.channels.Length == 3)
                     {
                         Width = 285 + 165 * 2 + 20;
-                        Height = 635 + 110;
+                        Height = 635 + 110 + 25;
                         element.Visibility = Visibility.Visible;
                         scroll.MaxHeight = 600;
                     }
@@ -426,6 +467,36 @@ namespace KernelAutomata.Gui
             }
 
             e.Handled = true;
+        }
+
+        private void ChangeChannelsCount_Click(object sender, RoutedEventArgs e)
+        {
+            var tag = WpfUtil.GetTagAsString(sender);
+            var newChannelsCount = app.recipe.channels.Length + int.Parse(tag);
+            if (newChannelsCount < 1)
+                newChannelsCount = 1;
+            if (newChannelsCount > 3)
+                newChannelsCount = 3;
+            var newRecipe = RecipeFactory.ChangeNumberOfChannelsTo(app.recipe, newChannelsCount);
+            StartNewSimulation(newRecipe);
+        }
+
+        private void UndoRedo_Click(object sender, RoutedEventArgs e)
+        {
+            var tag = WpfUtil.GetTagAsString(sender);
+            if (tag.Equals("undo"))
+                app.Undo();
+            else if (tag.Equals("redo"))
+                app.Redo();
+            UpdateAllControls();
+        }
+
+        private void SaveScreenn_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CommonSaveFileDialog { Title = "Select filename to save capture PNG", DefaultExtension = "png" };
+            dialog.Filters.Add(new CommonFileDialogFilter("PNG files", "*.png"));
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                app.simulation.gpuContext.SaveScreenFrameToFile(dialog.FileName);
         }
     }
 }

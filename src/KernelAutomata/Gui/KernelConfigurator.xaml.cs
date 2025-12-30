@@ -59,6 +59,7 @@ namespace KernelAutomata.Gui
             Loaded += (s, e) =>
             {
                 WpfUtil.AddShortcutsToAllSliders(this, (s, e) => Slider_ValueChanged(s, e));
+                UpdateActiveControls();
                 UpdatePassiveControls();
             };
         }
@@ -100,8 +101,8 @@ namespace KernelAutomata.Gui
                 var intersection = new double[globalMaxR];
                 for (int x = 0; x < intersection.Length; x++)
                     intersection[x] = kernel.kernelBuffer[x * 4] * 1000;
-                var positiveSum = kernel.kernelBuffer.Where(v => v > 0).Sum();
-                var negativeSum = kernel.kernelBuffer.Where(v => v < 0).Sum();
+                var positiveSum = kernel.kernelBuffer.Where(v => v >= 0).Sum();
+                var negativeSum = kernel.kernelBuffer.Where(v => v <= 0).Sum();
                 graph.Draw(globalMaxR, 0, globalMaxR, x =>
                 {
                     int ix = (int)x;

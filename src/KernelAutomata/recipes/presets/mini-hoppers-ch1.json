@@ -1,0 +1,70 @@
+{
+  "size": 512,
+  "dt": 0.11967854,
+  "channels": [
+    {
+      "mu": 0.08299992,
+      "sigma": 0.018199999,
+      "mu2": 0,
+      "sigma2": 0,
+      "weight2": 0,
+      "decay": 0.020230768,
+      "kernels": [
+        {
+          "rings": [
+            {
+              "maxR": 32,
+              "center": 6,
+              "width": 2,
+              "weight": 1,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 32,
+              "center": 13,
+              "width": 3,
+              "weight": -0.8,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 32,
+              "center": 21,
+              "width": 5,
+              "weight": 0.3,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            },
+            {
+              "maxR": 0,
+              "center": 0,
+              "width": 0,
+              "weight": 0,
+              "innerSlope": 1,
+              "outerSlope": 1
+            }
+          ],
+          "weight": 1
+        }
+      ],
+      "initialization": {
+        "centerX": 0.5,
+        "centerY": 0.5,
+        "density": 0.5,
+        "noiseRadius": 0.27567568,
+        "blobRadius": 0.05,
+        "mu": 0.23513514,
+        "sigma": 0.33243242
+      }
+    }
+  ]
+}

@@ -8,14 +8,31 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="recipes\2channels.json" />
+    <None Remove="recipes\presets\3ch-tissue.json" />
+    <None Remove="recipes\presets\borg.json" />
+    <None Remove="recipes\presets\ch2-multiorbs1.json" />
+    <None Remove="recipes\presets\grow.json" />
+    <None Remove="recipes\presets\mini-hoppers-ch1.json" />
+    <None Remove="recipes\presets\mitohondria.json" />
+    <None Remove="recipes\presets\mitosis2.json" />
+    <None Remove="recipes\presets\tapes.json" />
+    <None Remove="recipes\presets\worms-bugs.json" />
     <None Remove="shaders\debug.vert" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="app.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="app.ico" />
     <EmbeddedResource Include="recipes\3channels.json" />
     <EmbeddedResource Include="recipes\2channels.json" />
     <EmbeddedResource Include="recipes\1channel.json" />
@@ -29,6 +46,15 @@
     <EmbeddedResource Include="recipes\kernels\one-small-ring.json" />
     <EmbeddedResource Include="recipes\kernels\one-large-ring.json" />
     <EmbeddedResource Include="recipes\kernels\one-medium-ring.json" />
+    <EmbeddedResource Include="recipes\presets\3ch-tissue.json" />
+    <EmbeddedResource Include="recipes\presets\borg.json" />
+    <EmbeddedResource Include="recipes\presets\ch2-multiorbs1.json" />
+    <EmbeddedResource Include="recipes\presets\grow.json" />
+    <EmbeddedResource Include="recipes\presets\mini-hoppers-ch1.json" />
+    <EmbeddedResource Include="recipes\presets\mitohondria.json" />
+    <EmbeddedResource Include="recipes\presets\mitosis2.json" />
+    <EmbeddedResource Include="recipes\presets\tapes.json" />
+    <EmbeddedResource Include="recipes\presets\worms-bugs.json" />
     <EmbeddedResource Include="shaders\display.vert" />
     <EmbeddedResource Include="shaders\display.frag" />
     <EmbeddedResource Include="shaders\fft_cooley.comp" />

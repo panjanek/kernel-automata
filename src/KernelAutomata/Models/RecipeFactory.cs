@@ -49,25 +49,49 @@ namespace KernelAutomata.Models
             var str = reader.ReadToEnd();
             return str;
         }
-
-        public static SimulationRecipe ExpandTo(SimulationRecipe recipe1, int targetCount)
+        
+        public static List<string> ListPresetsFromResources()
         {
-            var copy = recipe1.Clone();
-            int numberToAdd = targetCount - copy.channels.Length;
-            var channels = copy.channels.ToList();
-            for(int i=0; i< numberToAdd; i++)
-                channels.Add(copy.channels.Last().Clone());
-            foreach(var channel in channels)
+            var assembly = Assembly.GetExecutingAssembly();
+            var fullNames = assembly.GetManifestResourceNames().Where(n => n.StartsWith("KernelAutomata.recipes.presets.")).ToList();
+            return fullNames.Select(n =>
             {
-                var kernels = channel.kernels.ToList();
+                var split = n.Split('.');
+                return string.Join(".", split.Skip(2));
+            }).ToList();
+        }
+
+        public static SimulationRecipe ChangeNumberOfChannelsTo(SimulationRecipe recipe, int targetCount)
+        {
+            var copy = recipe.Clone();
+            if (targetCount == recipe.channels.Length)
+                return copy;
+
+            if (targetCount > recipe.channels.Length)
+            {
+                int numberToAdd = targetCount - copy.channels.Length;
+                var channels = copy.channels.ToList();
                 for (int i = 0; i < numberToAdd; i++)
-                    kernels.Add(channel.kernels.Last().Clone());
+                    channels.Add(copy.channels.Last().Clone());
+                foreach (var channel in channels)
+                {
+                    var kernels = channel.kernels.ToList();
+                    for (int i = 0; i < numberToAdd; i++)
+                        kernels.Add(channel.kernels.Last().Clone());
 
-                channel.kernels = kernels.ToArray();
+                    channel.kernels = kernels.ToArray();
+                }
+
+                copy.channels = channels.ToArray();
+                return copy;
             }
-
-            copy.channels = channels.ToArray();
-            return copy;
+            else
+            {
+                copy.channels = copy.channels.Take(targetCount).ToArray();
+                foreach (var channel in copy.channels)
+                    channel.kernels = channel.kernels.Take(targetCount).ToArray();
+                return copy;
+            }     
         }
     }
 }

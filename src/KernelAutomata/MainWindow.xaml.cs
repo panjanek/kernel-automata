@@ -31,9 +31,7 @@ namespace KernelAutomata
 
         private long lastCheckFrameCount;
 
-        private int recNr;
-
-        private bool prevRecState;
+        private FullscreenWindow fullscreen;
         public MainWindow()
         {
             InitializeComponent();
@@ -50,7 +48,7 @@ namespace KernelAutomata
 
             var initRecipe = RecipeFactory.LoadFromResource("2channels.json");
 
-            //var initRecipe = RecipeFactory.ExpandTo(RecipeFactory.LoadFromResource("2channels.json"), 3);
+            //var initRecipe = RecipeFactory.ExpandTo(RecipeFactory.LoadFromFile("C:\\Projects\\git-panjanek\\kernel-automata\\patterns\\links.json"), 3);
             initRecipe.size = 512;
 
             app.StartNewSimulation(initRecipe);
@@ -108,6 +106,15 @@ namespace KernelAutomata
                     break;
                 case Key.R:
                     app.RestartSimulation();
+                    e.Handled = true;
+                    break;
+                case Key.F:
+                    ToggleFullscreen();
+                    e.Handled = true;
+                    break;
+                case Key.Escape:
+                    if (fullscreen != null)
+                        ToggleFullscreen();
                     e.Handled = true;
                     break;
             }
@@ -169,6 +176,25 @@ namespace KernelAutomata
             // Optional: center manually if needed
             Left = workArea.Left + (workArea.Width - size) / 2;
             Top = workArea.Top + (workArea.Height - size) / 2;
+        }
+
+        public void ToggleFullscreen()
+        {
+            if (fullscreen == null)
+            {
+                parent.Children.Remove(placeholder);
+                fullscreen = new FullscreenWindow();
+                fullscreen.KeyDown += MainWindow_KeyDown;
+                fullscreen.ContentHost.Content = placeholder;
+                fullscreen.ShowDialog();
+            }
+            else
+            {
+                fullscreen.ContentHost.Content = null;
+                parent.Children.Add(placeholder);
+                fullscreen.Close();
+                fullscreen = null;
+            }
         }
     }
 }
