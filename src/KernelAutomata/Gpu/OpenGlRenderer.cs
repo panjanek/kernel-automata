@@ -222,6 +222,9 @@ namespace KernelAutomata.Gpu
                 simulation.gpuContext.glControl.MakeCurrent();
                 int width = simulation.gpuContext.glControl.Width;
                 int height = simulation.gpuContext.glControl.Height;
+                int bufferSize = width * height * 4;
+                if (captureBuffer == null || bufferSize != captureBuffer.Length)
+                    captureBuffer = new byte[bufferSize];
                 GL.ReadPixels(
                     0, 0,
                     width, height,

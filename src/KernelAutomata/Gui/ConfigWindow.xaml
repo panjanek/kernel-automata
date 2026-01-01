@@ -134,21 +134,66 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" ToolTip="Save file" Click="SaveFile_Click">
-                        <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols"
-                           FontSize="12"
-                           Text="⎙"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
+                        <Path
+    Width="20"
+    Height="20"
+    Stretch="None"
+    Fill="#FF2B2B2B"
+    Stroke="Black"
+    StrokeThickness="0.1"
+    Data="M3,1
+          H17
+          L21,5
+          V23
+          H3
+          Z
+          M6,3
+          H14
+          V9
+          H6
+          Z
+          M7,13
+          H17
+          V21
+          H7
+          Z
+          M9,15
+          V19
+          H15
+          V15
+          Z"/>
                     </Button>
                     <Button Grid.Column="1" ToolTip="Open file" Click="OpenFile_Click">
-                        <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols"
-                           FontSize="12"
-                           Text="⎘"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
+                        <Path
+    Width="20"
+    Height="20"
+    Stretch="None"
+    Fill="#FF2B2B2B"
+    Stroke="Black"
+    StrokeThickness="1"
+    Data="
+        M2,6
+        H9
+        L11,8
+        H22
+        V19
+        H2
+        Z
+
+        M2,6
+        V4
+        H8
+        L10,6
+        Z
+
+        M3,10
+        H21
+        V18
+        H3
+        Z"/>
                     </Button>
                     <Button Grid.Column="2" ToolTip="Restart" Click="Restart_Click">
-                        <TextBlock FontFamily="pack://application:,,,/Fonts/#Noto Sans Symbols"
+                        <TextBlock
                            FontSize="14"
                            Text="↻"
                            HorizontalAlignment="Center"
