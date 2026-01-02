@@ -1,7 +1,9 @@
 # Kernel Automata
 Exploring artificial life emerging from <a href="https://medium.com/@davidstanojevic43/smoothlife-a-simple-mathematical-overview-478876a6d1ab" target="_blank">continous cellular automata</a>, extension of <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank">Conway's "Game of Life</a>. <br/>
+<br/>
+Some patterns generated with this tool: https://www.youtube.com/watch?v=joX_ELfN2YQ
 
-Inspired by:
+## Inspired by:
 * https://www.youtube.com/watch?v=6kiBYjvyojQ
 * https://www.youtube.com/watch?v=8wDSQxmAyTw
 * https://github.com/Chakazul/Lenia
